@@ -53,6 +53,11 @@ class RepositorySlices(support.Case):
         return [item for block in response.get('blocks', []) if block['kind'] == kind
                 for item in block['items']]
 
+    def note(self, response, code):
+        notes = [note['text'] for note in response['notes'] if note['code'] == code]
+        self.assertEqual(len(notes), 1, response['notes'])
+        return notes[0]
+
     def test_external_excerpt_and_only_local_consumers_with_clean_metadata(self):
         self.code()
         self.code('tests/test_client.py')
@@ -72,11 +77,15 @@ class RepositorySlices(support.Case):
         self.assertFalse(result['incomplete'])
         self.assertEqual(result['checks']['staleness'],
                          {'state': 'full', 'checked': 0, 'total': 0, 'scope': 'local'})
+        self.assertEqual(self.note(result, 'cross-repo-staleness'),
+                         '2 locations with cross-repository links. Staleness of these links was not checked')
 
     def test_external_without_consumers_still_returns_excerpt(self):
         result = self.response('core::docs/api.md#request')
         self.assertTrue(self.items(result, 'excerpt'))
         self.assertFalse(self.items(result, 'code'))
+        self.assertEqual(self.note(result, 'cross-repo-staleness'),
+                         '0 locations with cross-repository links. Staleness of these links was not checked')
 
     def test_reverse_places_use_physical_backlink_and_qualified_layer(self):
         self.code(targets=('docs/README.md#local',))
@@ -96,6 +105,76 @@ class RepositorySlices(support.Case):
         self.assertEqual(code, 0, text)
         self.assertIn('core::src/client.py:1', text)
         self.assertIn('[core::engine]', text)
+
+    def test_staleness_counts_mixed_locations_once_before_filters_and_budget(self):
+        target = 'docs/README.md#local'
+        test_path = 'tests/test_request.py'
+        support.w(self.neighbor / 'docs/detail.md', '# Detail <a id="detail"></a>\n\nDetails.\n')
+        self.code(targets=(target,))
+        self.code(test_path, targets=(target, 'core::docs/api.md#request',
+                                      'core::docs/detail.md#detail'))
+        self.code(root=self.neighbor, targets=('consumer::' + target,))
+        self.code(test_path, root=self.neighbor, targets=('consumer::' + target,))
+        for root in (self.root, self.neighbor):
+            support.git_init(root)
+            self.assertEqual(support.commit(root)[0], 0)
+
+        result = self.response(target)
+        coverage = {'state': 'full', 'checked': 2, 'total': 2, 'scope': 'local'}
+        cross_note = '3 locations with cross-repository links. Staleness of these links was not checked'
+        local_note = 'checked 2 of 2 local locations for staleness'
+        self.assertEqual(result['checks']['staleness'], coverage)
+        self.assertEqual(self.note(result, 'cross-repo-staleness'), cross_note)
+        self.assertEqual(self.note(result, 'staleness-full'), local_note)
+        self.assertEqual(result['summary']['tests'], 2)
+        self.assertEqual([(item['repo'], item['path'], item['line']) for item in self.items(result, 'tests')],
+                         [(None, test_path, 1), ('core', test_path, 1)])
+        self.assertFalse(result['incomplete'])
+
+        for language, summary, heading, local, cross in (
+                ('en', '2 test locations', 'Test locations', local_note, cross_note),
+                ('ru', '2 места в тестах', 'Места в тестах',
+                 'Устаревание проверено для 2 из 2 локальных мест',
+                 '3 места с межрепозиторными связями. Устаревание этих связей не проверялось')):
+            with self.subTest(language=language):
+                env = support.language_env(self.root.parent / ('profile-' + language), language)
+                command = support.PY + [str(support.CLI), 'slice', target]
+                code, text = support.run(command, cwd=self.root, env=env)
+                self.assertEqual(code, 0, text)
+                self.assertIn(summary, text.splitlines()[1])
+                self.assertIn(heading, text.splitlines())
+                self.assertIn(local, text.splitlines())
+                self.assertIn(cross, text.splitlines())
+                code, output = support.run(command + ['--format', 'json'], cwd=self.root, env=env)
+                self.assertEqual(code, 0, output)
+                self.assertEqual(json.loads(output), result)
+
+        support.set_config(self.root, slice_budget=1)
+        filtered = self.response(target, '--only', 'code', '--layer', 'api', '--layer', 'core::engine')
+        self.assertEqual([item['repo'] for item in self.items(filtered, 'code')], [None])
+        self.assertFalse(self.items(filtered, 'tests'))
+        self.assertEqual(next(block['omitted'] for block in filtered['blocks'] if block['kind'] == 'code'), 1)
+        self.assertEqual(filtered['checks']['staleness'], coverage)
+        self.assertEqual(self.note(filtered, 'cross-repo-staleness'), cross_note)
+        self.assertEqual(self.note(filtered, 'staleness-full'), local_note)
+
+    def test_code_file_counts_its_own_cross_repo_location_with_partial_local_history(self):
+        path = 'src/client.py'
+        target = 'docs/README.md#local'
+        self.code(path, targets=(target,))
+        support.git_init(self.root)
+        self.assertEqual(support.commit(self.root)[0], 0)
+        support.w(self.root / 'docs/untracked.md', '# New <a id="new"></a>\n\nNew rule.\n')
+        self.code(path, targets=(target, 'docs/untracked.md#new', 'core::docs/api.md#request'))
+
+        result = self.response(path)
+        self.assertFalse(self.items(result, 'code'))
+        self.assertEqual(result['checks']['staleness'],
+                         {'state': 'partial', 'checked': 0, 'total': 1, 'scope': 'local'})
+        self.assertEqual(self.note(result, 'staleness-partial'),
+                         'checked 0 of 1 local locations for staleness. Run lipi audit for a full local check')
+        self.assertEqual(self.note(result, 'cross-repo-staleness'),
+                         '1 location with cross-repository links. Staleness of these links was not checked')
 
     def test_missing_source_has_exit_zero_even_t4_error_and_off_preserves_state(self):
         support.set_config(self.root, repos={'core': {'path': '../missing-neighbor', 'read': ['docs']}})
@@ -268,6 +347,8 @@ class RepositorySlices(support.Case):
         result = self.response('docs/README.md#local')
         self.assertFalse(self.items(result, 'code'))
         self.assertEqual(len(self.items(result, 'tests')), 1)
+        self.assertEqual(self.note(result, 'cross-repo-staleness'),
+                         '1 location with cross-repository links. Staleness of these links was not checked')
 
     def test_only_and_budget_preserve_metadata_and_common_selection(self):
         for number in range(8):
@@ -281,12 +362,17 @@ class RepositorySlices(support.Case):
         code, text = support.cli(self.root, 'slice', 'core::docs/api.md#request', '--only', 'code')
         self.assertEqual(code, 0, text)
         self.assertIn(support.localized('sources:', 'источники:'), text)
-        self.assertIn(support.localized('cross-repository staleness was not checked', 'межрепозиторное устаревание не проверено'), text)
+        self.assertIn(support.localized('local staleness was not checked (Git unavailable)',
+                                        'Устаревание локальных связей не проверено (Git недоступен)'), text)
+        self.assertIn(support.localized(
+            '8 locations with cross-repository links. Staleness of these links was not checked',
+            '8 мест с межрепозиторными связями. Устаревание этих связей не проверялось'), text)
         for item in self.items(result, 'code'):
             self.assertIn(item['path'] + ':1', text)
 
     def test_diff_reads_only_own_changes_but_includes_external_targets(self):
         self.code()
+        self.code('tests/test_request.py')
         support.git_init(self.root)
         self.assertEqual(support.commit(self.root)[0], 0)
         support.sub(self.root / 'src/client.py', 'return 1', 'return 2')
@@ -295,6 +381,9 @@ class RepositorySlices(support.Case):
         result = json.loads(text)
         self.assertEqual([(item['repo'], item['target']) for item in self.items(result, 'concepts')],
                          [('core', 'docs/api.md#request')])
+        self.assertEqual([item['path'] for item in self.items(result, 'tests')], ['tests/test_request.py'])
+        self.assertEqual(self.note(result, 'cross-repo-staleness'),
+                         '1 location with cross-repository links. Staleness of these links was not checked')
         self.assertEqual(result['checks']['diff']['files'], 1)
 
     def test_deleted_external_decision_mark_retains_diff_obligations(self):

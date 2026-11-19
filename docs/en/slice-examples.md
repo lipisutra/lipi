@@ -8,7 +8,7 @@ Here the anchor is in a paragraph. Its title comes from the paragraph text. When
 
 ```text
 docs/pricing.md#threshold — A 5% discount applies to orders of at least $100 excluding shipping. Compare…
-1 warning · 1 decision · 1 rule · 2 entry points · 5 code locations (3 layers) · 2 tests · 1 open work item
+1 warning · 1 decision · 1 rule · 2 entry points · 5 code locations (3 layers) · 2 test locations · 1 open work item
 checked 7 of 7 locations for staleness
 
 Signals
@@ -27,7 +27,7 @@ Code locations
   src/app/settings.py:21  DISCOUNT_THRESHOLD = Money(10_000)  [app]
   src/domain/discount.py:12  class DiscountPolicy:  [domain]
   src/domain/discount.py:57  def threshold_for(customer):  [domain]
-Tests
+Test locations
   tests/test_checkout.py:30  def test_discount_applied():
   tests/test_discount.py:8  def test_threshold_boundary():
 Context
@@ -87,7 +87,7 @@ is omitted from this example.
 
 ```text
 src/domain/discount.py — code file [domain]
-1 warning · 1 decision · 1 rule · 3 concepts · 4 code locations (2 layers) · 3 tests · 1 open work item
+1 warning · 1 decision · 1 rule · 3 concepts · 4 code locations (2 layers) · 3 test locations · 1 open work item
 no trace markers in layers domain
 
 Signals
@@ -100,7 +100,7 @@ Concepts
   .agents/architecture.md#money — Monetary amounts use Money (1 code location)
   docs/pricing.md#rounding — Rounding (2 code locations)
   docs/pricing.md#threshold — A 5% discount applies to orders of at least $100 excluding shipping. Compare… (5 code locations)
-Tests
+Test locations
   tests/test_checkout.py:30  def test_discount_applied():
   tests/test_discount.py:8  def test_threshold_boundary():
   tests/test_rounding.py:31  def test_rounding_half_up():
@@ -142,7 +142,7 @@ In this `lipi slice --staged` example, one declaration marked with `docs/pricing
 
 ```text
 --staged — check related locations
-1 decision · 1 concept · 1 code location (1 layer) · 1 test
+1 decision · 1 concept · 1 code location (1 layer) · 1 test location
 check related locations, decisions, and tests
 changes without trace markers: 1 location
 
@@ -152,7 +152,7 @@ Concepts
   docs/pricing.md#threshold — Discount threshold (2 code locations)
 Code locations
   src/api/orders.py:88  def post_order(request):  [api]
-Tests
+Test locations
   tests/test_discount.py:8  def test_threshold_boundary():
 ```
 
@@ -214,7 +214,7 @@ core::docs/api.md#request — Request
 1 code location (1 layer, 1 repository)
 sources: local bee9e29, clean; core 3c5db3b, clean
 Available repositories: local, core.
-cross-repository staleness was not checked
+1 location with cross-repository links. Staleness of these links was not checked
 
 Excerpt
   ## Request
@@ -242,7 +242,7 @@ Full JSON for the same response:
  "incomplete": false,
  "notes": [
   {"code": "repos-scope", "text": "Available repositories: local, core."},
-  {"code": "cross-repo-staleness", "text": "cross-repository staleness was not checked"}
+  {"code": "cross-repo-staleness", "text": "1 location with cross-repository links. Staleness of these links was not checked"}
  ],
  "checks": {
   "staleness": {"state": "full", "checked": 0, "total": 0, "scope": "local"},

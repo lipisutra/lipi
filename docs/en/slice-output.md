@@ -51,6 +51,12 @@ with a nonzero `total` also shows the checked and total counts
 (`notes[].code` is `staleness-full`). `--only`, `--layer`, `--full`, and
 the output budget leave history coverage unchanged.
 
+With connections, the checked and total counts describe local A4 coverage.
+The `cross-repo-staleness` note counts each known location with a resolved
+cross-repository link once, including test locations. It includes only readable
+sources. When the count cannot be determined, the note reports the unchecked
+scope without a number. Local coverage and this count can overlap.
+
 ## Output budget <a id="budget"></a>
 
 - `slice_budget` sets the total content line budget across the response.

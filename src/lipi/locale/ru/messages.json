@@ -2855,9 +2855,37 @@
     "source_sha256": "e931785ccf3a99d2e59cc2072b66f52eb03090b25b0736cfcfdfd3cbcadb5e19",
     "text": "межрепозиторное устаревание не проверено"
   },
+  "repo.note.cross_staleness.ending_one": {
+    "source_sha256": "351304616ef131b581658e80c50a0724a74b15d04575358d7e982cb85a62b3fc",
+    "text": "%d место с межрепозиторными связями. Устаревание этих связей не проверялось"
+  },
+  "repo.note.cross_staleness.few": {
+    "source_sha256": "351304616ef131b581658e80c50a0724a74b15d04575358d7e982cb85a62b3fc",
+    "text": "%d места с межрепозиторными связями. Устаревание этих связей не проверялось"
+  },
+  "repo.note.cross_staleness.one": {
+    "source_sha256": "da494a583779fe7527d31aba6e594d5e7358c170607ff1ae227b6053c28b55f4",
+    "text": "%d место с межрепозиторными связями. Устаревание этих связей не проверялось"
+  },
+  "repo.note.cross_staleness.other": {
+    "source_sha256": "351304616ef131b581658e80c50a0724a74b15d04575358d7e982cb85a62b3fc",
+    "text": "%d мест с межрепозиторными связями. Устаревание этих связей не проверялось"
+  },
   "repo.note.incomplete": {
     "source_sha256": "8013d615cfa94130a72df6a6bd5530852afbcbca2ddb6501baf22685bd4b92a2",
     "text": "%s недоступен: %s; связи не проверены"
+  },
+  "repo.note.local_staleness_full": {
+    "source_sha256": "3725f45e6f6652467a0c80ffe732a96a21c8362ae5bfe4dba0cec437f2cb4cb5",
+    "text": "Устаревание проверено для %d из %d локальных мест"
+  },
+  "repo.note.local_staleness_no_git": {
+    "source_sha256": "3727d6304ac74b5305f9310cf54a495099e5fa5730fe88e0c0545629675e1572",
+    "text": "Устаревание локальных связей не проверено (Git недоступен)"
+  },
+  "repo.note.local_staleness_partial": {
+    "source_sha256": "88492ecad24aa4d6df2b65a4176d029a39ad04730cbb69458d441c76095c93ef",
+    "text": "Устаревание проверено для %d из %d локальных мест. Для полной локальной проверки запустите lipi audit"
   },
   "repo.note.scope": {
     "source_sha256": "87c8c6e0c6c41367382bcb718bebf0ca8276670af00dfac2add679dd323db1fc",
@@ -3124,8 +3152,8 @@
     "text": "Цели работы"
   },
   "slice.block.tests": {
-    "source_sha256": "e5c9d7030bada2fe792ad7e4a26ca44379a73f3fe16805ac1359e46759a1571a",
-    "text": "Тесты"
+    "source_sha256": "4921925c6994a5696c7fc6e635f4dafe1c5d561155d38271fc814d82cf3a6fa8",
+    "text": "Места в тестах"
   },
   "slice.code.title": {
     "source_sha256": "61241285ab0682612f8c8e84f7688afdebb140f4f475f77f46eb039ab9db7cf3",
@@ -3308,20 +3336,20 @@
     "text": "%d целей"
   },
   "slice.count.tests.ending_one": {
-    "source_sha256": "60f206430b91995ca7a72ed94e11647c58892f0a72e96dc62df74c89aab7e686",
-    "text": "%d тест"
+    "source_sha256": "4e5bfa9b4ce20b48bf9722443733a0e6e93fe2828361e58ad99cd268147cf97e",
+    "text": "%d место в тестах"
   },
   "slice.count.tests.few": {
-    "source_sha256": "60f206430b91995ca7a72ed94e11647c58892f0a72e96dc62df74c89aab7e686",
-    "text": "%d теста"
+    "source_sha256": "4e5bfa9b4ce20b48bf9722443733a0e6e93fe2828361e58ad99cd268147cf97e",
+    "text": "%d места в тестах"
   },
   "slice.count.tests.one": {
-    "source_sha256": "ca1c61f5a942eb77a9310af64b8e6f4cdd8a289f599cc2426dcc31bbfa0f58e0",
-    "text": "%d тест"
+    "source_sha256": "4d32a712f9de8d37a805ce25cae274ac86e9ea04fd4ba8a101e4252df4c84ffa",
+    "text": "%d место в тестах"
   },
   "slice.count.tests.other": {
-    "source_sha256": "60f206430b91995ca7a72ed94e11647c58892f0a72e96dc62df74c89aab7e686",
-    "text": "%d тестов"
+    "source_sha256": "4e5bfa9b4ce20b48bf9722443733a0e6e93fe2828361e58ad99cd268147cf97e",
+    "text": "%d мест в тестах"
   },
   "slice.count.warnings.ending_one": {
     "source_sha256": "74ccb43976d703e7e801e9a6f50c0da24bf14c65265825ffb2324bc7e72b4b4f",
@@ -3400,8 +3428,8 @@
     "text": "связи изменённого кода относительно ревизии Git"
   },
   "slice.help.epilog": {
-    "source_sha256": "9b0bc6ffa035fb95591f99239d5bcb3345c5e90d4e3c032ea5ee96ebc6e6743a",
-    "text": "Форма ответа и примеры — docs/ru/slice.md. Сигналы сохраняются при любом --only."
+    "source_sha256": "48945a8e3df44665901547fe3086b9fd6180f48da4b84cac033eafbbfb54b2d2",
+    "text": "Форма ответа и примеры — docs/ru/slice.md. Сигналы сохраняются при любом --only. Метки связывают перечисленные места в тестах с целями среза. Какое поведение проверяет тест, видно по его утверждениям."
   },
   "slice.help.full": {
     "source_sha256": "1e3d4dbccf4acf74244efda201934bc978eca76f96ec58a755a0e3db951949fa",

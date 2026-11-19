@@ -66,7 +66,7 @@ Text headings follow the interface language. In JSON, lipi writes its explanatio
 | `concepts` | Concepts | Sections implemented by a code file or anchors in a page |
 | `entry` | Entry points | Code locations that match `entry` |
 | `code` | Code locations | Other code locations by layer |
-| `tests` | Tests | Test locations |
+| `tests` | Test locations | Locations linked by trace markers |
 | `targets` | Work item targets | Targets linked from a work item |
 | `context` | Context | Titles of neighboring documents |
 
@@ -130,7 +130,8 @@ blocks depend on the target.
   limited to 80 characters. `layers` chooses the layer, with the
   top-level directory as the default.
 - **Tests.** A test location is in a file in the `tests` layer or
-  matched by the filename patterns in [settings](settings.md).
+  matched by the filename patterns in [settings](settings.md). Trace markers link these locations
+  to slice targets. Read the test assertions to see which behavior they check.
 - **Concepts.** For a code file, concepts are the sections its trace
   markers target. For a page, they are its anchors. Each has a
   project-wide count of code locations.
@@ -159,7 +160,7 @@ concepts, entry points, code locations and layers, tests, open work items, and
 work item targets.
 
 ```text
-1 warning · 1 decision · 1 rule · 2 entry points · 5 code locations (3 layers) · 2 tests · 1 open work item
+1 warning · 1 decision · 1 rule · 2 entry points · 5 code locations (3 layers) · 2 test locations · 1 open work item
 ```
 
 JSON retains zeros. Keys are `errors`, `warnings`, `decisions`, `rules`,
@@ -302,7 +303,9 @@ state. JSON has `notes` objects with `code` and `text`. `repos-scope`
 describes available sources in scope, `repos-incomplete` describes unread
 sources, and `repos-unreproducible` reports dirty trees or missing Git or
 HEAD. These notes and the `cross-repo-staleness` note are outside the output
-budget and appear with any `--only` selection. `checks.staleness` checks only
+budget and appear with any `--only` selection. The note counts visible locations with
+cross-repository links before filters and truncation. A location with both local
+and cross-repository links can also count toward local coverage. `checks.staleness` checks only
 local links to local sections and has `scope: local`. Excluding
 cross-repository links alone does not cause `incomplete`. See [connected
 repository examples](slice-examples.md#repos) for an external target and dirty

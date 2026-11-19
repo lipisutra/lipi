@@ -71,6 +71,19 @@ class SliceContract(unittest.TestCase):
                    if b["kind"] == "excerpt" else len(b["items"])
                    for b in result["blocks"])
 
+    def test_help_explains_what_test_locations_show(self):
+        for language, description in (
+                ("en", "Trace markers link the listed test locations to slice targets. "
+                 "Read the assertions to see what behavior a test checks."),
+                ("ru", "Метки связывают перечисленные места в тестах с целями среза. "
+                 "Какое поведение проверяет тест, видно по его утверждениям.")):
+            with self.subTest(language=language):
+                env = support.language_env(self.root / language, language)
+                code, text = support.run(support.PY + [str(support.CLI), "slice", "--help"],
+                                         cwd=self.root, env=env)
+                self.assertEqual(code, 0, text)
+                self.assertIn(description, " ".join(text.split()))
+
     def test_target_forms_empty_notes_and_schema(self):
         self.section()
         self.write("src/plain.py", "pass\n")

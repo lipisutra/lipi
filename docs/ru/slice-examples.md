@@ -11,7 +11,7 @@
 
 ```text
 docs/pricing.md#threshold — Скидка 5% действует с суммы заказа 10 000 ₽ без доставки. Сумма сравнивается…
-1 предупреждение · 1 решение · 1 правило · 2 точки входа · 5 мест в коде (3 слоя) · 2 теста · 1 открытая работа
+1 предупреждение · 1 решение · 1 правило · 2 точки входа · 5 мест в коде (3 слоя) · 2 места в тестах · 1 открытая работа
 устаревание проверено для 7 из 7 мест
 
 Сигналы
@@ -30,7 +30,7 @@ docs/pricing.md#threshold — Скидка 5% действует с суммы �
   src/app/settings.py:21  DISCOUNT_THRESHOLD = Money(10_000)  [app]
   src/domain/discount.py:12  class DiscountPolicy:  [domain]
   src/domain/discount.py:57  def threshold_for(customer):  [domain]
-Тесты
+Места в тестах
   tests/test_checkout.py:30  def test_discount_applied():
   tests/test_discount.py:8  def test_threshold_boundary():
 Контекст
@@ -76,7 +76,7 @@ docs/pricing.md#threshold — Скидка 5% действует с суммы �
 
 ```text
 src/domain/discount.py — файл кода [domain]
-1 предупреждение · 1 решение · 1 правило · 2 понятия · 4 места в коде (2 слоя) · 3 теста
+1 предупреждение · 1 решение · 1 правило · 2 понятия · 4 места в коде (2 слоя) · 3 места в тестах
 
 Сигналы
   ! T3  src/domain/discount.py:80 — ISS-004 closed — проверьте, нужна ли связь; если это временный обход, его можно убрать
@@ -86,7 +86,7 @@ src/domain/discount.py — файл кода [domain]
 Понятия
   docs/pricing.md#rounding — Округление (2 места в коде)
   docs/pricing.md#threshold — Скидка 5% действует с суммы заказа 10 000 ₽ без доставки. Сумма сравнивается… (5 мест в коде)
-Тесты
+Места в тестах
   tests/test_checkout.py:30  def test_discount_applied():
   tests/test_discount.py:8  def test_threshold_boundary():
   tests/test_discount.py:31  def test_rounding_half_up():
@@ -128,7 +128,7 @@ ISS-007 — Порог не учитывает возвраты (open)
 
 ```text
 --staged — проверьте связанные места
-1 решение · 1 понятие · 1 место в коде (1 слой) · 1 тест
+1 решение · 1 понятие · 1 место в коде (1 слой) · 1 место в тестах
 проверьте связанные места, решения и тесты
 изменения без меток: 1 место
 
@@ -138,7 +138,7 @@ ISS-007 — Порог не учитывает возвраты (open)
   docs/pricing.md#threshold — Порог скидки (2 места в коде)
 Места в коде
   src/api/orders.py:88  def post_order(request)  [api]
-Тесты
+Места в тестах
   tests/test_discount.py:8  def test_threshold_boundary():
 ```
 
@@ -189,7 +189,7 @@ core::docs/api.md#request — Запрос
 1 место в коде (1 слой, 1 репозиторий)
 источники: свой aaaaaaa, чистый; core bbbbbbb, чистый
 Доступные источники: свой, core.
-межрепозиторное устаревание не проверено
+1 место с межрепозиторными связями. Устаревание этих связей не проверялось
 
 Выдержка
   ## Запрос
@@ -214,7 +214,7 @@ core::docs/api.md#request — Запрос
  "reproducible":true,"incomplete":false,
  "notes":[
   {"code":"repos-scope","text":"Available repositories: local, core."},
-  {"code":"cross-repo-staleness","text":"cross-repository staleness was not checked"}]}
+  {"code":"cross-repo-staleness","text":"1 location with cross-repository links. Staleness of these links was not checked"}]}
 ```
 
 **Грязный сосед.** При незакоммиченной правке, не меняющей связей, блоки и

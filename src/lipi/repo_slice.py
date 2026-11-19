@@ -1,6 +1,6 @@
 """Срез подключений: общий индекс, локальная история, явные адреса ответа."""
 
-from .i18n import tr
+from .i18n import plural_form, tr
 from .repo_output import repository_status
 from .slice_index import document_order
 
@@ -54,8 +54,14 @@ def _finish(index, response):
     response['reproducible'] = status['reproducible']
     response['incomplete'] = response.get('incomplete', False) or status['incomplete']
     response.setdefault('notes', []).extend(status['notes'])
-    response['notes'].append({'code': 'cross-repo-staleness',
-                             'text': tr('repo.note.cross_staleness')})
+    cross_locations = response.pop('_cross_repo_locations', None)
+    target_repo = response.get('target', {}).get('repo')
+    if (cross_locations is not None and target_repo not in unavailable
+            and (cross_locations or not unavailable)):
+        cross_note = tr('repo.note.cross_staleness.' + plural_form(cross_locations)) % cross_locations
+    else:
+        cross_note = tr('repo.note.cross_staleness')
+    response['notes'].append({'code': 'cross-repo-staleness', 'text': cross_note})
     if 'error' in response:
         for candidate in response.get('candidates', []):
             repo, target = _split(candidate['target'])

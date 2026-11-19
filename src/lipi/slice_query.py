@@ -379,6 +379,7 @@ def build_diff_slice(pr, base=None, staged=False, depth=1, layers=None):
 
 def _build_slice(index, target, depth, layers, diff=None):
     pr = index.pr
+    connected = hasattr(index, 'sources')
     kind, aid = target['kind'], target['target']
     own_work = target.get('_work_id', aid if kind in ('work', 'decision') else None)
     own_places = index.by_file.get(aid, []) if kind == 'code' else []
@@ -494,7 +495,7 @@ def _build_slice(index, target, depth, layers, diff=None):
     for place in places:
         via = sorted(set(place['targets']) & seeds)[0]
         item = {key: place[key] for key in ('path', 'line', 'symbol', 'layer')}
-        if hasattr(index, 'sources'):
+        if connected:
             item['repo'] = place.get('repo')
             item['_test'] = place['test']
         item['line'] = place['targets'][via]
@@ -543,7 +544,7 @@ def _build_slice(index, target, depth, layers, diff=None):
             notes.append({'code': code, 'text': text})
     configured = list(dict.fromkeys(pr.cfg.get('layers', {}).values()))
     expected_layers = list(dict.fromkeys(layers or configured))
-    if hasattr(index, 'sources'):
+    if connected:
         expected_layers = [layer for layer in expected_layers if '::' not in layer or
                            (index.sources.get(layer.partition('::')[0]) is not None
                             and index.sources.get(layer.partition('::')[0]).state != 'unavailable')]
@@ -552,15 +553,14 @@ def _build_slice(index, target, depth, layers, diff=None):
         for place in places)]
     if missing:
         notes.append({'code': 'layers-no-marks', 'text': tr('slice.note.layers_no_marks') % ', '.join(missing)})
-    if staleness['state'] == 'no-git':
-        notes.append({'code': 'no-git', 'text': tr('slice.note.no_git')})
-    elif staleness['state'] == 'partial':
-        notes.append({'code': 'staleness-partial',
-                      'text': tr('slice.note.staleness_partial')
-                              % (staleness['checked'], staleness['total'])})
+    state = staleness['state']
+    if state == 'no-git':
+        key = 'repo.note.local_staleness_no_git' if connected else 'slice.note.no_git'
+        notes.append({'code': 'no-git', 'text': tr(key)})
     elif staleness['total']:
-        notes.append({'code': 'staleness-full',
-                      'text': tr('slice.note.staleness_full')
+        coverage_key = 'repo.note.local_staleness_' if connected else 'slice.note.staleness_'
+        notes.append({'code': 'staleness-' + state,
+                      'text': tr(coverage_key + state)
                               % (staleness['checked'], staleness['total'])})
     summary = dict.fromkeys(SUMMARY, 0)
     for signal in blocks['signals']:
@@ -579,8 +579,14 @@ def _build_slice(index, target, depth, layers, diff=None):
     if index._reviews_present:
         summary['reviewed_pairs'] = len(index._reviewed_pairs)
     public_target = {key: value for key, value in target.items() if key not in ('page', 'line') and not key.startswith('_')}
-    return {'schema': 1, 'target': public_target, 'summary': summary,
-            'blocks': [{'kind': name, 'items': blocks[name], 'omitted': 0, 'hint': []}
-                       for name in ORDERS[kind] if blocks[name]],
-            'incomplete': staleness['state'] == 'partial',
-            'notes': notes, 'checks': {'staleness': staleness}}, 0
+    response = {'schema': 1, 'target': public_target, 'summary': summary,
+                'blocks': [{'kind': name, 'items': blocks[name], 'omitted': 0, 'hint': []}
+                           for name in ORDERS[kind] if blocks[name]],
+                'incomplete': state == 'partial',
+                'notes': notes, 'checks': {'staleness': staleness}}
+    if connected:
+        cross_locations = {(place['repo'], place['path'], place['line']) for place in signal_places
+                           if any(index.nodes[aid]['repo'] != place['repo']
+                                  for aid in place['targets'])}
+        response['_cross_repo_locations'] = len(cross_locations)
+    return response, 0
