@@ -1,0 +1,310 @@
+"""Срез прямых подключений: области чтения, адреса, неполнота и общий отбор."""
+import json
+import sys
+from pathlib import Path
+from unittest.mock import patch
+
+from tests import support
+
+sys.path.insert(0, str(support.LIPI / 'src'))
+from lipi.checker.config import load_config
+from lipi.checker.model import Project
+from lipi.slice_query import build_slice
+
+
+# @trace docs/ru/slice.md#repos
+class RepositorySlices(support.Case):
+    seed_project = False
+
+    def setUp(self):
+        self.root = self.project().resolve()
+        self.neighbor = self.root.parent / (self.root.name + '-core')
+        self.neighbor.mkdir()
+        support.w(self.neighbor / 'lipi.json', json.dumps({
+            'workflow': None, 'decisions': 'decisions',
+            'repos': {'consumer': {'path': '../' + self.root.name, 'read': ['docs']}},
+            'layers': {'src/*': 'engine'}}))
+        support.set_config(self.root, workflow=None,
+                           repos={'core': {'path': '../' + self.neighbor.name,
+                                           'read': ['docs', 'decisions', 'code', 'tests']}},
+                           layers={'src/*': 'api'})
+        support.w(self.root / 'docs/README.md', '# Local\n\n## Local <a id="local"></a>\n\nLocal rule.\n')
+        support.w(self.neighbor / 'docs/api.md',
+                  '# Protocol\n\n## Request <a id="request"></a>\n\nA request has an identifier.\n')
+
+    def code(self, path='src/client.py', targets=('core::docs/api.md#request',), root=None):
+        support.w((root or self.root) / path,
+                  '# %s %s\ndef request():\n    return 1\n' % (support.TAG, ', '.join(targets)))
+
+    def decision(self, number, *, status='accepted', refines=None):
+        text = '# Decision %s\n\n- Status: %s\n' % (number, status)
+        if refines:
+            text += '- Refines: [Parent](adr-%03d-choice.md)\n' % refines
+        support.w(self.neighbor / ('decisions/adr-%03d-choice.md' % number),
+                  text + '\n## Decision\n\nA rule.\n')
+
+    def response(self, query, *args, expected=0):
+        code, text = support.cli(self.root, 'slice', query, '--format', 'json', *args)
+        self.assertEqual(code, expected, text)
+        return json.loads(text)
+
+    @staticmethod
+    def items(response, kind):
+        return [item for block in response.get('blocks', []) if block['kind'] == kind
+                for item in block['items']]
+
+    def test_external_excerpt_and_only_local_consumers_with_clean_metadata(self):
+        self.code()
+        self.code('tests/test_client.py')
+        self.code(root=self.neighbor, targets=('docs/api.md#request',))
+        for root in (self.root, self.neighbor):
+            support.git_init(root)
+            self.assertEqual(support.commit(root)[0], 0)
+        result = self.response('core::docs/api.md#request', '--full')
+        self.assertEqual(result['target']['repo'], 'core')
+        self.assertEqual(result['target']['target'], 'docs/api.md#request')
+        self.assertIn('identifier', self.items(result, 'excerpt')[0]['text'])
+        self.assertEqual({item['repo'] for item in self.items(result, 'code')}, {None})
+        self.assertEqual(result['summary']['tests'], 1)
+        self.assertEqual(result['summary']['repos'], 1)
+        self.assertEqual([item['repo'] for item in result['checks']['repos']], [None, 'core'])
+        self.assertTrue(result['reproducible'])
+        self.assertFalse(result['incomplete'])
+        self.assertEqual(result['checks']['staleness'],
+                         {'state': 'full', 'checked': 0, 'total': 0, 'scope': 'local'})
+
+    def test_external_without_consumers_still_returns_excerpt(self):
+        result = self.response('core::docs/api.md#request')
+        self.assertTrue(self.items(result, 'excerpt'))
+        self.assertFalse(self.items(result, 'code'))
+
+    def test_reverse_places_use_physical_backlink_and_qualified_layer(self):
+        self.code(targets=('docs/README.md#local',))
+        self.code(root=self.neighbor, targets=('consumer::docs/README.md#local',))
+        self.code(root=self.neighbor, path='tests/test_request.py',
+                  targets=('consumer::docs/README.md#local',))
+        result = self.response('docs/README.md#local')
+        self.assertEqual([item['repo'] for item in self.items(result, 'code')], [None, 'core'])
+        self.assertEqual(self.items(result, 'tests')[0]['repo'], 'core')
+        self.assertEqual(result['summary']['repos'], 2)
+        narrowed = self.response('docs/README.md#local', '--layer', 'core::engine')
+        self.assertEqual([item['repo'] for item in self.items(narrowed, 'code')], ['core'])
+        self.assertEqual(narrowed['summary']['code'], 1)
+        self.assertFalse([note for note in narrowed['notes'] if note['code'] == 'layers-no-marks'])
+        self.assertEqual(result['checks']['staleness'], narrowed['checks']['staleness'])
+        code, text = support.cli(self.root, 'slice', 'docs/README.md#local', '--layer', 'core::engine')
+        self.assertEqual(code, 0, text)
+        self.assertIn('core::src/client.py:1', text)
+        self.assertIn('[core::engine]', text)
+
+    def test_missing_source_has_exit_zero_even_t4_error_and_off_preserves_state(self):
+        support.set_config(self.root, repos={'core': {'path': '../missing-neighbor', 'read': ['docs']}})
+        for level in ('warning', 'error', 'off'):
+            with self.subTest(level=level):
+                support.set_config(self.root, codes={'T4': level})
+                result = self.response('core::docs/api.md#request')
+                self.assertTrue(result['incomplete'])
+                self.assertFalse(result['reproducible'])
+                self.assertNotIn('found', result['target'])
+                self.assertEqual(result['target']['title'], '')
+                self.assertEqual(result['checks']['repos'][1]['state'], 'unavailable')
+                signals = self.items(result, 'signals')
+                self.assertEqual(len(signals), 0 if level == 'off' else 1)
+                if signals:
+                    self.assertEqual(signals[0]['target_repo'], 'core')
+                    self.assertEqual(signals[0]['level'], level)
+        result = self.response('core::request')
+        self.assertIsNone(result['target']['kind'])
+
+    def test_unknown_missing_and_ambiguous_targets_return_one_with_addresses(self):
+        for query in ('unknown::docs/api.md#request', 'core::docs/missing.md#request'):
+            with self.subTest(query=query):
+                result = self.response(query, expected=1)
+                self.assertEqual(result['error'], 'not-found')
+                self.assertTrue(result['message'])
+                self.assertIn('checks', result)
+        support.w(self.neighbor / 'docs/extra.md', '# Other\n\n## Request <a id="request"></a>\n')
+        result = self.response('core::request', expected=1)
+        self.assertEqual(result['error'], 'ambiguous')
+        self.assertEqual({item['repo'] for item in result['candidates']}, {'core'})
+        self.assertTrue(all('::' not in item['target'] for item in result['candidates']))
+
+    def test_external_not_found_explains_work_ids_bare_names_and_denied_decisions(self):
+        self.decision(1)
+        for query in ('core::ADR-999', 'core::absent', 'core::ISS-001', 'core::ADR-001'):
+            with self.subTest(query=query):
+                read = ['docs'] if query == 'core::ADR-001' else ['docs', 'decisions']
+                support.set_config(self.root, repos={'core': {'path': '../' + self.neighbor.name,
+                                                            'read': read}})
+                result = self.response(query, expected=1)
+                self.assertEqual(result['error'], 'not-found')
+                self.assertEqual(result['query'], query)
+                self.assertEqual(result['candidates'], [])
+                self.assertEqual(result['message'],
+                                 'target is missing or outside the allowed read scope')
+                self.assertEqual([item['repo'] for item in result['checks']['repos']],
+                                 [None, 'core'])
+                self.assertEqual(result['checks']['repos'][1]['read'], read)
+
+    def test_ambiguous_external_decision_keeps_candidate_paths(self):
+        self.decision(1)
+        support.w(self.neighbor / 'decisions/0001-other.md', '# Other decision\n')
+        result = self.response('core::ADR-001', expected=1)
+        self.assertEqual(result['error'], 'ambiguous')
+        self.assertEqual(result['query'], 'core::ADR-001')
+        self.assertNotIn('message', result)
+        self.assertEqual({(item['repo'], item['target']) for item in result['candidates']},
+                         {('core', 'decisions/adr-001-choice.md'),
+                          ('core', 'decisions/0001-other.md')})
+        self.assertEqual([item['repo'] for item in result['checks']['repos']], [None, 'core'])
+
+    def test_without_config_only_explicit_section_is_supported(self):
+        (self.neighbor / 'lipi.json').unlink()
+        self.assertTrue(self.items(self.response('core::docs/api.md#request'), 'excerpt'))
+        for query in ('core::docs/api.md', 'core::request', 'core::ADR-001'):
+            with self.subTest(query=query):
+                self.assertEqual(self.response(query, expected=1)['error'], 'not-found')
+
+    def test_explicit_external_adr_brings_accepted_refinements_but_not_foreign_rules(self):
+        self.decision(1)
+        self.decision(2, refines=1)
+        self.decision(3, refines=2)
+        support.w(self.neighbor / 'AGENTS.md', '# Rules\n\n## Hidden <a id="hidden"></a>\n')
+        self.assertFalse(self.items(self.response('core::ADR-001'), 'obey'))
+        self.code(targets=('core::ADR-001',))
+        for query in ('src/client.py', 'core::ADR-001'):
+            with self.subTest(query=query):
+                result = self.response(query)
+                self.assertEqual({(item['repo'], item['target']) for item in self.items(result, 'obey')},
+                                 {('core', 'ADR-001'), ('core', 'ADR-002'), ('core', 'ADR-003')})
+                self.assertFalse(any('AGENTS' in item['target'] for item in self.items(result, 'context')))
+
+    def test_t3_separates_local_source_and_external_target(self):
+        self.decision(1, status='rejected')
+        self.code(targets=('docs/README.md#local', 'core::ADR-001'))
+        result = self.response('docs/README.md#local')
+        signal = next(item for item in self.items(result, 'signals') if item['code'] == 'T3')
+        self.assertEqual((signal['repo'], signal['path'], signal['target_repo'], signal['target']),
+                         (None, 'src/client.py', 'core', 'ADR-001'))
+        self.assertIn('core::ADR-001', signal['message'])
+
+    def test_unreadable_source_discards_all_its_data_and_keeps_own_places(self):
+        self.code(targets=('docs/README.md#local',))
+        self.code(root=self.neighbor, targets=('consumer::docs/README.md#local',))
+        (self.neighbor / 'docs/broken.md').write_bytes(b'\xff')
+        result = self.response('docs/README.md#local')
+        self.assertEqual([item['repo'] for item in self.items(result, 'code')], [None])
+        self.assertEqual(result['summary']['code'], 1)
+        self.assertEqual(result['checks']['repos'][1]['state'], 'unavailable')
+        self.assertTrue(result['incomplete'])
+
+    def test_failed_covers_read_discards_already_indexed_source(self):
+        (self.neighbor / 'lipi.json').unlink()
+        self.code(targets=('docs/README.md#local', 'core::docs/api.md#request'))
+        (self.neighbor / 'docs/broken.md').write_bytes(b'\xff')
+        with (self.root / 'docs/README.md').open('a') as stream:
+            stream.write('\n<!-- covers: core::docs/broken.md#missing -->\n')
+        result = self.response('docs/README.md#local')
+        self.assertEqual(result['checks']['repos'][1]['state'], 'unavailable')
+        self.assertEqual(result['summary']['code'], 1)
+        self.assertFalse([item for item in self.items(result, 'context') if item['repo'] == 'core'])
+        self.assertEqual(len([item for item in self.items(result, 'signals') if item['code'] == 'T4']), 1)
+
+    def test_same_file_and_line_in_different_sources_keep_both_status_signals(self):
+        support.set_config(self.root, decisions='decisions')
+        support.w(self.root / 'decisions/adr-001-rule.md', '# Rule\n\n- Status: rejected\n')
+        self.code(targets=('docs/README.md#local', 'ADR-001'))
+        self.code(root=self.neighbor, targets=('consumer::docs/README.md#local', 'consumer::ADR-001'))
+        result = self.response('docs/README.md#local')
+        statuses = [item for item in self.items(result, 'signals') if item['code'] == 'T3']
+        self.assertEqual({(item['repo'], item['path'], item['target_repo']) for item in statuses},
+                         {(None, 'src/client.py', None), ('core', 'src/client.py', None)})
+
+    def test_read_only_and_dirty_metadata_do_not_claim_incomplete(self):
+        self.code()
+        for root in (self.root, self.neighbor):
+            support.git_init(root)
+            self.assertEqual(support.commit(root)[0], 0)
+        support.w(self.neighbor / 'untracked.txt', 'Uncommitted.\n')
+        before = {str(path): path.read_bytes() for root in (self.root, self.neighbor)
+                  for path in root.rglob('*') if path.is_file()}
+        result = self.response('core::docs/api.md#request')
+        self.assertFalse(result['reproducible'])
+        self.assertFalse(result['incomplete'])
+        self.assertTrue(result['checks']['repos'][1]['dirty'])
+        after = {str(path): path.read_bytes() for root in (self.root, self.neighbor)
+                 for path in root.rglob('*') if path.is_file()}
+        self.assertEqual(before, after)
+
+    def test_local_work_gets_explicit_foreign_obligations_via_own_goal(self):
+        support.set_config(self.root, workflow='workflow')
+        self.decision(1)
+        self.decision(2, refines=1)
+        self.code(targets=('docs/README.md#local', 'core::ADR-001'))
+        support.w(self.root / 'workflow/plan/2026/pln-001-change.md',
+                  '# Change\n\n- Status: new\n\n[Goal](../../../docs/README.md#local)\n')
+        result = self.response('PLN-001')
+        obligations = self.items(result, 'obey')
+        self.assertEqual({item['target'] for item in obligations}, {'ADR-001', 'ADR-002'})
+        self.assertTrue(all(item['repo'] == 'core' for item in obligations))
+        self.assertTrue(all(item['via'] == ['docs/README.md#local'] for item in obligations))
+
+    def test_staleness_never_asks_git_about_external_targets_or_code(self):
+        self.code()
+        project = Project(self.root, load_config(self.root, None))
+        with patch('lipi.slice_query.GitBlame', side_effect=AssertionError('foreign blame')):
+            result, code = build_slice(project, 'core::docs/api.md#request')
+        self.assertEqual(code, 0)
+        self.assertEqual(result['checks']['staleness']['total'], 0)
+
+    def test_read_permissions_apply_to_search_and_reverse_place_categories(self):
+        self.decision(1)
+        self.code(root=self.neighbor, targets=('consumer::docs/README.md#local',))
+        self.code(root=self.neighbor, path='tests/test_request.py',
+                  targets=('consumer::docs/README.md#local',))
+        support.set_config(self.root, repos={'core': {'path': '../' + self.neighbor.name,
+                                                     'read': ['docs', 'tests']}})
+        self.response('core::ADR-001', expected=1)
+        result = self.response('docs/README.md#local')
+        self.assertFalse(self.items(result, 'code'))
+        self.assertEqual(len(self.items(result, 'tests')), 1)
+
+    def test_only_and_budget_preserve_metadata_and_common_selection(self):
+        for number in range(8):
+            self.code('src/client%d.py' % number)
+        support.set_config(self.root, slice_budget=3)
+        result = self.response('core::docs/api.md#request', '--only', 'code')
+        self.assertEqual(result['summary']['code'], 8)
+        self.assertEqual(len(self.items(result, 'code')), 3)
+        self.assertTrue(result['incomplete'])
+        self.assertTrue(result['checks']['repos'])
+        code, text = support.cli(self.root, 'slice', 'core::docs/api.md#request', '--only', 'code')
+        self.assertEqual(code, 0, text)
+        self.assertIn(support.localized('sources:', 'источники:'), text)
+        self.assertIn(support.localized('cross-repository staleness was not checked', 'межрепозиторное устаревание не проверено'), text)
+        for item in self.items(result, 'code'):
+            self.assertIn(item['path'] + ':1', text)
+
+    def test_diff_reads_only_own_changes_but_includes_external_targets(self):
+        self.code()
+        support.git_init(self.root)
+        self.assertEqual(support.commit(self.root)[0], 0)
+        support.sub(self.root / 'src/client.py', 'return 1', 'return 2')
+        code, text = support.cli(self.root, 'slice', '--diff', 'HEAD', '--format', 'json')
+        self.assertEqual(code, 0, text)
+        result = json.loads(text)
+        self.assertEqual([(item['repo'], item['target']) for item in self.items(result, 'concepts')],
+                         [('core', 'docs/api.md#request')])
+        self.assertEqual(result['checks']['diff']['files'], 1)
+
+    def test_deleted_external_decision_mark_retains_diff_obligations(self):
+        self.decision(1)
+        self.decision(2, refines=1)
+        self.code(targets=('core::ADR-001',))
+        support.git_init(self.root)
+        self.assertEqual(support.commit(self.root)[0], 0)
+        (self.root / 'src/client.py').unlink()
+        code, text = support.cli(self.root, 'slice', '--diff', 'HEAD', '--format', 'json')
+        self.assertEqual(code, 0, text)
+        result = json.loads(text)
+        self.assertEqual({item['target'] for item in self.items(result, 'obey')}, {'ADR-001', 'ADR-002'})

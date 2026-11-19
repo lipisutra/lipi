@@ -1,0 +1,194 @@
+{
+  "agent instructions": {
+    "definition": "Rules for a person or agent working on the project.",
+    "term": "agent instructions"
+  },
+  "anchor region": {
+    "definition": "The Markdown lines belonging to a particular explicit anchor.",
+    "term": "anchor region"
+  },
+  "approach": {
+    "definition": "The method chosen to carry out a plan.",
+    "term": "approach"
+  },
+  "architecture decision": {
+    "definition": "A record of a decision, its context, and its consequences.",
+    "term": "architecture decision"
+  },
+  "audit": {
+    "definition": "An examination of a project and the findings it produced.",
+    "term": "audit"
+  },
+  "baseline": {
+    "definition": "A recorded set of existing errors used to identify new errors.",
+    "term": "baseline"
+  },
+  "check code": {
+    "definition": "The stable identifier of a check, such as D1.",
+    "term": "check code"
+  },
+  "closure log": {
+    "definition": "The index of closed work grouped by closure year.",
+    "term": "closure log"
+  },
+  "code location": {
+    "definition": "A file and line identifying code relevant to a target.",
+    "term": "code location"
+  },
+  "conclusions": {
+    "definition": "The judgments reached from the available evidence.",
+    "term": "conclusions"
+  },
+  "connected repository": {
+    "definition": "A neighboring repository explicitly listed in project settings.",
+    "term": "connected repository"
+  },
+  "consequences": {
+    "definition": "The effects expected from adopting a decision.",
+    "term": "consequences"
+  },
+  "context": {
+    "definition": "The circumstances that explain why a decision was needed.",
+    "term": "context"
+  },
+  "discussion": {
+    "definition": "A work item for exploring a question before deciding.",
+    "term": "discussion"
+  },
+  "document header": {
+    "definition": "The structured fields below a document’s title.",
+    "term": "document header"
+  },
+  "entry point": {
+    "definition": "A configured location where a user or caller enters the code.",
+    "term": "entry point"
+  },
+  "excerpt": {
+    "definition": "The portion of a target displayed in a slice.",
+    "term": "excerpt"
+  },
+  "exit code": {
+    "definition": "The numeric result returned by a command to its caller.",
+    "term": "exit code"
+  },
+  "explicit anchor": {
+    "definition": "A stable identifier written explicitly in Markdown.",
+    "term": "explicit anchor"
+  },
+  "facts": {
+    "definition": "Observations used as evidence in a discussion or audit.",
+    "term": "facts"
+  },
+  "finding": {
+    "definition": "A condition reported by a project check.",
+    "term": "finding"
+  },
+  "findings": {
+    "definition": "The results of an examination that call for attention.",
+    "term": "findings"
+  },
+  "fingerprint": {
+    "definition": "A content digest used to detect a change in a source.",
+    "term": "fingerprint"
+  },
+  "how to reproduce or where it occurred": {
+    "definition": "The steps or circumstances that demonstrate an issue.",
+    "term": "how to reproduce or where it occurred"
+  },
+  "index": {
+    "definition": "Generated pages listing workflow documents.",
+    "term": "index"
+  },
+  "issue": {
+    "definition": "A recorded bug, friction, request, or question.",
+    "term": "issue"
+  },
+  "language edition": {
+    "definition": "One language’s version of a set of documentation pages.",
+    "term": "language edition"
+  },
+  "layer": {
+    "definition": "A project-defined grouping of code paths.",
+    "term": "layer"
+  },
+  "map": {
+    "definition": "A table of explicit trace coverage across targets, layers, and tests.",
+    "term": "map"
+  },
+  "master plan": {
+    "definition": "The project’s ordered queue of approved work.",
+    "term": "master plan"
+  },
+  "options": {
+    "definition": "The alternatives considered before a decision.",
+    "term": "options"
+  },
+  "plan": {
+    "definition": "A work item that sets out steps and completion criteria.",
+    "term": "plan"
+  },
+  "project documentation": {
+    "definition": "Pages that describe the project’s current behavior and rules.",
+    "term": "project documentation"
+  },
+  "question and scope": {
+    "definition": "The question under examination and the limits of that examination.",
+    "term": "question and scope"
+  },
+  "review mark": {
+    "definition": "A recorded review of a code and documentation pair, valid while both fingerprints match.",
+    "term": "review mark"
+  },
+  "section": {
+    "definition": "An addressable part of a documentation page.",
+    "term": "section"
+  },
+  "signal": {
+    "definition": "An item that may affect how a change should be made.",
+    "term": "signal"
+  },
+  "slice": {
+    "definition": "A focused view of the documents, code, tests, and signals for a target or change.",
+    "term": "slice"
+  },
+  "staleness": {
+    "definition": "A possible mismatch when related code is newer than its documentation.",
+    "term": "staleness"
+  },
+  "steps": {
+    "definition": "The ordered actions that make up a plan.",
+    "term": "steps"
+  },
+  "target": {
+    "definition": "The page, anchor, work item, or code file addressed by a query or reference.",
+    "term": "target"
+  },
+  "trace marker": {
+    "definition": "An explicit annotation connecting code or tests to a target.",
+    "term": "trace marker"
+  },
+  "trace marker group": {
+    "definition": "The longest run of adjacent lines with stand-alone trace markers; a line with code and a trace marker forms its own group.",
+    "term": "trace marker group"
+  },
+  "trace region": {
+    "definition": "A trace marker group together with the text up to the next group or the end of the file.",
+    "term": "trace region"
+  },
+  "warning": {
+    "definition": "A finding at warning severity.",
+    "term": "warning"
+  },
+  "work item": {
+    "definition": "A numbered item that can be referenced by its identifier.",
+    "term": "work item"
+  },
+  "workflow document": {
+    "definition": "One numbered document within the workflow.",
+    "term": "workflow document"
+  },
+  "workflow documents": {
+    "definition": "Files used to record work, decisions, discussions, and audits.",
+    "term": "workflow documents"
+  }
+}

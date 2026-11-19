@@ -1,0 +1,241 @@
+{
+  "counts": {
+    "edgeTypes": {
+      "anchor": 1,
+      "covers": 1,
+      "link": 15,
+      "ref": 1,
+      "trace": 1
+    },
+    "edges": 19,
+    "nodeTypes": {
+      "anchor": 1,
+      "code": 1,
+      "doc": 4,
+      "file": 8,
+      "rules": 1,
+      "work": 1
+    },
+    "nodes": 16
+  },
+  "edges": [
+    {
+      "anchor": "docs/development/rules.md#max-discount",
+      "from": "PLN-001",
+      "line": 9,
+      "to": "docs/development/rules.md",
+      "type": "link"
+    },
+    {
+      "from": "AGENTS.md",
+      "line": 3,
+      "to": "docs/README.md",
+      "type": "link"
+    },
+    {
+      "from": "AGENTS.md",
+      "line": 4,
+      "to": ".agents/lipi/README.md",
+      "type": "link"
+    },
+    {
+      "from": "docs/README.md",
+      "line": 3,
+      "to": "docs/discount.md",
+      "type": "link"
+    },
+    {
+      "from": "docs/README.md",
+      "line": 5,
+      "to": "docs/development/README.md",
+      "type": "link"
+    },
+    {
+      "from": "docs/development/README.md",
+      "line": 3,
+      "to": "docs/development/rules.md",
+      "type": "link"
+    },
+    {
+      "from": "docs/development/rules.md#max-discount",
+      "line": 3,
+      "to": "docs/development/rules.md",
+      "type": "anchor"
+    },
+    {
+      "from": "docs/discount.md",
+      "to": "docs/development/rules.md#max-discount",
+      "type": "covers"
+    },
+    {
+      "from": "src/app.py",
+      "line": 1,
+      "to": "docs/development/rules.md#max-discount",
+      "type": "trace"
+    },
+    {
+      "from": "workflow/INDEX.md",
+      "line": 18,
+      "to": "workflow/index/plans.md",
+      "type": "link"
+    },
+    {
+      "from": "workflow/INDEX.md",
+      "line": 19,
+      "to": "workflow/index/issues.md",
+      "type": "link"
+    },
+    {
+      "from": "workflow/INDEX.md",
+      "line": 20,
+      "to": "workflow/index/discussions.md",
+      "type": "link"
+    },
+    {
+      "from": "workflow/INDEX.md",
+      "line": 21,
+      "to": "workflow/index/decisions.md",
+      "type": "link"
+    },
+    {
+      "from": "workflow/INDEX.md",
+      "line": 22,
+      "to": "workflow/index/audits.md",
+      "type": "link"
+    },
+    {
+      "from": "workflow/INDEX.md",
+      "line": 8,
+      "to": "workflow/plan/2026/pln-001-skidki.md",
+      "type": "link"
+    },
+    {
+      "from": "workflow/README.md",
+      "line": 3,
+      "to": ".agents/lipi/workflow.md",
+      "type": "link"
+    },
+    {
+      "from": "workflow/README.md",
+      "line": 4,
+      "to": "workflow/INDEX.md",
+      "type": "link"
+    },
+    {
+      "from": "workflow/index/plans.md",
+      "line": 6,
+      "to": "workflow/plan/2026/pln-001-skidki.md",
+      "type": "link"
+    },
+    {
+      "from": "workflow/masterplan.md",
+      "line": 5,
+      "to": "PLN-001",
+      "type": "ref"
+    }
+  ],
+  "nodes": [
+    {
+      "anchors": [
+        "max-discount"
+      ],
+      "h1": "Правила",
+      "id": "docs/development/rules.md",
+      "lines": 6,
+      "path": "docs/development/rules.md",
+      "reachable": true,
+      "type": "doc"
+    },
+    {
+      "anchors": [],
+      "h1": "Как работает скидка",
+      "id": "docs/discount.md",
+      "lines": 6,
+      "path": "docs/discount.md",
+      "reachable": true,
+      "type": "doc"
+    },
+    {
+      "anchors": [],
+      "h1": "Описание системы",
+      "id": "docs/development/README.md",
+      "lines": 4,
+      "path": "docs/development/README.md",
+      "reachable": true,
+      "type": "doc"
+    },
+    {
+      "anchors": [],
+      "h1": "Справка",
+      "id": "docs/README.md",
+      "lines": 6,
+      "path": "docs/README.md",
+      "reachable": true,
+      "type": "doc"
+    },
+    {
+      "id": "AGENTS.md",
+      "path": "AGENTS.md",
+      "type": "rules"
+    },
+    {
+      "id": "PLN-001",
+      "path": "workflow/plan/2026/pln-001-skidki.md",
+      "prefix": "pln",
+      "status": "in progress",
+      "title": "Скидки в приложении",
+      "type": "work"
+    },
+    {
+      "id": "docs/development/rules.md#max-discount",
+      "line": 3,
+      "path": "docs/development/rules.md",
+      "type": "anchor"
+    },
+    {
+      "id": "src/app.py",
+      "path": "src/app.py",
+      "type": "code"
+    },
+    {
+      "id": "workflow/INDEX.md",
+      "path": "workflow/INDEX.md",
+      "type": "file"
+    },
+    {
+      "id": "workflow/README.md",
+      "path": "workflow/README.md",
+      "type": "file"
+    },
+    {
+      "id": "workflow/index/audits.md",
+      "path": "workflow/index/audits.md",
+      "type": "file"
+    },
+    {
+      "id": "workflow/index/decisions.md",
+      "path": "workflow/index/decisions.md",
+      "type": "file"
+    },
+    {
+      "id": "workflow/index/discussions.md",
+      "path": "workflow/index/discussions.md",
+      "type": "file"
+    },
+    {
+      "id": "workflow/index/issues.md",
+      "path": "workflow/index/issues.md",
+      "type": "file"
+    },
+    {
+      "id": "workflow/index/plans.md",
+      "path": "workflow/index/plans.md",
+      "type": "file"
+    },
+    {
+      "id": "workflow/masterplan.md",
+      "path": "workflow/masterplan.md",
+      "type": "file"
+    }
+  ]
+}

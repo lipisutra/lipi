@@ -1,0 +1,38 @@
+# CI workflow: the installed lipi checks the project on push and pull request.
+#
+# Create the file with `lipi init --ci github` or `lipi ci github`.
+# `lipi init` replaces it in full like other managed lipi files (ADR-009).
+# pipx installs lipi from its major-version tag. The tag moves with every
+# release in that line (ADR-010), so local and CI checks use the same
+# version line.
+#
+# "enforce" in lipi.json controls strictness (ADR-011). With false, errors
+# appear as annotations and the run can pass. With true, errors fail the
+# check steps.
+name: lipi
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      # --diff compares with the branch base, so it needs the full history.
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Install lipi
+        run: pipx install git+https://github.com/lipisutra/lipi@v{{MAJOR}}
+      - name: Check branch changes
+        if: github.event_name == 'pull_request'
+{{ENFORCE}}
+        run: lipi check --diff origin/${{ github.base_ref }}...HEAD --format github
+      - name: Check after push
+        if: github.event_name == 'push'
+{{ENFORCE}}
+        run: lipi check --format github

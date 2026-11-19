@@ -1,0 +1,338 @@
+{
+  "agent instructions": {
+    "source_sha256": "4bfdb2d7761ade76898cf61e1913bd0b3d84bd460a1522bef6804bab172532c0",
+    "text": {
+      "definition": "Правила для человека или агента, который работает над проектом.",
+      "term": "правила исполнителя"
+    }
+  },
+  "anchor region": {
+    "source_sha256": "60776155d004ccc0b4e746973fb3d7e809a2ca0b31546cc18f1a73e205698ca5",
+    "text": {
+      "definition": "Строки Markdown, относящиеся к явному якорю.",
+      "term": "область якоря"
+    }
+  },
+  "approach": {
+    "source_sha256": "e531320356191aeeb8efbe2cf17edb1eb0d5c97f1d82898666fef5bf44d0d245",
+    "text": {
+      "definition": "Выбранный способ выполнения плана.",
+      "term": "подход"
+    }
+  },
+  "architecture decision": {
+    "source_sha256": "1e711c674557e91fe25c54830bfe2cbfd2994677df757589b0daf24a8cbedd01",
+    "text": {
+      "definition": "Запись решения, его контекста и последствий.",
+      "term": "архитектурное решение"
+    }
+  },
+  "audit": {
+    "source_sha256": "1709b569c3969724241d3e51ba3b5d4982fe8cda26d5a451bb51fb05a4754001",
+    "text": {
+      "definition": "Проверка проекта и запись её результатов.",
+      "term": "аудит"
+    }
+  },
+  "baseline": {
+    "source_sha256": "3a44517110f41c4dab6c8e62f0184f4a15b079ebf876a09037ea30b58eb9c9da",
+    "text": {
+      "definition": "Набор уже известных ошибок, позволяющий выделять новые.",
+      "term": "базовая линия"
+    }
+  },
+  "check code": {
+    "source_sha256": "26d23ac10658d35fecbaac0e81b35b25c158d156e187969c494cb316ce8d8808",
+    "text": {
+      "definition": "Постоянный идентификатор проверки, например D1.",
+      "term": "код проверки"
+    }
+  },
+  "closure log": {
+    "source_sha256": "7dd3739cc09b0ebdabcc4d258b8ba983bb7282795eade942dfc31c9a7b28de5c",
+    "text": {
+      "definition": "Указатель закрытых работ по году закрытия.",
+      "term": "журнал закрытых работ"
+    }
+  },
+  "code location": {
+    "source_sha256": "a52d4de9037040fe0846378c687f9d07bf575e40cef40063c214b3070f1c48db",
+    "text": {
+      "definition": "Путь и строка кода, относящиеся к цели.",
+      "term": "место в коде"
+    }
+  },
+  "conclusions": {
+    "source_sha256": "57ec3b719861e032da9411579c5f308fcdc24da3875b38d8a511870aca4d64c7",
+    "text": {
+      "definition": "Выводы из собранных фактов.",
+      "term": "выводы"
+    }
+  },
+  "connected repository": {
+    "source_sha256": "d8900914920b7df08a1bf3919ab71d68a2eb465081d568702ec8d37a4587ff56",
+    "text": {
+      "definition": "Соседний репозиторий, явно подключённый в настройках проекта.",
+      "term": "подключённый репозиторий"
+    }
+  },
+  "consequences": {
+    "source_sha256": "b99b9e55f6ad46dc144bad62fd473791bc18d6eddcf4caf9d9a4bb7b94219c3b",
+    "text": {
+      "definition": "Ожидаемые следствия принятого решения.",
+      "term": "последствия"
+    }
+  },
+  "context": {
+    "source_sha256": "6c2f2f8725dca0546622871ebaea11d7ac743b777eedbdf3867374643c566bdd",
+    "text": {
+      "definition": "Обстоятельства, из-за которых потребовалось решение.",
+      "term": "контекст"
+    }
+  },
+  "discussion": {
+    "source_sha256": "84dd9c796230a351a1fa5e27666ab96d6fa6c1232a014dc8aafd1e97746cb75b",
+    "text": {
+      "definition": "Рабочий документ для разбора вопроса до принятия решения.",
+      "term": "обсуждение"
+    }
+  },
+  "document header": {
+    "source_sha256": "07231c35ae1360d7db9b549b78239554d0db02d2d8dacd0601283c9172ed86b1",
+    "text": {
+      "definition": "Служебные поля под названием документа.",
+      "term": "шапка документа"
+    }
+  },
+  "entry point": {
+    "source_sha256": "8825b4272cd1ba734935048300d81cc04660252d8010b90f7b57fca5ecb8f039",
+    "text": {
+      "definition": "Настроенное место входа в код для пользователя или вызывающей стороны.",
+      "term": "точка входа"
+    }
+  },
+  "excerpt": {
+    "source_sha256": "64e78075e240f9a74af8e4d31a2fea126a16f50a363782c1c126ec159c1f6f39",
+    "text": {
+      "definition": "Фрагмент цели, показанный в срезе.",
+      "term": "выдержка"
+    }
+  },
+  "exit code": {
+    "source_sha256": "b11c4103d0fa7b0bc6dce48824a312fe4cbd66360fe87ac95ba8ba525f53f123",
+    "text": {
+      "definition": "Числовой результат, возвращаемый командой.",
+      "term": "код возврата"
+    }
+  },
+  "explicit anchor": {
+    "source_sha256": "a6b882fb68ab83ea18027a0da4dbabb136e09b2def16bd725e7fec6064304703",
+    "text": {
+      "definition": "Постоянный идентификатор, явно записанный в Markdown.",
+      "term": "явный якорь"
+    }
+  },
+  "facts": {
+    "source_sha256": "12ff4369fe03aada9f9ddb76a9cb41644896f0ef52f85cdb29801e7fd3fad839",
+    "text": {
+      "definition": "Наблюдения, на которых строится обсуждение или аудит.",
+      "term": "факты"
+    }
+  },
+  "finding": {
+    "source_sha256": "1288506f3ae926d34998c866a2aec1c51cd96b8ad575fd4470330282d126510c",
+    "text": {
+      "definition": "Результат проверки, требующий внимания.",
+      "term": "находка"
+    }
+  },
+  "findings": {
+    "source_sha256": "4a9f890d5366dda95b021a32793175213ce67f49aa53acfcfb386423ba3817bb",
+    "text": {
+      "definition": "Результаты проверки, требующие внимания.",
+      "term": "находки"
+    }
+  },
+  "fingerprint": {
+    "source_sha256": "8805ea11b352e43977bcdf5600a6a5766cb3b481c75c8e5ef05ebf6671e1843e",
+    "text": {
+      "definition": "Значение, вычисленное по содержимому для обнаружения изменений.",
+      "term": "отпечаток"
+    }
+  },
+  "how to reproduce or where it occurred": {
+    "source_sha256": "4d06c1c957a5728b9b7571b94182f985b539608886fba940210b408ae532f335",
+    "text": {
+      "definition": "Действия или обстоятельства, при которых проявляется замечание.",
+      "term": "как воспроизвести или где встретилось"
+    }
+  },
+  "index": {
+    "source_sha256": "b2e7a92102668e7c0ad4d83afc15478606cd3d7ded8828ba5ae6a06f495c968e",
+    "text": {
+      "definition": "Собранные автоматически списки рабочих документов.",
+      "term": "указатель"
+    }
+  },
+  "issue": {
+    "source_sha256": "54aca4f4a823f9ae8e33c05b6ff0c45dc09962d700c1d7c2e4d7f9b960df7c0d",
+    "text": {
+      "definition": "Записанный баг, трение, запрос или вопрос.",
+      "term": "замечание"
+    }
+  },
+  "language edition": {
+    "source_sha256": "0e047477a8e3e5bdb01c0cc2012ae15ddb080a437fcfc2d9e3300378f2a62080",
+    "text": {
+      "definition": "Комплект страниц описания на одном языке.",
+      "term": "языковая редакция"
+    }
+  },
+  "layer": {
+    "source_sha256": "d3085aeaed4d08590eef865b5cb56d368c9713ef4b94631f87a3ddb770576225",
+    "text": {
+      "definition": "Заданная проектом группа путей кода.",
+      "term": "слой"
+    }
+  },
+  "map": {
+    "source_sha256": "9fd7f107de23372ce18add297aa0953214e0e0e16eacfcf051c018b3ed485145",
+    "text": {
+      "definition": "Таблица явных связей целей со слоями и тестами.",
+      "term": "карта"
+    }
+  },
+  "master plan": {
+    "source_sha256": "c18804aa1826b9911a66564d5d6496f2a2da38ccb77a02c02f0b90485a9739aa",
+    "text": {
+      "definition": "Согласованная очередь работ проекта.",
+      "term": "мастер-план"
+    }
+  },
+  "options": {
+    "source_sha256": "95a783f8e77becc0804fef776d1290557b5411db48ce1bc9c861b984738fa8b2",
+    "text": {
+      "definition": "Альтернативы, рассмотренные перед принятием решения.",
+      "term": "варианты"
+    }
+  },
+  "plan": {
+    "source_sha256": "59547ba3a4bf557dc2567380cd2b15828bc710f43f4ab4a611e8ef30a1635088",
+    "text": {
+      "definition": "Рабочий документ с шагами и критериями завершения.",
+      "term": "план"
+    }
+  },
+  "project documentation": {
+    "source_sha256": "43d1aa6c355731eb877a987cfad07fe29aa6200e4d51e2da2f66aebb6e68af07",
+    "text": {
+      "definition": "Страницы о действующем поведении и правилах проекта.",
+      "term": "описание проекта"
+    }
+  },
+  "question and scope": {
+    "source_sha256": "3a5050e447896f20ff32e5f7d7a2640cb6fe1a30d621bacf5eee4be28ac93846",
+    "text": {
+      "definition": "Предмет разбора и границы рассмотрения.",
+      "term": "вопрос и границы"
+    }
+  },
+  "review mark": {
+    "source_sha256": "22a5dc9ab5be1fd46d4f753a4f006b76a97906e089a9ea3ebbca9af498610a40",
+    "text": {
+      "definition": "Запись о проверке пары кода и описания, действующая при совпадении обоих отпечатков.",
+      "term": "отметка просмотра"
+    }
+  },
+  "section": {
+    "source_sha256": "a5ec94339ae3a0593465fb11dfd0bf2887b35bd3c2cf14dde7b2b77bed648187",
+    "text": {
+      "definition": "Часть страницы описания, на которую можно сослаться.",
+      "term": "раздел"
+    }
+  },
+  "signal": {
+    "source_sha256": "9ceb2478cf6d872577826adea34f85657232ed345cf8fabc065cc1633283f2da",
+    "text": {
+      "definition": "Сообщение о том, что может повлиять на правку.",
+      "term": "сигнал"
+    }
+  },
+  "slice": {
+    "source_sha256": "3336b53ad3cfffdab0d26557737f51dd7b28b6eb0e17951322d46f88376e6193",
+    "text": {
+      "definition": "Подборка документов, кода, тестов и сигналов по цели или изменению.",
+      "term": "срез"
+    }
+  },
+  "staleness": {
+    "source_sha256": "c186021301fad113c73d8a22a8cf58351e6a2d659b107cb898d380b2ae1b658a",
+    "text": {
+      "definition": "Возможное расхождение, когда связанный код новее описания.",
+      "term": "устаревание"
+    }
+  },
+  "steps": {
+    "source_sha256": "be0479279350c9a51f5c248005a5431c71bcb64321940b210abcf03c226e230b",
+    "text": {
+      "definition": "Последовательность действий в плане.",
+      "term": "шаги"
+    }
+  },
+  "target": {
+    "source_sha256": "fad989f9adc05366ad67c9aa7bad209e3636fb19c255a8b514ae8139d48d7295",
+    "text": {
+      "definition": "Страница, якорь, работа или файл кода, выбранные запросом или ссылкой.",
+      "term": "цель"
+    }
+  },
+  "trace marker": {
+    "source_sha256": "6cd5e8962ad51699fbf473b548e76b163b68bc958301cf613e7280cdc54cff73",
+    "text": {
+      "definition": "Явная связь кода или теста с целью.",
+      "term": "метка"
+    }
+  },
+  "trace marker group": {
+    "source_sha256": "fc5b122d73b2a8e77e50baadbf9f5a17060ac09654b44f40cdfb0d1907fdc308",
+    "text": {
+      "definition": "Наибольший ряд соседних строк с отдельными метками; строка с кодом и меткой образует свою группу.",
+      "term": "группа меток"
+    }
+  },
+  "trace region": {
+    "source_sha256": "7637f73005e9e75ab580adf7576deca320fe84fb72a27977b36e252e7b297521",
+    "text": {
+      "definition": "Группа меток вместе с текстом до следующей группы или конца файла.",
+      "term": "область метки"
+    }
+  },
+  "warning": {
+    "source_sha256": "1724290802c9e13ffe6271f79fa046c4af46b8e5e9c9ba76b2e702e0efd775cf",
+    "text": {
+      "definition": "Находка с уровнем предупреждения.",
+      "term": "предупреждение"
+    }
+  },
+  "work item": {
+    "source_sha256": "12443c5bd4253e4cbc5756e5a05c7118476b1a217e132801905291cdbd96b760",
+    "text": {
+      "definition": "Рабочий материал, на который можно сослаться по номеру.",
+      "term": "работа"
+    }
+  },
+  "workflow document": {
+    "source_sha256": "01721877c32e26ae68df5e515283ace59ec71fa4a01ed6f87680ef2596589b63",
+    "text": {
+      "definition": "Один документ рабочих материалов со сквозным номером своего вида.",
+      "term": "рабочий документ"
+    }
+  },
+  "workflow documents": {
+    "source_sha256": "a369f5152ea0eaf101886e1dbbdb7d55a8e9818a86e74edb91ddb0d19d15b1f4",
+    "text": {
+      "definition": "Файлы с планами, замечаниями, решениями, обсуждениями и аудитами.",
+      "term": "рабочие материалы"
+    }
+  }
+}

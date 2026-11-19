@@ -1,0 +1,3562 @@
+{
+  "argparse.%(prog)s: error: %(message)s\n": {
+    "source_sha256": "954b9f0ae60a867cfd078d8ad6d4b5c06a14e9482b310ea278486a4941b15061",
+    "text": "%(prog)s: ошибка: %(message)s\n"
+  },
+  "argparse.ambiguous option: %(option)s could match %(matches)s": {
+    "source_sha256": "3bef049e0cb232eaeb4ea03cf458678088090b4f17ff57fdb8cdeb94ea7aeaf3",
+    "text": "неоднозначный параметр %(option)s: %(matches)s"
+  },
+  "argparse.argument %(argument_name)s: %(message)s": {
+    "source_sha256": "2ee7b9a91ae416756569a17e77d1b0bd8e9dbdb02a2cdd59c7f2c8a581bee6cf",
+    "text": "аргумент %(argument_name)s: %(message)s"
+  },
+  "argparse.expected at least one argument": {
+    "source_sha256": "738680668051b19e592869a142ed1ca10ca21051adff248fb2995fd5a8a5a82f",
+    "text": "ожидается хотя бы один аргумент"
+  },
+  "argparse.expected at most one argument": {
+    "source_sha256": "d7650e9b2bb5121e67369fdf55823bbbf47e11f2226f8ca1b3bd98dc18f09c0a",
+    "text": "ожидается не более одного аргумента"
+  },
+  "argparse.expected one argument": {
+    "source_sha256": "d5d4f7b1110313a7e46a99fc5b270c1ca39f2bbe0f2e98b9fd1a44fc7c4317d1",
+    "text": "ожидается один аргумент"
+  },
+  "argparse.ignored explicit argument %r": {
+    "source_sha256": "6692a97eb8e84044450c38acf363c4f3bb1a21f6e4fae880384fdaa224cfef92",
+    "text": "лишнее значение %r"
+  },
+  "argparse.invalid %(type)s value: %(value)r": {
+    "source_sha256": "3c817f6812ced2d8acafdb1df6a8173a1bfd61815dee74c24fc3e66c9853bed6",
+    "text": "неверное значение типа %(type)s: %(value)r"
+  },
+  "argparse.invalid choice: %(value)r (choose from %(choices)s)": {
+    "source_sha256": "9dbc964dd39f35818d74861e547ef6d3c5423963dd6eefa2f25448d6b325d986",
+    "text": "недопустимое значение %(value)r (варианты: %(choices)s)"
+  },
+  "argparse.not allowed with argument %s": {
+    "source_sha256": "a6c8c59c927f5a516440fec8da712921c5681a741c73b1cc15de5c6bb3483bde",
+    "text": "нельзя сочетать с аргументом %s"
+  },
+  "argparse.one of the arguments %s is required": {
+    "source_sha256": "0924da186b867156b8b709716ca8e4eb2b8ca918766d5f261373e3d5ee8262a3",
+    "text": "необходим один из аргументов %s"
+  },
+  "argparse.optional arguments": {
+    "source_sha256": "f9e99bb734bf18b318f764e99f46dc7972b374fcb7ce4867e6d5c753f53b7ef1",
+    "text": "необязательные аргументы"
+  },
+  "argparse.options": {
+    "source_sha256": "a793ab8fcc2afce5e42b3044090719ddaff19741697d93b3b7f36838dd5e825c",
+    "text": "параметры"
+  },
+  "argparse.positional arguments": {
+    "source_sha256": "a5f91c7a5881296a8cdcb0c28106f8e8f9a70296d9ff2062d15cc8499331878c",
+    "text": "позиционные аргументы"
+  },
+  "argparse.show this help message and exit": {
+    "source_sha256": "608017daf42d9326e0d264a2a8e0075b1854b6b26ac5f5d3b9a464f5d646a637",
+    "text": "показать эту справку и выйти"
+  },
+  "argparse.the following arguments are required: %s": {
+    "source_sha256": "25fb5034ca699b944561afde2be40b614380f7a41d1c7d88554768b7508a789a",
+    "text": "обязательные аргументы: %s"
+  },
+  "argparse.unrecognized arguments: %s": {
+    "source_sha256": "5ed6ba5c375bb97ef02081ead0a53cf44a412e673c01a47bf097f80eeb7d4bcb",
+    "text": "неизвестные аргументы: %s"
+  },
+  "argparse.usage: ": {
+    "source_sha256": "d85f7a9a6f83840bf3170c3736f90cb6fa557194c182963a181ed74613340ad1",
+    "text": "использование: "
+  },
+  "checker.audit.accepted_decision_open_discussion": {
+    "source_sha256": "90e419263e1100ec9b2bf0f794b7900dc08d73978b0cf0f57a3b321903694ceb",
+    "text": "принятое решение ссылается на открытое %s — проверьте, можно ли закрыть обсуждение"
+  },
+  "checker.audit.awaiting_acceptance": {
+    "source_sha256": "1f5054695d5c6df7a10c136b52f6c5cedc25bb8546a41d898a90943abb76d5fa",
+    "text": "ждёт приёмки; обновлён %d дн. назад"
+  },
+  "checker.audit.baseline": {
+    "source_sha256": "b6476651d7faa12e586dbc17a2a4e2e93ee409599bf7aa013d6936d951ff125b",
+    "text": "базовая линия: %s"
+  },
+  "checker.audit.code_newer_than_documentation": {
+    "source_sha256": "6a4dc3172f53cdba4843f092e24ddd755be99b5f018ac731e889f759100cc091",
+    "text": "раздел «%s»: код под меткой (%s) менялся %s, позже описания (%s)"
+  },
+  "checker.audit.commit_few": {
+    "source_sha256": "0268601667e2d61d41f0d6dafb4779ce2f32ded024b9b7e725ce5520a51dd9b8",
+    "text": "коммита"
+  },
+  "checker.audit.commit_many": {
+    "source_sha256": "0268601667e2d61d41f0d6dafb4779ce2f32ded024b9b7e725ce5520a51dd9b8",
+    "text": "коммитов"
+  },
+  "checker.audit.commit_singular": {
+    "source_sha256": "9505cacb7c710ed17125fcc6cb3669e8ddca6c8cd8af6a31f6b3cd64604c3098",
+    "text": "коммит"
+  },
+  "checker.audit.commit_unresolved": {
+    "source_sha256": "269097355c60ee064fd46e575dc3b5e0c80fee11848e138795719c80a6558e03",
+    "text": "не удалось разрешить один коммит Git для %r"
+  },
+  "checker.audit.commits_after_status": {
+    "source_sha256": "60232bd183680a21a61cb7ddd076784510e207cc93b4ffffdd477666fc421858",
+    "text": "«%(id)s»: %(count)d %(word)s после %(updated)s, последний %(latest)s — %(reason)s"
+  },
+  "checker.audit.entry_without_trace": {
+    "source_sha256": "32159a09caa217a94e45da09cb76e95af214932db7d718cea83afc78802270bc",
+    "text": "точка входа без метки @trace: %s"
+  },
+  "checker.audit.git_unavailable": {
+    "source_sha256": "ab15c885ff0ac66fc45a8d1d542168b1a04b1aca7064e2861f1477b24c2662b8",
+    "text": "Git недоступен: %s"
+  },
+  "checker.audit.inactive_plan": {
+    "source_sha256": "28020a5d0da812205dcc517b360a3491e6789b8d1c56ed775075bd408e5fbdf1",
+    "text": "план «%s» не обновлялся %d дн. — продолжить, отложить или отменить"
+  },
+  "checker.audit.invalid_due_date": {
+    "source_sha256": "73339234492cbe4b03db4ef2e73e406a94a63fd06afb29f04601c1f739485e33",
+    "text": "в шапке «%s»: ожидается календарная дата ГГГГ-ММ-ДД, а не «%s»"
+  },
+  "checker.audit.open_issue": {
+    "source_sha256": "edc3cd8b2c0b29069661f1f1d364e02ce51bebf7272cf83b9842873a8ebe9dd2",
+    "text": "замечание открыто; обновлено %d дн. назад"
+  },
+  "checker.audit.overdue_work_item": {
+    "source_sha256": "aa89405bfc97ddc19836fa6313c283429f58f9ca70eb2fa86ebc31f1b77bd4a0",
+    "text": "срок %s прошёл, работа «%s» ещё не завершена"
+  },
+  "checker.audit.oversized_workflow_document": {
+    "source_sha256": "5573a73362c8c2be4f88e2fd95ed5048c4b141267ce3bbebae5c842a1b2d63a5",
+    "text": "%d строк (ориентир %d): вынесите доказательства в приложения"
+  },
+  "checker.audit.review_at_commit": {
+    "source_sha256": "1564d2b9f3dca533493b4dfb482c85a32c5a2039854a6737faa0c898a7c71e77",
+    "text": "реестр на коммите %s: %s"
+  },
+  "checker.audit.review_file_expected": {
+    "source_sha256": "f817327d322f119b6f271222ac5083c19381d5ec593b404a6f84d8846549c788",
+    "text": "ожидается обычный файл реестра"
+  },
+  "checker.audit.review_path_ambiguous": {
+    "source_sha256": "8de4c38a78a86b3e5abc598c64f3e60cd98052b54f416ad4f3d2921c82b5dde4",
+    "text": "неоднозначный путь реестра"
+  },
+  "checker.audit.review_unreadable_at_commit": {
+    "source_sha256": "09c665c4b9fdacb49d99dccf63ad911cc3d1fde94990a13dd320eba759dea706",
+    "text": "реестр на коммите %s не читается в Git"
+  },
+  "checker.audit.unrecorded_work": {
+    "source_sha256": "aa2e7044daa898394362e192554de7852760ebe3ee92522221f1dc7f6f10e011",
+    "text": "работа идёт, статус не обновлён"
+  },
+  "checker.audit.work_continued_after_closure": {
+    "source_sha256": "e7512ebbe0b21c1c859c3e562449de8c0cc0787b6dbba9ed322685b73f75582a",
+    "text": "работа закрыта, коммиты продолжаются"
+  },
+  "checker.commands.baseline_missing": {
+    "source_sha256": "b94fe60839e155333d4e6a675451c46823486dd9c16544fa08ab508f148e2d17",
+    "text": "базовой линии нет (%s): создайте её командой lipi baseline"
+  },
+  "checker.commands.baseline_pruned": {
+    "source_sha256": "265debea3f4a752fbdc4654e7b2135737cde72ecdaaf698def5ed4415e01c8cf",
+    "text": "базовая линия: было %d, убрано %d, осталось %d"
+  },
+  "checker.commands.baseline_usage": {
+    "source_sha256": "8bf006b0ffda1b32738528448cf7adfc4e09daeea9b23528353ae7bd16387246",
+    "text": "использование: lipi baseline [--prune]"
+  },
+  "checker.commands.baseline_written": {
+    "source_sha256": "f408360e828f2a8fd651cd84da1aa752507c2a27d7ed0cfcdeb79fb236d4c2f9",
+    "text": "базовая линия записана: %s (ошибок: %d)"
+  },
+  "checker.commands.check_exit_code": {
+    "source_sha256": "c5c35923bddbac768f77e5aea3bc3b9489bd48290d66611819488ff50670b07b",
+    "text": "код возврата %d"
+  },
+  "checker.commands.check_result": {
+    "source_sha256": "bdbfd61675fc9e2e9444fe797ee1516fc70d1bf07c35cbe176f4c630e5fb09b1",
+    "text": "проверка «%s»: %s"
+  },
+  "checker.commands.check_timeout": {
+    "source_sha256": "b332894a6d8f0f6ced3868f3ac3f8ab97bbb54474d80d5c283500cb46f315122",
+    "text": "таймаут %d с"
+  },
+  "checker.commands.document_created": {
+    "source_sha256": "6aec847be13662e33f9b0e4b77ab0539b35beaf0222101e92f2d54f820f4f3a6",
+    "text": "создан %s (%s-%s)%s"
+  },
+  "checker.commands.fill_observation": {
+    "source_sha256": "06a2c1ce18d8d618df47e71d0d2cc6e8b88c5bd4088f3b1ee4e22ee2eb593c0c",
+    "text": "заполните раздел «Observation» — он обязателен у открытого замечания"
+  },
+  "checker.commands.fill_plan_sections": {
+    "source_sha256": "60890a0be22330a5ff5e723701227762c9ff735a9b63bab6a422135b14cfd1d8",
+    "text": "заполните разделы «Purpose» и «Completion criteria» — они обязательны при статусе «in progress» или «pending acceptance»"
+  },
+  "checker.commands.index_update_failed": {
+    "source_sha256": "594af7f5cec9c99fc12d1f05650438768d24e269e9ccf6ccbf5e6d5d88bbd70b",
+    "text": "указатель не обновлён: %s"
+  },
+  "checker.commands.index_updated": {
+    "source_sha256": "d5796f581c0ab70dd16aa1826fbaf3f8b9b0546f513d66b1006331ec2c2b59de",
+    "text": ", указатель обновлён"
+  },
+  "checker.commands.issue_kind": {
+    "source_sha256": "8213c5b710148facd760bd33167027abbd3175527010a1c7af2a01e43132d476",
+    "text": "вид замечания: %s"
+  },
+  "checker.commands.new_path_symlink": {
+    "source_sha256": "66ba562a234c5bf046e60c02d30ab9b0b1d32b3f94b7161244f6a0a97ab636e8",
+    "text": "символическая ссылка в пути нового документа: %s"
+  },
+  "checker.commands.new_usage": {
+    "source_sha256": "f65f8f768b0d0068a4f1083fe05adef51eb94b95fd3a22ee26166feb5cee8127",
+    "text": "использование: lipi new {%s} \"Название\" [вид замечания] [lipi]"
+  },
+  "checker.commands.project_check_missing_executable": {
+    "source_sha256": "8de22ad7ceccce878b7fedfa6f79fabba9f1ee885bbb909ea70529256f466869",
+    "text": "проверка «%s»: команда не найдена: %s"
+  },
+  "checker.commands.project_check_start_failed": {
+    "source_sha256": "df467b939b24d9b0c78f11fca21e3bdc2273cd728ea30f282a7d4d2fecce7228",
+    "text": "проверка «%s»: не запускается: %s"
+  },
+  "checker.commands.similar_open_issues": {
+    "source_sha256": "9c1e14faae0661dc82107a53c022d28ed340ade9c9c04cf95e8b0019b08e503e",
+    "text": "Похожие открытые замечания (проверьте, нет ли уже нужной работы):"
+  },
+  "checker.commands.skeleton_audit": {
+    "source_sha256": "b54a6596eee5b8bd8acd959821e502c2c7b78ad82d51f282cfbb882404f63ea2",
+    "text": "## Вопрос и границы\n\n\n## Факты\n\n\n## Находки\n\n\n## Выводы\n"
+  },
+  "checker.commands.skeleton_decision": {
+    "source_sha256": "1ee642b02be105a0bd2f27c4aaa76769f5f7daac76128f944c1df2589743547a",
+    "text": "## Контекст\n\n\n## %s\n\n\n## Последствия\n"
+  },
+  "checker.commands.skeleton_discussion": {
+    "source_sha256": "16379d43b3ee08d5ab61d8c3eeb19f2408d91c5eb6c620f1a13d3d37945b4048",
+    "text": "## Вопрос\n\n\n## Варианты\n"
+  },
+  "checker.commands.skeleton_issue": {
+    "source_sha256": "20b9efe84b81395bb5834d34f90d215ef9c544ca7f2332ffb7e41100753ca50e",
+    "text": "## %s\n\n\n## Как воспроизвести или где встретилось\n"
+  },
+  "checker.commands.skeleton_plan": {
+    "source_sha256": "c13824ee4d51b2961619a9594e018f1b6a6114d37a6ed2cf525cceb6d39c7229",
+    "text": "## %s\n\n\n## Подход\n\n\n## Шаги\n\n\n## %s\n"
+  },
+  "checker.commands.workflow_disabled": {
+    "source_sha256": "4979a1877d365ba6112cad4dd3e4f3bb8f5e06c59f3a50401800fb18d37edd54",
+    "text": "рабочие материалы в этом проекте не подключены (в %s \"workflow\": null или каталога нет), документ не создан. Замечание к lipi создайте командой lipi new iss \"Название\" friction lipi: оно запишется в .agents/lipi-feedback/."
+  },
+  "checker.config.baseline_entry": {
+    "source_sha256": "3fcf8663afb83106ae702caadf7117abbfe8f975d894dad7eef27b2a5b9c87cd",
+    "text": "ключ «entries»: элемент %d"
+  },
+  "checker.config.check_name_not_string": {
+    "source_sha256": "502c48733d178cd0c44a34b000310afcca744b7260c8b833a9301a73e15529f4",
+    "text": "%s: «name»: ожидается строка, а не %s"
+  },
+  "checker.config.code_level_fixed": {
+    "source_sha256": "57fe619f29ff981aeb6d6c3df8b851fe12ba1b2cdc834f424ea28ce46a9f0d7d",
+    "text": "код %s не настраивается: его уровень задаёт правило"
+  },
+  "checker.config.codes_not_object": {
+    "source_sha256": "c49a95519cffcd8f67563fa92c8ed4ad455f402ff5fcc7f8c9ef044f78180d57",
+    "text": "ожидается объект «код: уровень», а не %s"
+  },
+  "checker.config.config_missing": {
+    "source_sha256": "affcf4c8d293c17fcb845deb7f4bb1aff6697426d75bf28a2bf7403067646673",
+    "text": "файл не найден"
+  },
+  "checker.config.decisions_outside_root": {
+    "source_sha256": "34cf3ea7a382d9d86596a99975bb51f6fce2100338ae1862be03b3fbf6a28f73",
+    "text": "ключ «decisions»: каталог должен быть внутри корня проекта"
+  },
+  "checker.config.default_edition_missing": {
+    "source_sha256": "455039fca56abe0f63af18cfb275dd0fdf6b7cb9580cc96bb18f7bfad5ef0ed4",
+    "text": "«default»: редакции «%s» нет в «editions»%s"
+  },
+  "checker.config.default_edition_not_string": {
+    "source_sha256": "89db0a108d63cf14ff7102064be0f097716aaad6bde12318eb62c105de6a808a",
+    "text": "«default»: ожидается строка, а не %s"
+  },
+  "checker.config.did_you_mean": {
+    "source_sha256": "bba1a5eb098b91ed5db89a71bd890f463d0bda0fcc6a49f2e2026e1769220042",
+    "text": ", имелось в виду «%s»?"
+  },
+  "checker.config.docs_not_default_edition": {
+    "source_sha256": "c8df60e479d30ae26b0ec990e0af8a53dcd914473ccc90e7d136761f1de476ab",
+    "text": "ключ «docs»: %s, а редакция по умолчанию «%s» — %s; при ключе «languages» каталог описания — каталог редакции по умолчанию, задайте его в «docs»"
+  },
+  "checker.config.edition_path_not_string": {
+    "source_sha256": "b08040e1bda05c0e544328809d2e32a5cf694eec3d738113ee1220ae6af4884a",
+    "text": "«editions»: «%s»: ожидается строка, а не %s"
+  },
+  "checker.config.empty_check_name": {
+    "source_sha256": "4ee5431018bef5fbc48466a0094a267447a627d8115e3e73425dbd61c9a5b327",
+    "text": "%s: «name»: пустое имя проверки"
+  },
+  "checker.config.empty_command": {
+    "source_sha256": "ad17e96fadfb0653fdf9ceb4cb9e2efa5a36ebd9fc30e7ea61bfccc6fc8d50a0",
+    "text": "пустой список: нужна хотя бы сама команда"
+  },
+  "checker.config.empty_decisions_path": {
+    "source_sha256": "96b2714cc9600f69b56b26c10b02e1e4702fb8ca17d77b7cc3f20c4a5b8d9138",
+    "text": "пустой путь каталога решений"
+  },
+  "checker.config.empty_edition_name": {
+    "source_sha256": "2ee35c9c21acf8f82e146991f2b0c5e6f3a022af022b267a56283a480f68f922",
+    "text": "«editions»: пустое имя редакции"
+  },
+  "checker.config.empty_edition_path": {
+    "source_sha256": "71923c539b70c92bb270e9e6371c6b4bef986149b84058cfeb9a8699e2ffda5d",
+    "text": "«editions»: «%s»: пустой путь"
+  },
+  "checker.config.empty_editions": {
+    "source_sha256": "2d5a435af938ddb100f852d9a6c512de70ebd023ce9a65e1abe01e49260c5ce9",
+    "text": "«editions»: пустой объект: нужна хотя бы одна редакция"
+  },
+  "checker.config.empty_filename_pattern": {
+    "source_sha256": "ff616e736adf0a7ab16767ec1df9b010ef7197e934a1963867b3b928fa16c125",
+    "text": "пустой шаблон имени файла"
+  },
+  "checker.config.empty_item": {
+    "source_sha256": "d47ee433ce15bcabd209c6ed60614a6a0cec9931889becd0621e55238f201d13",
+    "text": "элемент %d: пустая строка"
+  },
+  "checker.config.empty_layer_name": {
+    "source_sha256": "28056fad2b8007b9abdf3460f546b140a7d85808715faae3ebd9fe81ece0c664",
+    "text": "«%s»: пустое имя слоя"
+  },
+  "checker.config.empty_path_pattern": {
+    "source_sha256": "ae8539470f61d835107fa587373bba2f139169b034247f9f436991af76c250ed",
+    "text": "пустой шаблон пути"
+  },
+  "checker.config.empty_release_notes_path": {
+    "source_sha256": "158e2d50d98caa41d1c15f0675a73ae41972a69267845f42a6a6008b1bd360c9",
+    "text": "пустое значение: ожидается путь страницы описания"
+  },
+  "checker.config.empty_repo_path": {
+    "source_sha256": "ec5bd06a41feff12b3b450cff4bee86cd472367010e7c4c1f52dc622430b710c",
+    "text": "«%s»: «path»: пустой путь"
+  },
+  "checker.config.empty_repo_read": {
+    "source_sha256": "c68be4ad74a77f4149b43aacfb26248d82f0b88afa5b9e4ab2cdb2599b6a8376",
+    "text": "«%s»: «read»: нужна хотя бы одна возможность"
+  },
+  "checker.config.expected_boolean": {
+    "source_sha256": "319291f0bc70e6d87712f10a8fefcd8a5edbd0e55e5a8632e98a4c59c99ee018",
+    "text": "ожидается логическое значение, а не %s"
+  },
+  "checker.config.expected_layers_object": {
+    "source_sha256": "a8d7cc49260f649fbe69027826490db22a07e26b27d86f0ff00e8a1628d6a88b",
+    "text": "ожидается объект «шаблон пути: слой», а не %s"
+  },
+  "checker.config.expected_list": {
+    "source_sha256": "4d2e72ed51ab560a128dc0624094fd93ffd8f0b4db425019b65328e7c50f918c",
+    "text": "ожидается список, а не %s"
+  },
+  "checker.config.expected_object": {
+    "source_sha256": "5db97a2251582a83bd7aee5bf0805097bbffb371c6a639e6178f25ae91bd113a",
+    "text": "ожидается объект, а не %s"
+  },
+  "checker.config.expected_positive_integer": {
+    "source_sha256": "c7e2158f13bef065cbfd5fc8483f59ad449bacac2b3bbfef11d6c253be00beee",
+    "text": "ожидается целое от 1, а не %s"
+  },
+  "checker.config.expected_string": {
+    "source_sha256": "9c6fc3f599688b6627372a3aec914b55ad13167f50db355af57a8e66235d19ec",
+    "text": "ожидается строка, а не %s"
+  },
+  "checker.config.expected_string_list": {
+    "source_sha256": "c92f7b90e5a7e9c09895a8b34d49b8fb8643bcb21e3e7f2e1515b87a0296016e",
+    "text": "ожидается список строк, а не %s"
+  },
+  "checker.config.expected_string_or_null": {
+    "source_sha256": "d1bd40ad8b6fb50c6cafc000785a40a1963f8815b73719b078e013943ffaa75b",
+    "text": "ожидается строка или null, а не %s"
+  },
+  "checker.config.invalid_baseline_count": {
+    "source_sha256": "5e67f97b4a55b0ea3cfcde5f9243b0a470bda911ec276d8cc7dae465d87c00d6",
+    "text": "%s: «count»: ожидается неотрицательное целое, а не %s"
+  },
+  "checker.config.invalid_baseline_entries": {
+    "source_sha256": "4f7db13d4696ea4285006919ed6ecdce65bed3afc2595c9443149a1eb3356f02",
+    "text": "ключ «entries»: ожидается список, а не %s"
+  },
+  "checker.config.invalid_baseline_schema": {
+    "source_sha256": "8d01efac3280c0df8962e3c26fe10a6d83df104c242ba98b0f803ffbbcd5b234",
+    "text": "ключ «schema»: ожидается 1, а не %s"
+  },
+  "checker.config.invalid_check_mode_type": {
+    "source_sha256": "9995a013cb933f32ba6802c8959224b2ac3f9975bdd50215becf60c3d9a5485d",
+    "text": "%s: «mode»: ожидается quick или audit, а не %s"
+  },
+  "checker.config.invalid_check_mode_value": {
+    "source_sha256": "b47993c9e87d3713a54c67d6aff8145ef89adbfdf25208f2062baba8ee65660b",
+    "text": "%s: «mode»: ожидается quick или audit, а не «%s»%s"
+  },
+  "checker.config.invalid_check_timeout": {
+    "source_sha256": "cc5ab2e2fcc68dd0c05ab25d21b4d44945579b27248052196635077e77c4d9ad",
+    "text": "%s: «timeout»: ожидается положительное целое (секунды), а не %s"
+  },
+  "checker.config.invalid_editions_type": {
+    "source_sha256": "4c2fcfd50a9b81ee083e18701725fae9a434512afa034238eaaf8b702fc5f066",
+    "text": "«editions»: ожидается объект «язык: каталог», а не %s"
+  },
+  "checker.config.invalid_item": {
+    "source_sha256": "5f3f7b455f5f972e2e4fd3d8fb3cd8b76433f6d1708493c3e059277d53374131",
+    "text": "элемент %d: %s"
+  },
+  "checker.config.invalid_json": {
+    "source_sha256": "0896b93c9fd430ef74453b8e995fb2db99ee7d54f9f409b1f739b9e32e0088f5",
+    "text": "не читается как JSON"
+  },
+  "checker.config.invalid_key": {
+    "source_sha256": "dbe8a2fc1347c4818673320b446652e901c2007dd6564a78e377bad2387b21da",
+    "text": "ключ «%s»: %s"
+  },
+  "checker.config.invalid_lock_enforce": {
+    "source_sha256": "d74d2e2373c71ec217f7d02b6c40d31ba5158ad94e257ae23eec33bfca8f0558",
+    "text": "ключ «enforce»: ожидается логическое значение, а не %s"
+  },
+  "checker.config.invalid_lock_files": {
+    "source_sha256": "cece702e780d6d0c9ca93d13b72a894560e3e999509ede02b50a5b96b5088dd6",
+    "text": "ключ «files»: ожидается объект, а не %s"
+  },
+  "checker.config.invalid_lock_fingerprint": {
+    "source_sha256": "89834595f315414cc61a8c1dddf893cc2ab044a2fb6df068f99570ba4b79b856",
+    "text": "ключ «files»: «%s»: ожидается строка, а не %s"
+  },
+  "checker.config.invalid_lock_lipi": {
+    "source_sha256": "66e388554c5dee09e6cead262492aa4205d05828d0136454cb64e0a6c30ff9eb",
+    "text": "ключ «lipi»: ожидается строка, а не %s"
+  },
+  "checker.config.invalid_repo_name": {
+    "source_sha256": "8625092bf79d43e08bb27376e002c3e6d63b54d383ba2c6c66b44abd85556de5",
+    "text": "имя «%s»: ожидаются строчные латинские буквы, цифры и дефис"
+  },
+  "checker.config.invalid_repo_path": {
+    "source_sha256": "e8757b401f94d45a662c2c25cd541e9c0479dd08212538ecf03043d93579eef8",
+    "text": "«%s»: «path»: ожидается относительный путь без нулевого символа"
+  },
+  "checker.config.item": {
+    "source_sha256": "9a768fbe498d1506cf8674c0f329809d721600b162ddfd064063ec5f4fac78e1",
+    "text": "элемент %d"
+  },
+  "checker.config.item_expected_string": {
+    "source_sha256": "b0724f125a4cdff35741bf11db1229085aafd37e83900646cff07e5d3c6fc598",
+    "text": "элемент %d: ожидается строка, а не %s"
+  },
+  "checker.config.item_invalid_regex": {
+    "source_sha256": "ec021e24b44b3844e6c2eeca931168106978ca72cd536165377f5a0188428e1c",
+    "text": "элемент %d: неверное регулярное выражение: %s"
+  },
+  "checker.config.key_expected_integer": {
+    "source_sha256": "67aac5f0bdb46b1f10cc2c9ea8a64477e4262c3ee48825ef1655417bf80ff925",
+    "text": "«%s»: ожидается целое, а не %s"
+  },
+  "checker.config.key_expected_nonnegative_integer": {
+    "source_sha256": "2b67944a2ea1be7be160e805677254c8339130405d5ec8e28b86f154c5cec0fc",
+    "text": "«%s»: ожидается неотрицательное целое, а не %s"
+  },
+  "checker.config.key_expected_object": {
+    "source_sha256": "ead68b4bfe18229fb1695e584b3a2d1c100ee20c43c4fb0675a8c2e6582ac81c",
+    "text": "«%s»: ожидается объект, а не %s"
+  },
+  "checker.config.key_expected_string": {
+    "source_sha256": "3018503c2655d463ca7a303f91782f6436310708c64d10b68b35f2e6bbe189b8",
+    "text": "«%s»: ожидается строка, а не %s"
+  },
+  "checker.config.missing_key": {
+    "source_sha256": "db433d1c2f8ea63958d64589bbd70b9fb71cdcea46bc574e4cbe8a16b7ae547c",
+    "text": "нет ключа «%s»"
+  },
+  "checker.config.missing_key_at": {
+    "source_sha256": "586d502e517b295f3f166d60114d86380fa7b5087069ca3f4449504b91ea551a",
+    "text": "%s: нет ключа «%s»"
+  },
+  "checker.config.nested_edition_directory": {
+    "source_sha256": "cc1b508c2ebd180e86f91f6416e156ef931f43a049758fbf743d63663d5cb108",
+    "text": "«editions»: каталог «%s» («%s») вложен в «%s» («%s»)"
+  },
+  "checker.config.nul_in_decisions_path": {
+    "source_sha256": "28d431fdf1d02015b1e75165137f355de545e1a630c4b55bd69cc0a9645d0f08",
+    "text": "путь каталога решений содержит недопустимый символ NUL"
+  },
+  "checker.config.object_expected_at": {
+    "source_sha256": "081d7012064854c6ec8b4769fae5ae92087821aa0505e06ea0b670682c4dfbc2",
+    "text": "%s: ожидается объект, а не %s"
+  },
+  "checker.config.object_required": {
+    "source_sha256": "63aa3b57aef1147adce652e9dc2406266af9ab01cadb80ff765f41df30cd8015",
+    "text": "ожидается объект"
+  },
+  "checker.config.relative_path_inside_root": {
+    "source_sha256": "ac5ebe6ad168d1db9d9981422bd3dc1c8e12025a2a9d49b77c71e3affdff49d5",
+    "text": "ожидается относительный путь внутри корня проекта"
+  },
+  "checker.config.repeated_repo_capability": {
+    "source_sha256": "9a5387f57dff82d2b9ae27055a3f168187ae9b2b9dbc789c6e4cb3a6f1c75663",
+    "text": "«%s»: «read»: повтор возможности «%s»"
+  },
+  "checker.config.repo_duplicate_root": {
+    "source_sha256": "ec021e97aa1851056a07f9793271cf8afae3f1515a8f40ee2ae762009ba05b90",
+    "text": "ключ «repos»: «%s» и «%s» — один корень"
+  },
+  "checker.config.repo_missing_key": {
+    "source_sha256": "66f4aa2817df30bfa1075f37739505a7259418445c424e80669fdd9811774e2b",
+    "text": "«%s»: нет ключа «%s»"
+  },
+  "checker.config.repo_path_not_string": {
+    "source_sha256": "1582c97c32e30db8f66858a2dd512755eb0ee95c663f9c636f8f33ad89ce4faf",
+    "text": "«%s»: «path»: ожидается строка, а не %s"
+  },
+  "checker.config.repo_path_unresolved": {
+    "source_sha256": "07f5eb690cf87869c7b600a99cc639a947330903c86d6583690af6e524674ae3",
+    "text": "ключ «repos»: «%s»: путь не разрешён: %s"
+  },
+  "checker.config.repo_self_reference": {
+    "source_sha256": "0cf769b561699e02513e33d7bfc393887e985084942e5910dee52d543560c921",
+    "text": "ключ «repos»: «%s»: подключение к самому проекту"
+  },
+  "checker.config.repo_unknown_key": {
+    "source_sha256": "5f29b81552833705a277eb9c388170a0f60eb816a76fdf0bd33b59c44e694f69",
+    "text": "«%s»: неизвестный ключ «%s»%s"
+  },
+  "checker.config.repos_root_unresolved": {
+    "source_sha256": "53720810ac962d5b64ef21c83d60c088fb01432b6b15ad92b510dc3a00a9a35a",
+    "text": "ключ «repos»: корень проекта не разрешён: %s"
+  },
+  "checker.config.required_edition_missing": {
+    "source_sha256": "168f4c1255aa7c7c4b8befd682cad98636829e68e7c63f709c8e0a758735594f",
+    "text": "«required»: элемент %d: редакции «%s» нет в «editions»%s"
+  },
+  "checker.config.required_edition_not_string": {
+    "source_sha256": "5d0a2e74d0eee8d1f42bf0dbd7ee19428dda4e7da314cf680c78e6335ed73192",
+    "text": "«required»: элемент %d: ожидается строка, а не %s"
+  },
+  "checker.config.required_editions_not_list": {
+    "source_sha256": "64e6deb39a8cb2300358d2c4b29681006005029a495dad10fa777ef03e911b14",
+    "text": "«required»: ожидается список имён редакций, а не %s"
+  },
+  "checker.config.reserved_layer_separator": {
+    "source_sha256": "ae2b7569936a9886f8901724a30dca548b4e453cd78fb8af560c2876fe7b04b8",
+    "text": "ключ «layers»: в режиме подключений имя слоя не содержит «::»"
+  },
+  "checker.config.same_edition_directory": {
+    "source_sha256": "cfb5fc578e1a16c0efd0bf479f55d0681b952698e6e8cac9328390c8011a250a",
+    "text": "«editions»: «%s» и «%s» — один каталог: %s"
+  },
+  "checker.config.string_expected_at": {
+    "source_sha256": "ed55ff8a1ea133a7faf2fa7b1e1ce63df77e9c06b481028eba9e07fa1b61af3b",
+    "text": "%s: «%s»: ожидается строка, а не %s"
+  },
+  "checker.config.type_boolean": {
+    "source_sha256": "bf84d3d60e93cc959793d5c9d8308fbcf868f673cb032f461c9676f0480cc29e",
+    "text": "логическое значение"
+  },
+  "checker.config.type_integer": {
+    "source_sha256": "2dba2454d80024acf67141fe5efe7a6772a3f0c92273ea2f26f0ae742bcafc25",
+    "text": "целое"
+  },
+  "checker.config.type_list": {
+    "source_sha256": "a330395cc0a53ad1207736546afff4735940937564bbf75ce1edad40780d9139",
+    "text": "список"
+  },
+  "checker.config.type_number": {
+    "source_sha256": "12886f9d00055adf24c40579e22d31b2b45f2023f892954ffd5567beb60825f8",
+    "text": "число"
+  },
+  "checker.config.type_object": {
+    "source_sha256": "2958d416d08aa5a472d7b509036cb7eafd542add84527e66a145ea64cb4cdc75",
+    "text": "объект"
+  },
+  "checker.config.type_string": {
+    "source_sha256": "473287f8298dba7163a897908958f7c0eae733e25d2e027992ea2edc9bed2fa8",
+    "text": "строка"
+  },
+  "checker.config.unknown_check_code": {
+    "source_sha256": "591beecbeb691d6670c39695f4ab114d036d479133876bec97ff7697649aaf00",
+    "text": "неизвестный код «%s»; допустимые: %s"
+  },
+  "checker.config.unknown_check_level": {
+    "source_sha256": "ad27903e291339e6429e625d8165a18b3f91035ac0ab1d0a8335359243a6abd7",
+    "text": "уровень кода %s: «%s»; допустимые: error, warning, off"
+  },
+  "checker.config.unknown_key": {
+    "source_sha256": "9b985f1995005f4463af602119360a08eaff1d1571f62f08ec41ad9591e45fd5",
+    "text": "неизвестный ключ «%s»%s"
+  },
+  "checker.config.unknown_key_at": {
+    "source_sha256": "3cc27e82b227cc10d5a6d38dc57facbf8b23c44e9fa81a9990c9bc50e3dca710",
+    "text": "%s: неизвестный ключ «%s»%s"
+  },
+  "checker.config.unknown_repo_capability": {
+    "source_sha256": "e26b9e58f683c05e413bbc617e450d316704ae12512f07e922b8de21e4b4fb3e",
+    "text": "«%s»: «read»: неизвестная возможность «%s»; допустимые: %s"
+  },
+  "checker.conventions.audit": {
+    "source_sha256": "b81f37a043a6f767e7c94d105f4bd31282f3ecc20680bb9d09bd93461cf4c863",
+    "text": "Аудит"
+  },
+  "checker.conventions.decision": {
+    "source_sha256": "86ae35d58a6aa3b5742df94ef9d7162219f0106a911ae1954c1f0604aaec805d",
+    "text": "Решение"
+  },
+  "checker.conventions.discussion": {
+    "source_sha256": "3cc610240ec72ccfbf16c22bcd5d1d298a09f0e2bb1dd8feef426911542492c4",
+    "text": "Обсуждение"
+  },
+  "checker.conventions.issue": {
+    "source_sha256": "4a502846d070e2088b7025abe80629830bf03d7ab5624d5e91f332bc9d049d3f",
+    "text": "Замечание"
+  },
+  "checker.conventions.plan": {
+    "source_sha256": "64879f7d6b960a01909762d911a32d4582c20010c5641ee90278b644a9e3b525",
+    "text": "План"
+  },
+  "checker.docs.duplicate_anchor": {
+    "source_sha256": "0733d7dd4f7a7129d775079c764d46e2b5566f2b00f4e666687985ef7b0f6867",
+    "text": "якорь «%s» повторяется в файле"
+  },
+  "checker.docs.duplicate_heading_slug": {
+    "source_sha256": "be081351671ae0e19e82aaeb6a37f9300823ab0dd600f471f6185e51e136907e",
+    "text": "заголовок со slug «%s» повторяется на странице"
+  },
+  "checker.docs.edition_anchor_mismatch": {
+    "source_sha256": "8ccf87d6ea17ba727f68e8a0c8abd3e68852ff76ac7833297799c292061e3df5",
+    "text": "наборы явных якорей у пары разошлись с редакцией «%s»: %s"
+  },
+  "checker.docs.edition_link_to_nonmatching_page": {
+    "source_sha256": "1f8a389dfc55844d3b8ee81309a2d5a1f4c59c84dbcad85754095549f8e8cf70",
+    "text": "ссылка из редакции «%s» в «%s» ведёт не на парную страницу: %s (пара — %s)"
+  },
+  "checker.docs.extra_anchor": {
+    "source_sha256": "c8dee78f8c7b466c881847accc196998bad00e2b96c5ef913dfbe454d3807c96",
+    "text": "лишний"
+  },
+  "checker.docs.extra_anchors": {
+    "source_sha256": "c8dee78f8c7b466c881847accc196998bad00e2b96c5ef913dfbe454d3807c96",
+    "text": "лишние"
+  },
+  "checker.docs.heading_without_explicit_anchor": {
+    "source_sha256": "7e59dff42034e890c472098698403845fa8b459a1aba715e22875907d2e4b529",
+    "text": "ссылка на заголовок без явного якоря: %s"
+  },
+  "checker.docs.invalid_anchor": {
+    "source_sha256": "1146bdc5243129aad0ec84318f931adbff102b6b40b662fa5d72ba18b6274bb1",
+    "text": "якорь «%s»: начинается со строчной латинской буквы или цифры; допустимы только строчные латинские буквы, цифры и дефис"
+  },
+  "checker.docs.missing_anchor": {
+    "source_sha256": "a89c28847b64b703a4f2744705aed665db5827d3e3bd9878072b075735336777",
+    "text": "якорь не найден: %s"
+  },
+  "checker.docs.missing_anchors": {
+    "source_sha256": "2058b5bb5344987152c2b1ac78fe837e76d0b64e12cb198f30765d139b72dd7e",
+    "text": "нет "
+  },
+  "checker.docs.missing_edition_page": {
+    "source_sha256": "9b25a1369b15194cf375d9829b9a80ef5d399c67588c8cfb3639fcd71faa2502",
+    "text": "нет страницы в обязательной редакции «%s»: %s"
+  },
+  "checker.docs.missing_link_file": {
+    "source_sha256": "6783cc6256ae28887cfdd4c4e9a0f496ff869db67eb9affadbf33960aab72b22",
+    "text": "ссылка ведёт в несуществующий файл: %s"
+  },
+  "checker.docs.missing_readme_index": {
+    "source_sha256": "7ee3c84f3f3aa6031d491a28a6b2583760c6171245cd25e5b9c912f418c4944d",
+    "text": "нет указателя README.md"
+  },
+  "checker.docs.page_too_large": {
+    "source_sha256": "555c60c09bf1cccea49bceb53e8af52c4f2c9e91548a0e54c9e05bfddcde408c",
+    "text": "размер %d строк / %d байт (предел %d / %d) — разделите страницу"
+  },
+  "checker.docs.unreachable_page": {
+    "source_sha256": "0848848f668171df0714affdaada0f798227286e6afd2b8a8b13204069470745",
+    "text": "страница недостижима из %s"
+  },
+  "checker.docs.unreadable_utf8": {
+    "source_sha256": "dc85a98f51ea4c6e105e13777b67686dbd11cdfdaf6f451a4b65c90b54b83fda",
+    "text": "файл не читается как UTF-8"
+  },
+  "checker.docs.workflow_link": {
+    "source_sha256": "29c9fb1526fdf5e65a6e9c601220c31d44128b9e1df8b0699976dc4926bf291f",
+    "text": "описание ссылается на рабочие материалы"
+  },
+  "checker.history.negative_blame_limit": {
+    "source_sha256": "081e14e5c4b517471eb6e20fe511e7bba7bc87b4a65d0f5013606abc96d2d1bf",
+    "text": "лимиты blame должны быть неотрицательными"
+  },
+  "checker.history.unchecked_region": {
+    "source_sha256": "6d76fb8dc35c4b742cb006f39b98dd0eb32db5558d096fb888f584514806bc8e",
+    "text": "история области %s:%s не проверена"
+  },
+  "checker.paths.empty_or_nul_directory": {
+    "source_sha256": "538dc1baad44a007967c73d0fa448471e3a85c0bcac330f14918c6d2812adf9c",
+    "text": "ожидается непустое имя или путь каталога без NUL"
+  },
+  "checker.paths.exclude_project_root": {
+    "source_sha256": "14cbbee3e575f807d884dc11d45c6eed8c93423b66a4012ed47f3b1ffb6df1d1",
+    "text": "нельзя исключить корень проекта"
+  },
+  "checker.paths.outside_project_root": {
+    "source_sha256": "6ef3876da779b0165ee2ce169c61ad1f09a3ecf83bdd7eadfd504e683091bfab",
+    "text": "путь выходит за корень проекта"
+  },
+  "checker.paths.path_separator": {
+    "source_sha256": "0ae7e88e701c85c39000779ca4b1eb19745c4d46fe9bc9ea744768ef6345f5fd",
+    "text": "разделитель пути — /"
+  },
+  "checker.paths.relative_path_inside_root": {
+    "source_sha256": "ac5ebe6ad168d1db9d9981422bd3dc1c8e12025a2a9d49b77c71e3affdff49d5",
+    "text": "ожидается относительный путь внутри корня проекта"
+  },
+  "checker.report.error": {
+    "source_sha256": "ca00fccfb408989eddc401062c4d1219a6aceb6b9b55412357f1790862e8f178",
+    "text": "ошибка"
+  },
+  "checker.report.warning": {
+    "source_sha256": "4bd9354bb652233497a0f42647464b81b83a83654fcf1511263a5d0120d74c91",
+    "text": "предупреждение"
+  },
+  "checker.reviews.duplicate_json_key": {
+    "source_sha256": "2884b3270a5dd8c3aace263e103056f9a9f42d48288f5cd468a33cacd092bd90",
+    "text": "повтор JSON-ключа: %s"
+  },
+  "checker.reviews.empty_string": {
+    "source_sha256": "fe3eeb3affd24f1b0892bbf7a9ed0d48688f08cd9871808248e2f57b11abf37f",
+    "text": "%s: ожидается непустая строка"
+  },
+  "checker.reviews.entry": {
+    "source_sha256": "923fe53966c6cd9343e11af776cd4b05be315ea4b200b02e4d5dfb0f929b73bf",
+    "text": "запись"
+  },
+  "checker.reviews.invalid_algorithm": {
+    "source_sha256": "6939bc0bec7e0d71d84b8f1a7794fb24c9a1325416056b37b7972126e15806a8",
+    "text": "algorithm: ожидается %s"
+  },
+  "checker.reviews.invalid_anchor": {
+    "source_sha256": "7918697a16796c4e273e550faff9012c4484accc00cb2c4ea36f4ffcda0c51b6",
+    "text": "anchor: ожидается точный ID без # и NUL"
+  },
+  "checker.reviews.invalid_digest": {
+    "source_sha256": "179154e94f21fc1a9e03395f7ba892700117299a7ff9ef7b4c7328ea945ddb93",
+    "text": "sha256: ожидаются 64 строчные hex-цифры"
+  },
+  "checker.reviews.invalid_entries": {
+    "source_sha256": "82792286edfaf3828656cdf58790cc581be08c78c8ae618b847630c0c3fa33da",
+    "text": "entries: ожидается массив"
+  },
+  "checker.reviews.invalid_head": {
+    "source_sha256": "b123c2feda38bdfb2a3312a152ee8b0c58ac9df73c34d74582673ce13ae6afe1",
+    "text": "head: ожидается полный Git OID или null"
+  },
+  "checker.reviews.invalid_id": {
+    "source_sha256": "55e4193ad939c0225ecf1f2cf7b55284688f2b5a4cbfc0a03077f92a5b0cc6e7",
+    "text": "id: не совпадает с SHA-256 пары"
+  },
+  "checker.reviews.invalid_json_value": {
+    "source_sha256": "91326b5e333a4353b3715a3babef0be9eb3205561f9725f27203d1cbc326ec55",
+    "text": "недопустимое JSON-значение: %s"
+  },
+  "checker.reviews.invalid_path": {
+    "source_sha256": "54ee1dc5f25a1a187b9e04840340c68cf8ac6271095ee109ba7647fed31ef2d2",
+    "text": "path: ожидается канонический POSIX-путь файла от корня"
+  },
+  "checker.reviews.invalid_relation": {
+    "source_sha256": "e21f425cf7bdc28f9feba4d630bb2db7889a187ec1c2fe4a9cbc9423573730a6",
+    "text": "relation: ожидается trace"
+  },
+  "checker.reviews.invalid_schema": {
+    "source_sha256": "163a010fc23a9caac5a5ba3ad6e21e70da670d7f6d1ff139169d0aa080f3b1f2",
+    "text": "schema: ожидается 1"
+  },
+  "checker.reviews.invalid_timestamp": {
+    "source_sha256": "cd0b0c7439989c29969f9bd6dafe11fd052d8e5f0b13b61b7158951f78b60356",
+    "text": "reviewed_at: неверная календарная дата"
+  },
+  "checker.reviews.registry": {
+    "source_sha256": "872491a30d60d598962de6e7b834ab76b2aa65fbab102c6ebaaae6acdc238822",
+    "text": "реестр"
+  },
+  "checker.reviews.repeated_id": {
+    "source_sha256": "946f471363e869435d80b8f85821c0e0d9890f85c745ea31bd6a82be8b8c41f9",
+    "text": "повтор id: %s"
+  },
+  "checker.reviews.timestamp_format": {
+    "source_sha256": "7b43dfaf65c4a1cd5bc43675262750cf90ec02ff64ba0a7cd2920e70fca8d1c3",
+    "text": "reviewed_at: ожидается UTC YYYY-MM-DDTHH:MM:SSZ"
+  },
+  "checker.reviews.unexpected_fields": {
+    "source_sha256": "f13131bfa96450d70a2156cfa6bb6a11d4828797e941d7fb4185de43e3af3223",
+    "text": "%s: ожидаются только обязательные поля %s"
+  },
+  "checker.reviews.unpaired_surrogate": {
+    "source_sha256": "1fb61ff36e7372792ec8f97aade23b79bc93c2ec1284fb2445d55d8a57fa43a1",
+    "text": "%s: непарный суррогат"
+  },
+  "checker.reviews.unreadable_registry": {
+    "source_sha256": "4043e05ab36d045a489379f71dae5d26dd577cda99267908cfb30c9fff9801dd",
+    "text": "файл реестра не читается"
+  },
+  "checker.reviews.unreadable_registry_detail": {
+    "source_sha256": "07d3f9ee5d64d43f7480fed04a9b2511e921d5dd896c9a691d026ddda689bd6a",
+    "text": "файл реестра не читается: %s"
+  },
+  "checker.reviews.wrong_kind": {
+    "source_sha256": "d7f8b36ec6eb0d907f65d6ffd6981da1ab8a47af7e93a8fc0f7329cde4ee158c",
+    "text": "ожидается kind: %s"
+  },
+  "checker.runner.audit_help": {
+    "source_sha256": "fac98b9113f76cf8713932e76004d38883a9700d6322583cdb19898f338dd890",
+    "text": "расширенный аудит (вручную)"
+  },
+  "checker.runner.baseline_summary": {
+    "source_sha256": "adaa53d34b69cc34032756243cab89bdfd04bd0e2239044af29a66b1486c34fd",
+    "text": "в базовой линии %d, исправлено %d — `lipi baseline --prune`"
+  },
+  "checker.runner.config_help": {
+    "source_sha256": "7f022e035deee43a81693970347c50a88259890323921b4f1bb24b5fce6dbc2e",
+    "text": "файл настроек (по умолчанию <root>/%s)"
+  },
+  "checker.runner.description": {
+    "source_sha256": "6d280fd8b15f925a5b398578833eb7920ab6938b8b41f7a4de59c8eb7776eb60",
+    "text": "Чекер проекта по правилам lipi"
+  },
+  "checker.runner.diff_help": {
+    "source_sha256": "c7437abce4c82945e6cf5398142ef59ac5989bdae86d99a6dcdf3982bc736a23",
+    "text": "детектор расхождения по диапазону git, напр. origin/main...HEAD"
+  },
+  "checker.runner.format_help": {
+    "source_sha256": "0067d0ebdd5c935d37c7e14ea88a4abacfcfe15b95161a5adcb2dbbd604fc938",
+    "text": "формат вывода: text (по умолчанию), json — один объект для инструментов и CI, github — аннотации GitHub Actions"
+  },
+  "checker.runner.format_required": {
+    "source_sha256": "7b5ddf8cb5095a6593101696078bd10bbcf61a04ff4ddba90b39c4446a96693b",
+    "text": "--format: укажите text, json или github"
+  },
+  "checker.runner.git_diff_failed": {
+    "source_sha256": "47dd652ef6ce22d4ab19cc871d3ea8fcb4b5bf5df01589a4e958e3029b8e06d8",
+    "text": "git diff не выполнен: %s"
+  },
+  "checker.runner.ignored_trace_summary": {
+    "source_sha256": "c42bf112422d35e7d260eab011fdeeeffca395c79531042e49505f7a5d93bb90",
+    "text": "строк с lipi: ignore-trace: %d"
+  },
+  "checker.runner.index_rebuilt": {
+    "source_sha256": "167588b9a9bb9aa32387d6f6665440b1318590995fe7f86eda7de2254a316bbe",
+    "text": "указатель пересобран: %s"
+  },
+  "checker.runner.index_write_failed": {
+    "source_sha256": "50c6df9f388b14bef8a730dcaa666346d97ea1376b9cfc0df1ee9a688075b8ab",
+    "text": "указатель не записан: %s"
+  },
+  "checker.runner.invalid_entry_pattern": {
+    "source_sha256": "8fb6d3094ffd53e980df443ab8809c27adb3049402bb230a3d95b6b81398adbf",
+    "text": "неверный шаблон entry: %s"
+  },
+  "checker.runner.invalid_format": {
+    "source_sha256": "ba31c0a32c4d339d9d3dd68d04fe16f145584f303887c51cb840fc8fbb9f8546",
+    "text": "--format: ожидается text, json или github, а не %s"
+  },
+  "checker.runner.no_baseline_help": {
+    "source_sha256": "8d09d0f7a9ff06c13b192ede51199db67aeff5732ecad590ec0eacb3d0970650",
+    "text": "показать все ошибки, не учитывая базовую линию"
+  },
+  "checker.runner.no_project_directories": {
+    "source_sha256": "6c4762de6d1915fff2a0e99d79bbc05511862d215b7b960989ae4828d563ff22",
+    "text": "не найдены ни каталог описания, ни каталог рабочих материалов"
+  },
+  "checker.runner.obsolete_reviews_summary": {
+    "source_sha256": "ecd8d3527e83249e4f38bf80abd8b178a0555dfc309c33cbaea8b6255f54b8d4",
+    "text": "устаревших отметок: %d; не удалось проверить: %d"
+  },
+  "checker.runner.removed_json_flag": {
+    "source_sha256": "90a29b8dbe44daffe9feccc8ff376195092589be977616ae424a4df0eb130416",
+    "text": "ключ --json удалён; машинный вывод: --format json"
+  },
+  "checker.runner.review_error": {
+    "source_sha256": "2a24d30fd9eebb88f9a62a3d8ad6d95fb706dd5f26288ef788c649a0662c89cc",
+    "text": "%s: [ошибка C1] %s"
+  },
+  "checker.runner.reviewed_pairs_summary": {
+    "source_sha256": "04ad3580671ba2076978892367b7a4b1953ff607daed891d3d729b2e2b106ef5",
+    "text": "просмотрено пар устаревания: %d"
+  },
+  "checker.runner.reviewer_summary": {
+    "source_sha256": "0f8609ff1336e4b8c50e48b9de2de6003d6e3ffb0d26994e59f9321bf4a5d14f",
+    "text": "  %s — %d, последняя отметка %s"
+  },
+  "checker.runner.reviews_since_help": {
+    "source_sha256": "1c1a0bde6aeaf23c51e13276e7ba07b3f6bceb157f34744adf7fc9b47a777f61",
+    "text": "с аудитом: показать новые отметки просмотра относительно коммита Git"
+  },
+  "checker.runner.reviews_since_requires_audit": {
+    "source_sha256": "7764ee9fcd4d71b65f5a921b5c603ce7581ef38b6dbd81456a455f9e1eb5846c",
+    "text": "--reviews-since доступен только при аудите"
+  },
+  "checker.runner.reviews_since_summary": {
+    "source_sha256": "0092c3f16f7d6e068e098f60ba733c38196e50d2141f8654a3a8313f85609d3d",
+    "text": "новых отметок после %s: %d"
+  },
+  "checker.runner.root_help": {
+    "source_sha256": "aa4a7041cf81f44db8ab39365b73b908b7b12aa68a9da7c0cc98d9977b5838df",
+    "text": "корень проекта (по умолчанию .)"
+  },
+  "checker.runner.staged_help": {
+    "source_sha256": "cc446ee1dc0343f4b28a180edbe55b557ec81c18cfdf39c4ccb50a45a175ffb5",
+    "text": "детектор расхождения по проиндексированным изменениям"
+  },
+  "checker.runner.stale_index": {
+    "source_sha256": "6a1009d3681b2cb6eed48a940d79dbf230484e022ca6c040c547bd6c3b468f7e",
+    "text": "указатель устарел — запустите lipi index"
+  },
+  "checker.runner.strict_help": {
+    "source_sha256": "49be536e7eda5887e18b93e5ad876a8f82158ab2714c8d47141d6be5576794e1",
+    "text": "считать предупреждения ошибками"
+  },
+  "checker.runner.structure_help": {
+    "source_sha256": "1fec7a9a405d4ea638be3edee4b883c1e3e000ef1d9fea2eecd0de000028bf51",
+    "text": "с --format json: добавить граф структуры (узлы и рёбра)"
+  },
+  "checker.runner.summary": {
+    "source_sha256": "6283c718f6c2df0c46604fd42d3d263358baddf859cafb9acc0332f3b6925a8e",
+    "text": "страниц описания: %d, рабочих документов: %d, меток: %d; ошибок: %d, предупреждений: %d"
+  },
+  "checker.runner.unreadable_settings": {
+    "source_sha256": "51e5da4a8c67424d275fa2d4d304ec210d52d032b0b34a992035b9d2264f91ca",
+    "text": "настройки не читаются: %s"
+  },
+  "checker.runner.write_index_help": {
+    "source_sha256": "635261be2ca256823261490725bbb9be1b895418096783f32797e710a53968f2",
+    "text": "пересобрать указатель рабочих материалов"
+  },
+  "checker.sources.config_outside_connected_root": {
+    "source_sha256": "18978f4ce7761ebe073cc35321f932e060e98d2ffc080122cbd15db0f5f8dfc8",
+    "text": "lipi.json выходит за корень подключения"
+  },
+  "checker.sources.git_state_unavailable": {
+    "source_sha256": "8656bdbb53467a29bd7418b1e7c3dc7594e65db39dddf30603367a033267687d",
+    "text": "не удалось прочитать состояние Git"
+  },
+  "checker.sources.incompatible_major_version": {
+    "source_sha256": "439b5e35df246598a8f9951a438b9fef33bd7c0daca26c03fd6778d118945b4e",
+    "text": "другая первая цифра lipi: %s (ожидается %s.x)"
+  },
+  "checker.sources.invalid_connected_directory": {
+    "source_sha256": "fe6b29ac8f4da50d725566d6de8070530825730c8a3efe88fb8db05fcc7ce64e",
+    "text": "каталог «%s» выходит за корень подключения или проходит через символическую ссылку"
+  },
+  "checker.sources.lock_outside_connected_root": {
+    "source_sha256": "4d0c41817a0d4e574c564845721709bdf3f54ca5f8022ad9ffc370d318c94a8d",
+    "text": "lipi.lock выходит за корень подключения"
+  },
+  "checker.sources.missing_connected_directory": {
+    "source_sha256": "ef7761d4b9f351386cfd6b71ea06a0fdf92fae56fadb14a49662b47a204a7af7",
+    "text": "каталог подключения не найден"
+  },
+  "checker.sources.outside_git_worktree": {
+    "source_sha256": "c0a1265ca046d2ef43a3fa4404b753d74dbac3c89c05822d5ef12f14fda3cf51",
+    "text": "каталог источника находится вне рабочего дерева Git"
+  },
+  "checker.sources.reserved_layer_separator": {
+    "source_sha256": "097e835066f87c12c4d0e4a52b81a68570530ab167218f4690cb0dcc21a80d87",
+    "text": "имя слоя содержит зарезервированный разделитель ::"
+  },
+  "checker.sources.unreadable_connected_config": {
+    "source_sha256": "94c7bf25f342b3af311b5cc02acfe25e294d734b2a72a8335ef6c1ad7c87beca",
+    "text": "lipi.json не является читаемым файлом"
+  },
+  "checker.sources.unreadable_connected_lock": {
+    "source_sha256": "b85f89898d0fd17ffc8b89d16716a129183592c50a4aad250f203fc27e9b0c0e",
+    "text": "lipi.lock не является читаемым файлом"
+  },
+  "checker.state.enforce_mismatch": {
+    "source_sha256": "148e0cd8c2371cb1d6cb3911b321141089052124ad475e303f7d7ecdc9dc0b79",
+    "text": "правила lipi отрисованы с enforce: %s, а в lipi.json — %s; запустите lipi init"
+  },
+  "checker.state.fingerprint_mismatch": {
+    "source_sha256": "4d906e811b63c039dec8748d2f1f34f7e64f802130f74820839fb979cdf06526",
+    "text": "%s: не совпадает с отпечатком lipi — правило lipi не правится на месте, заведите замечание к lipi"
+  },
+  "checker.state.incompatible_older_project": {
+    "source_sha256": "8b424b93ec972e2b8c41f93950e9659069bf2e07ebf28ec7f9260bf9cd18a773",
+    "text": "проект на %d.x — прочитайте CHANGELOG.md и примените lipi init; или проверьте проект прежней версией: pipx install --suffix @%d git+https://github.com/lipisutra/lipi@v%d, затем lipi@%d check; установка: https://github.com/lipisutra/lipi/blob/v%s/SETUP.md#install"
+  },
+  "checker.state.missing_lipi_rules_link": {
+    "source_sha256": "5436504f574810a1efa7f9ff0038ce1f277d23aa8ed4a5ef8d488c770dec6536",
+    "text": "в AGENTS.md нет ссылки на %s — правила lipi"
+  },
+  "checker.state.missing_lock_fingerprints": {
+    "source_sha256": "9c8c7b79f524f548e840137224e9b7a3df6603442a980ce86447166a92a61f0b",
+    "text": "в lock-файле нет отпечатков файлов lipi — выполните lipi init"
+  },
+  "checker.state.upgrade_lipi": {
+    "source_sha256": "be10d2a9c0963a4591a8d9bce436271c25eaa668c0c96d2f8813ec16ca5d22fb",
+    "text": "обновите lipi: pipx upgrade lipi"
+  },
+  "checker.targets.align_code_with_decision": {
+    "source_sha256": "5c8f57070e8476b4f1a99ad2abba0752d027c706b79eb2be4c0b115ec9b80d58",
+    "text": "сверьте код с новым решением"
+  },
+  "checker.targets.ambiguous_external_work_id": {
+    "source_sha256": "2e061dc8a16f8a271226dc51b3bf4722b0d2cdbe6f3d88b6916d8982d1bc7ec1",
+    "text": "неоднозначный номер %s::%s: %s"
+  },
+  "checker.targets.ambiguous_target_anchor": {
+    "source_sha256": "38d90a931ff5a37a2dda1ed0fe2206285ee0897b5aaedf4ea7684f90f0ebf5c1",
+    "text": "неоднозначный якорь «%s» на странице %s: якорь повторяется"
+  },
+  "checker.targets.ambiguous_work_id": {
+    "source_sha256": "3e75681558f073358d8718a66139cb4515daa7191919d41497de36b15a99b888",
+    "text": "неоднозначный номер %s: %s"
+  },
+  "checker.targets.check_completed_plan_link": {
+    "source_sha256": "f6271b4f3ec73deca2255e68285090881499572aa2d198789180e7d250308c61",
+    "text": "проверьте актуальность связи с завершённым планом"
+  },
+  "checker.targets.check_discussion_outcome": {
+    "source_sha256": "e2b90fb87f83d59846a45edcc1eebaf05b1918257d0e416eb86042d9992e1ac5",
+    "text": "сверьте связь с итогом обсуждения"
+  },
+  "checker.targets.check_issue_link": {
+    "source_sha256": "23f90460183686e9c493d217253edddf6d2f4d9d6014d783e7c6eb57499c59c4",
+    "text": "проверьте, нужна ли связь; если это временный обход, его можно убрать"
+  },
+  "checker.targets.connection_error": {
+    "source_sha256": "d878e731a4f827f4e0be2b6337cff599ebee3db658bccfc0ddbcd4f8fb86a391",
+    "text": "подключение «%s»: %s"
+  },
+  "checker.targets.decision_target_not_found": {
+    "source_sha256": "a0b43f61b1318afa5a2ea0ae1dafb0011b36f0c4174506497c519f794ae6586a",
+    "text": "решение %s::%s не найдено среди разрешённых целей"
+  },
+  "checker.targets.decisions_not_allowed": {
+    "source_sha256": "f34657b4570cf4e7eb3f6ca04be5eaa093756e290dafdec8c29ec8a7f5e62642",
+    "text": "цель вне разрешённого чтения «%s»: требуется decisions"
+  },
+  "checker.targets.excluded_target": {
+    "source_sha256": "49aee0eb6acfad499cff5e8e66ed0a3735f4aeee48d4bb372b1ae916c2535848",
+    "text": "цель исключена из проверок: %s"
+  },
+  "checker.targets.external_target_excluded": {
+    "source_sha256": "6faa88c8f3d0f808ec801e0c0c61053a3e43828d3bd34140af4c1522ca2f3035",
+    "text": "цель исключена из проверок подключения «%s»: %s"
+  },
+  "checker.targets.external_target_not_allowed": {
+    "source_sha256": "552a91880ff19c0366839696c09e9bb5b4aa5fb600849f518ba1dc612d7f7fab",
+    "text": "цель вне разрешённого чтения «%s»%s"
+  },
+  "checker.targets.invalid_external_target": {
+    "source_sha256": "886002bbbcb22d088488cfa143151cef3d1341f0778e07c6b9c9a73bd29d7eba",
+    "text": "подключение «%s»: неверная цель, ожидается имя::путь#якорь или имя::ADR-номер"
+  },
+  "checker.targets.invalid_target": {
+    "source_sha256": "85972356b140d50ec992c973631c635741e06f76f879ea708d17047995631e34",
+    "text": "неверная форма метки/связи: ожидается путь/страница.md#якорь или ТИП-номер"
+  },
+  "checker.targets.malformed_external_target": {
+    "source_sha256": "b5b5328d8dd8712622e1304801282f3e98492ca2a308bf60391da2b2e93d0d08",
+    "text": "подключение «%s»: неверная форма метки/связи, ожидается %s::путь/страница.md#якорь или %s::ADR-номер"
+  },
+  "checker.targets.missing_external_config": {
+    "source_sha256": "ee18dfa51ee7f9880afdabe4f6eb8ced1a21cb8b60deaae635d63d87d6da4704",
+    "text": "у подключения «%s» нет lipi.json: доступны только цели путь#якорь"
+  },
+  "checker.targets.missing_target_anchor": {
+    "source_sha256": "392ed4fedcd0220695b1f8d4f5e441703dbb668565400a1997c7fa326284263e",
+    "text": "на странице %s нет якоря «%s»"
+  },
+  "checker.targets.missing_target_page": {
+    "source_sha256": "7ddc8d9fde3967dd239fd032006fccf52950e096bd0b1fbd2c273a45baa9db4d",
+    "text": "в проекте нет страницы %s"
+  },
+  "checker.targets.outdated_decision_link": {
+    "source_sha256": "bd34a0136ab6ab23dff03d7f115dbda537ac295ead65c8abbf2fc803bf6c372a",
+    "text": "ссылка ведёт на %s решение %s — проверьте актуальность текста"
+  },
+  "checker.targets.rejected_decision": {
+    "source_sha256": "20cd938a2ea64f612b3523bc9219130c6fc66cd09b394ea38437488c0b8898b2",
+    "text": "отклонённое"
+  },
+  "checker.targets.remove_canceled_plan_dependency": {
+    "source_sha256": "c591d6a9caf8d24aa8e4825284f2a0618d528cf70b7dab9e892666aac539b77f",
+    "text": "уберите опору на отменённый план"
+  },
+  "checker.targets.remove_rejected_decision_dependency": {
+    "source_sha256": "7c155c94d051bd07bb9c80e63b6d74b0f6db91c9a8191c96c5fea2bd5c3916b5",
+    "text": "уберите опору на отклонённое решение"
+  },
+  "checker.targets.required_capability": {
+    "source_sha256": "f74edf0975f0ccee01fd4bd4570cbdd32083613846ff941cb99fd48925d93e69",
+    "text": ": требуется "
+  },
+  "checker.targets.superseded_decision": {
+    "source_sha256": "444bd9c51d51643ccd939e7eb50c847bde7bfdfe271f2fca928e7dbfc73377f0",
+    "text": "заменённое"
+  },
+  "checker.targets.unchecked_external_target": {
+    "source_sha256": "fe7aba3ad2d3be5d6af4daeb256f9f1ae2e2e5ad974c59f92a91ac15211e0e80",
+    "text": "%s недоступен: %s — связь не проверена"
+  },
+  "checker.targets.unknown_connection": {
+    "source_sha256": "a04244c56962e3548654fb6247d8ae96fc3a00b6797a5c28cc6f1563fe84cf00",
+    "text": "неизвестное подключение «%s»"
+  },
+  "checker.targets.unreadable_external_decision": {
+    "source_sha256": "d3bc712440f422dfaa1371740d83b4873b9487f0029b62241e1c73dad93f0a8b",
+    "text": "решение %s не читается как UTF-8"
+  },
+  "checker.targets.unreadable_external_page": {
+    "source_sha256": "0e0200f1273c1e160226916943470094665fa6f2ccd07dd6997690af1478a895",
+    "text": "страница %s не читается как UTF-8"
+  },
+  "checker.targets.unreadable_work_document": {
+    "source_sha256": "b176bbec147a0758a99ca182e19b5920630f84bf951a88c9c8cb350bc734dfe9",
+    "text": "рабочий документ %s не читается как UTF-8"
+  },
+  "checker.targets.unsupported_external_work_item": {
+    "source_sha256": "21c2d00a3bd0ac2e202bc1eac09ff7bd8f037f3a08e71d3417b1722d5dc00b0f",
+    "text": "внешние работы не поддерживаются: %s::%s"
+  },
+  "checker.targets.work_target_not_found": {
+    "source_sha256": "70cd92d4340f9d5953e23389d377f7f852af43344b2f1a200b0cb016e06392db",
+    "text": "рабочий документ %s не найден среди разрешённых целей"
+  },
+  "checker.targets.workflow_directory_missing": {
+    "source_sha256": "cfeda8593242d0d9159729860dbac4af2571f57a51b26edf6c024d38e9024ca8",
+    "text": "нет каталога рабочих материалов"
+  },
+  "checker.targets.workflow_disabled": {
+    "source_sha256": "54ff413687e13a29494a75b881730867646bcbe49b838db754b7eee2ecfd7ae6",
+    "text": "рабочие материалы отключены (workflow: null)"
+  },
+  "checker.trace.stale_anchor_region": {
+    "source_sha256": "15824479f710aaddc0d5f52c9b7e7f47b0ca84d34f3ae5ace38feecc2bb2c4ea",
+    "text": "код под меткой «%s» изменён, а раздел %s:%d — нет; проверьте, что описание верно"
+  },
+  "checker.trace.stale_reference_page": {
+    "source_sha256": "00eab3a7188422ce9f8abf96ad4e348f644b01d1bc2d52d176a34f0dff93aae8",
+    "text": "раздел «%s» описания системы изменён, а эта страница справки — нет; проверьте её"
+  },
+  "checker.workflow.ambiguous_masterplan_document": {
+    "source_sha256": "f46094f79308ad7854bced283515e0574a40487d23de89efb4dde3b0439cd08c",
+    "text": "%s: неоднозначный номер"
+  },
+  "checker.workflow.closed_after_latest_date": {
+    "source_sha256": "6cf591cb35339c0d7c9a411e9a571ad0bb55dbca88313931be4ab4333d2df5fb",
+    "text": "дата закрытия позже допустимой даты %s"
+  },
+  "checker.workflow.closed_before_created": {
+    "source_sha256": "77e3d5bf13c920a2bee7dc8ab2015d32170ff38a8b423a454739dc586cc20bce",
+    "text": "дата закрытия раньше даты создания"
+  },
+  "checker.workflow.closed_masterplan_document": {
+    "source_sha256": "077b51fad27dd277bcd50bb597d79a0c0ce84f1f27324f170cc97fa8adda5b30",
+    "text": "%s уже «%s» — уберите из мастер-плана, итог есть в указателе"
+  },
+  "checker.workflow.duplicate_work_id": {
+    "source_sha256": "7ae3bcd33a0250cce15f7d6814b085743b497f2cfe0440f5d23579c22d861821",
+    "text": "ID %s уже занят: %s"
+  },
+  "checker.workflow.empty_required_section": {
+    "source_sha256": "5f90e75def25e13c92145948373fd3c0d75736a6cfb8505f76934326d50286a7",
+    "text": "раздел «%s» пуст — статус «%s» требует: %s"
+  },
+  "checker.workflow.incorrect_directory_year": {
+    "source_sha256": "946a9effe360c86643a0f0ec17603cdb31ed8dd02cdb5f439d3e6dcc9f3fb942",
+    "text": "год каталога не совпадает с Датой создания; lipi mv \"%s\" \"%s\""
+  },
+  "checker.workflow.invalid_closed_date": {
+    "source_sha256": "77e3194afa1a2bb96e8a4ecf0fe10efc513ae28c1547335f89590e975fade604",
+    "text": "«%s»: ожидается корректная календарная дата ГГГГ-ММ-ДД"
+  },
+  "checker.workflow.invalid_date_header": {
+    "source_sha256": "f21b57b662f442d0b77fee665a7b86e11af9c55b0c77d0143b852e3a58219ffc",
+    "text": "«%s»: ожидается дата ГГГГ-ММ-ДД, а не «%s»"
+  },
+  "checker.workflow.invalid_status": {
+    "source_sha256": "df020080a5ffb7626cff8745d9b291ff6a5f979c18f0eb99909d5b66d95b586e",
+    "text": "статус «%s» не из списка: %s. Подробности пишите в «%s»"
+  },
+  "checker.workflow.masterplan_too_large": {
+    "source_sha256": "d392aea59e14a6fedf2d689dc411eabc479e73ef662bcfc28e25b846048fcc04",
+    "text": "мастер-план %d строк (предел %d): оставьте порядок и зависимости, подробности перенесите в планы"
+  },
+  "checker.workflow.missing_closed_date": {
+    "source_sha256": "e13f81687d7f8612b6096024b7c2dffca19c1ea6d038bbbc6b976a8a5e9cecc3",
+    "text": "статус «%s» требует строки «- %s: ГГГГ-ММ-ДД»"
+  },
+  "checker.workflow.missing_date_header": {
+    "source_sha256": "8ec094753b97be3b9de1f79209d9882df60153370a40e4953e49c364964ee15a",
+    "text": "в шапке нет строки «- %s: ГГГГ-ММ-ДД»"
+  },
+  "checker.workflow.missing_h1": {
+    "source_sha256": "82f8aa7b11525cc89ccb58a36d5bbb2ad90bb22b363ff21978a2c8c1174bb4b0",
+    "text": "нет заголовка первого уровня"
+  },
+  "checker.workflow.missing_kind_header": {
+    "source_sha256": "26b3abc00d8f5fdf6d9c5cd57021116e69f4363999c5d74cd41da97043c9367f",
+    "text": "в шапке нужна строка «- %s: …» (%s)"
+  },
+  "checker.workflow.missing_required_header": {
+    "source_sha256": "a355389ba71d775b15e8edf3e661a3c95ffe812cfc9edcc0f679d36dbc0e47c6",
+    "text": "в шапке нет строки «- %s: …» (%s)"
+  },
+  "checker.workflow.missing_required_section": {
+    "source_sha256": "2195e64c147ca7a1181dce01a8c2972c0cd5af3ccaa0ee991a907d3f71740786",
+    "text": "нет раздела «%s» — статус «%s» требует: %s"
+  },
+  "checker.workflow.missing_result": {
+    "source_sha256": "3ce4f69c937eac3842eec435a97d55f6db55784e84b4ecd689bc5266b9192ada",
+    "text": "статус «%s» требует строки «- %s: …» — одной фразой, чем кончилось"
+  },
+  "checker.workflow.nonexistent_masterplan_document": {
+    "source_sha256": "f286e3759a516fcccc2b714c1c1723b9369a14be36f50b53709f4bd39033e2f8",
+    "text": "%s: такого документа нет"
+  },
+  "checker.workflow.refines_needs_decision_link": {
+    "source_sha256": "ec7946a4f049d5a13569edf07351da109b37b35e7aae495fb43216f3b733a650",
+    "text": "строка «%s» должна содержать Markdown-ссылку на решение"
+  },
+  "checker.workflow.section_conjunction": {
+    "source_sha256": "e3ee915a8e8c7aa02d2fced443314522b20824abd2535d5959c41dc8ab8a09e4",
+    "text": " и "
+  },
+  "checker.workflow.unreadable_utf8": {
+    "source_sha256": "dc85a98f51ea4c6e105e13777b67686dbd11cdfdaf6f451a4b65c90b54b83fda",
+    "text": "файл не читается как UTF-8"
+  },
+  "checker.workflow.updated_before_created": {
+    "source_sha256": "1830ccc991b0d32452cf1057ba1a6ee27742ca1cc7e242f8af1ab94b271b384c",
+    "text": "дата обновления раньше даты создания"
+  },
+  "checker.workflow.wrong_document_directory": {
+    "source_sha256": "aa191b04938715c399ec96d4c9b7881a821d25e50d3096351b7f9a40580365a2",
+    "text": "%s должен лежать в каталоге %s/"
+  },
+  "checker.workflow_index.all_documents": {
+    "source_sha256": "f0de2db687b8e0480c5d3ddfa46379ffd7abf179ef455d3458f30b1de58888fd",
+    "text": "## Все материалы"
+  },
+  "checker.workflow_index.audits": {
+    "source_sha256": "2feab4bb1fa182f2b7294e7db9b4cd7477eb0c3b1cc3b59067e08d21dae53b04",
+    "text": "Аудиты"
+  },
+  "checker.workflow_index.changed_after_plan": {
+    "source_sha256": "d19d6412436fba2c55d571d39dd5ad5eacfc37473a32c17903f212b09d292fc8",
+    "text": "файл изменился после подготовки указателя"
+  },
+  "checker.workflow_index.closed_work_items": {
+    "source_sha256": "ba0cf75020ace221847309bd2703a284e1eb103be6b95fd52a6bf435e4f73f10",
+    "text": "## Завершённое"
+  },
+  "checker.workflow_index.closed_year": {
+    "source_sha256": "01a37bbe236db22376141429cf8bd854e8f68f7b9e27fabb504d9ff304674cd3",
+    "text": "Завершённое за "
+  },
+  "checker.workflow_index.decisions": {
+    "source_sha256": "cfa6a08af3ed587100e647bd922ea291b8b542ee523cee20b10b416a2f8d7adc",
+    "text": "Решения"
+  },
+  "checker.workflow_index.discussions": {
+    "source_sha256": "60157cfcfe3f31c32f2c6394ad10f941a4b32c0be68151d35054c9230295fbc6",
+    "text": "Обсуждения"
+  },
+  "checker.workflow_index.generated_notice": {
+    "source_sha256": "fa4b1f90186525393dab0958b592681abd00ac34d1773b8db890b1d5978b8591",
+    "text": "Собирается командой `lipi index` из шапок документов. Вручную не править."
+  },
+  "checker.workflow_index.in_progress": {
+    "source_sha256": "c1f88e9d6c4145cf0530ae020155384d5688d70ed82a07a35d783bbc4b32238c",
+    "text": "В работе"
+  },
+  "checker.workflow_index.index_path_symlink": {
+    "source_sha256": "47ce68652bbc95ba017d0d3f487e3f321210ed14d07a78bb65e12bb8dd176a63",
+    "text": "символьная ссылка на пути указателя"
+  },
+  "checker.workflow_index.index_title": {
+    "source_sha256": "6b896b0ded2081d6cedcb45fc677289d0aebea4bde09f852a7ca7f8afab343d9",
+    "text": "Указатель рабочих материалов"
+  },
+  "checker.workflow_index.invalid_closed_date": {
+    "source_sha256": "e5c266f9f739c149ebf0761303eba29313c7e55242f6dc093a4dfad701001612",
+    "text": "нет корректной Даты закрытия; исправьте шапку документа"
+  },
+  "checker.workflow_index.invalid_index_path_or_marker": {
+    "source_sha256": "023a13dd8013911b187a64c8eba2c849b064749e1aea5422335d4c4baea3ba7d",
+    "text": "недопустимый производный путь или маркер"
+  },
+  "checker.workflow_index.issues": {
+    "source_sha256": "666067dd376e5d4553b8fd554f855855819ad213ae825022d2a32dfa28431115",
+    "text": "Замечания"
+  },
+  "checker.workflow_index.no_closed_work_items": {
+    "source_sha256": "59a8f3cdb44ede944cd74e2422d760de425bdf6fa017ef55dba2a2c96025197c",
+    "text": "Нет завершённых работ."
+  },
+  "checker.workflow_index.no_work_items": {
+    "source_sha256": "b6cf717eeaa0de7e15ad5d048c4cdb3b59f38e281868b276be864a952c213786",
+    "text": "Нет работ."
+  },
+  "checker.workflow_index.non_directory_at_index_path": {
+    "source_sha256": "e86207ea4e11eeb5aabb075d03f7bb80cd1f17ea1b8e2ed709299d775aa746ad",
+    "text": "каталог указателя занят не каталогом"
+  },
+  "checker.workflow_index.non_file_at_index_path": {
+    "source_sha256": "7be30328240a281bdccebe3c6351ac4f8bc039dd30c5ad1693cd544ff36a878a",
+    "text": "путь указателя занят не файлом"
+  },
+  "checker.workflow_index.pending_acceptance": {
+    "source_sha256": "f4c4a9c652c4faeebe0ab1134e90c6b7f46b1053812731a07c3a1bbaa427dea9",
+    "text": "На приёмке"
+  },
+  "checker.workflow_index.plans": {
+    "source_sha256": "dfe8b2f0de26bb87c6d6066acf6668807a27d8270cc08ade10018769ee380101",
+    "text": "Планы"
+  },
+  "checker.workflow_index.total_documents": {
+    "source_sha256": "dd80ab94388adb49e2397dcc6bfba3878ce86f7b7d1d9c1aba188f99feb09c79",
+    "text": "Всего документов: %d."
+  },
+  "checker.workflow_index.user_file_at_index_path": {
+    "source_sha256": "0dccf117b7dc7d5b31a5a5d3090024d60c4113b4cedff3674e9e36df9d0580c3",
+    "text": "путь указателя занят пользовательским файлом"
+  },
+  "checker.workflow_layout.disallowed_year_directory": {
+    "source_sha256": "fdd27dff492f99948030e3592a7b13ae4c302318adfdbeef251aaed9d02e4ac5",
+    "text": "каталог года недопустим в этом месте"
+  },
+  "checker.workflow_layout.expected_created_year_directory": {
+    "source_sha256": "958de3c1a209f5c5fff52bb5a5c5104526a9304220bace76e162269e2f41d243",
+    "text": "документ должен лежать в %s/ГГГГ/ по Дате создания"
+  },
+  "checker.workflow_layout.expected_flat_directory": {
+    "source_sha256": "8d05de97152cea909895b901c660e8b1e450e0342e09b2e4e8b7175545227ba2",
+    "text": "ожидается плоский каталог документов"
+  },
+  "checker.workflow_layout.invalid_created_date": {
+    "source_sha256": "3b018b0484123498892b871b0310d2ee124949d58e1a75bafb699dfa70656e74",
+    "text": "неверная Дата создания: %s"
+  },
+  "checker.workflow_layout.invalid_document_name": {
+    "source_sha256": "aa82587e57c336f690c2cb62771fcd55f9f57bb7b4d0952076e324acbe85ab8f",
+    "text": "имя не по формату %s-NNN-imya%s"
+  },
+  "checker.workflow_layout.invalid_feedback_name": {
+    "source_sha256": "35b77c09615f95ae87f193ac92fac7c4b1ed6a7ab0452907103287de9c2513a9",
+    "text": "в .agents/lipi-feedback/ допустимы только файлы iss-NNN-imya.md"
+  },
+  "checker.workflow_layout.missing_container_document": {
+    "source_sha256": "00f2ad7ecd57ebce78defa72c555e6c21629b9674c2dcd03d233afa7d64de23a",
+    "text": "в папке документа нет %s"
+  },
+  "cli.ci_provider": {
+    "source_sha256": "1254e38f332f2d834969042446072d3affa2c2507aca65dc6844254490340f8b",
+    "text": "lipi ci: поддерживается только github"
+  },
+  "cli.help": {
+    "source_sha256": "4b3e6e41c500c4ce6850e01bb2fa924f637cc4ee9619a140386d391efa87f7da",
+    "text": "lipi — команда для работы с правилами lipi из папки проекта.\n\n    lipi guide                инструкция по развёртыванию в новом и в существующем\n                              проекте; исполнителю и ИИ-агенту читать перед init\n    lipi init [папка] [--type app] [--docs …] [--workflow …]\n              [--enforce] [--ci github] [--dry-run]\n                              применить установленную версию lipi к проекту:\n                              впервые — создать недостающий каркас, повторно —\n                              заменить файлы lipi и привести свой хук к enforce;\n                              настройки и заготовки существующего проекта\n                              сохраняются; --dry-run показывает без записи\n    lipi ci github [папка]    добавить в развёрнутый проект задание CI GitHub\n                              Actions: .github/workflows/lipi.yml — файл lipi,\n                              дальше его заменяет lipi init\n    lipi migrate [папка] [--apply]\n                              перенести рабочие материалы существующего проекта на\n                              правила lipi; без --apply печатает план и ничего не меняет\n    lipi mv старый новый [--apply]\n    lipi mv --from файл [--apply]\n                              перенести страницу, каталог или список файлов;\n                              без --apply — общий план без записи\n    lipi check                быстрые проверки; ненулевой код возврата, если есть ошибки\n         --staged             + предупредить, если код под меткой изменён, а описание нет\n                              (по проиндексированным изменениям; так зовёт pre-commit)\n         --diff A...B         то же по диапазону git (для CI)\n         --strict             считать предупреждения ошибками\n         --no-baseline        показать все ошибки, не учитывая базовую линию\n    lipi baseline [--prune]   записать текущие ошибки в .agents/lipi/baseline.json;\n                              --prune убирает исправленное и не добавляет нового\n    lipi audit                check + то, что требует суждения: залежавшиеся планы,\n                              очередь приёмки, старые замечания, длинные документы\n         --reviews-since REV  новые отметки просмотра по авторам относительно ревизии Git\n    lipi slice цель           срез под задачу; --diff база / --staged — по изменениям\n                              --format json, --full, --depth 2|3, --layer, --only\n    lipi review цель --at путь[:строка]\n                              просмотр пары A4; --confirm TOKEN --by автор --reason текст\n    lipi review --prune      план уборки устаревших отметок; --confirm TOKEN — применить\n    lipi map [--format json]  карта разметки: цели × слои × тесты; только читает\n    lipi doctor [папка]       диагностика развёртывания: версии Python и lipi,\n                              lock-файл, pre-commit, указатель, базовая\n                              линия; ничего не меняет\n    lipi index                пересобрать указатель рабочих материалов\n    lipi new тип \"Название\" [вид] [lipi]\n                              новый рабочий документ: pln, iss, dsc, adr, aud\n    lipi collect папка [...]  забрать из проектов замечания к самому lipi\n                              (из клона lipi или установки --editable)\n    lipi lang [язык]          показать или выбрать язык интерфейса\n    lipi selftest             проверка самого lipi\n    lipi version [--path]     версия; с --path — и путь к чекеру пакета\n    lipi help                 эта справка; то же выводит lipi без аргументов\n\ncheck, audit, index, baseline и new запускают чекер пакета lipi."
+  },
+  "cli.no_tests": {
+    "source_sha256": "d000a398d95f16f090f73d9f37194452c5f125992d528a20b8435d06af85fd6f",
+    "text": "тесты lipi есть только в его репозитории: %s"
+  },
+  "cli.setup_url": {
+    "source_sha256": "9ed8302c2def78cb0c70856f3e9bf3ca4ce4119c897e078bdae81117392281a9",
+    "text": "Инструкция по развёртыванию — SETUP.md репозитория lipi: %s"
+  },
+  "cli.unknown": {
+    "source_sha256": "450007d800002df5925801dfc4cc3722444eb122aa46d6024281a5458be270a8",
+    "text": "неизвестная команда: %s"
+  },
+  "collect.collected": {
+    "source_sha256": "1726e7be31582cf2f36dc7448901d3ceb65135a34056ef36c5b41826101979af",
+    "text": "забрано: %s → %s"
+  },
+  "collect.config_unreadable": {
+    "source_sha256": "77cf576506f552f76b10d9c0f33c5445eb35192b5f0907bb24543c970ecdb286",
+    "text": "%s: настройки не читаются: %s"
+  },
+  "collect.index_failed": {
+    "source_sha256": "d08f927727137171c9e126595b8157e8adafba0ec58efb5c22336d29dd5f5c00",
+    "text": "указатель не обновлён: %s"
+  },
+  "collect.summary": {
+    "source_sha256": "43af22482ad408b182fec4e7fd826a0061ea327f3ab1a9e19fe4ea0bf2f78932",
+    "text": "новых замечаний: %d"
+  },
+  "collect.usage": {
+    "source_sha256": "f64e1536a6b89371e0e6d5b086257a7ad31c47946079222e5cc671648672a6cd",
+    "text": "collect.py — забирает из проекта замечания, адресованные lipi. Запуск — из клона\nрепозитория lipi, копии пишутся в него:\n\n    python3 src/lipi/collect.py /путь/к/проекту [/путь/к/другому ...]\n\nПри установке из этого клона с pipx install --editable . — то же командой\nlipi collect. У обычной установки нет репозитория lipi для записи.\n\nВ проекте такое замечание создаётся командой\n    lipi new iss \"Что мешает\" friction lipi\nи несёт в шапке строку «- Recipient: lipi». Лежит оно в workflow/issue/\nпроекта, а если рабочие материалы не подключены — в .agents/lipi-feedback/\n(там его тоже видит чекер). Скрипт копирует его в\nworkflow/issue/ГГГГ/ самого lipi с очередным номером и строкой\n«- Source: external <6 знаков хеша> ISS-NNN»: первые шесть знаков SHA-256\nот имени каталога проекта в UTF-8. Повторный запуск уже забранное не дублирует.\nПеред сбором обезличьте заголовок и текст замечания.\nЗамечание в проекте остаётся как есть."
+  },
+  "collect.workflow_missing": {
+    "source_sha256": "beb8400dd8c40193e57e7b85516dcbc9c7c23f4021ef5291e1dee21b970f666e",
+    "text": "в lipi нет каталога рабочих материалов"
+  },
+  "common.quote": {
+    "source_sha256": "003070dda5828ff8761d257b2dea021b47261e1f61337eee5a2239801f2cdf85",
+    "text": "«%s»"
+  },
+  "config.read.query": {
+    "source_sha256": "8c4f3e2abafc296d5e5d9ec02ee959e2dc297957cbb801ccf18d03746decc8c9",
+    "text": "настройки не читаются: %s"
+  },
+  "doctor.absent": {
+    "source_sha256": "ffa63583dfa6706b87d284b86b0d693a161e4840aad2c5cf6b5d27c3b9621f7d",
+    "text": "нет"
+  },
+  "doctor.baseline": {
+    "source_sha256": "8ba8496a2525ae171ffd104d632dede6ef418d9b95962a9d88e2fcdbc8d48d24",
+    "text": "базовая линия"
+  },
+  "doctor.baseline_no_entries": {
+    "source_sha256": "c95e22952de446c7aa900967fcf640ddf8e7df2256fbebe6eb67311aedb4743a",
+    "text": "нет списка записей"
+  },
+  "doctor.baseline_rebuild": {
+    "source_sha256": "72227bd6fac417cebd65b234b8ff53df6020bdd68402860d23009d5690deb5c9",
+    "text": "исправьте файл базовой линии или восстановите его корректную копию"
+  },
+  "doctor.baseline_totals": {
+    "source_sha256": "9cb7723c075f0b452aca67187d98703171b94b91982bba1d394b10c1f0b3db17",
+    "text": "есть, записей %d, ошибок %d"
+  },
+  "doctor.fix_document": {
+    "source_sha256": "35ad4e9c5f7754f1c80340e1839ccf9eb8a68985e475449b854553acb3e672d6",
+    "text": "исправьте документ; проверьте lipi check"
+  },
+  "doctor.headers": {
+    "source_sha256": "378f37b1fb33fa4dafba6519a48e06447ecaa58af290729cc3d357bcadd9926c",
+    "text": "шапки"
+  },
+  "doctor.hook_absent": {
+    "source_sha256": "1a85f548d94139f86910ea46ef350096792aa72d9b4325a8c757ea40d7d6a299",
+    "text": "нет (enforce: false)"
+  },
+  "doctor.hook_fix": {
+    "source_sha256": "518251a30b7a92149fa16e12c0dfc723c36858c3b362b664ff5edfb21c1740da",
+    "text": "поправьте %s"
+  },
+  "doctor.hook_foreign": {
+    "source_sha256": "8ae6e8bce878fbf3d6594f724bc27925768fed35807ad0adf905e6d180aabb0d",
+    "text": "есть, чужой хук (без метки lipi)"
+  },
+  "doctor.hook_foreign_kept": {
+    "source_sha256": "b9200ea6a5db8b3dd44b24c2813d5763992af91db14fde7786762ffa2dffc713",
+    "text": "есть, чужой хук (без метки lipi) — lipi его не трогает"
+  },
+  "doctor.hook_foreign_replace": {
+    "source_sha256": "24261debade6fcc45b74d9c9a005847bcea68e75134d3c7994595f3c7cfdcc58",
+    "text": "lipi его не трогает; удалите его и запустите lipi init"
+  },
+  "doctor.hook_install": {
+    "source_sha256": "12abe36ac320615533892fb720c044bafb513c36be4d22460cfae61b42a2644a",
+    "text": "enforce: true — запустите lipi init, он поставит хук lipi"
+  },
+  "doctor.hook_managed": {
+    "source_sha256": "a20e6bd5407bb571ea2ea9fac0e42e6d6c323aa2ed05c2d0bd53ba1ec28afebf",
+    "text": "есть, lipi check --staged"
+  },
+  "doctor.hook_remove": {
+    "source_sha256": "0acdc70ee5aa143220e8165edb21e9706e08da5eb508d53eaf0ac8ade2d0f591",
+    "text": "enforce: false — lipi init уберёт этот хук"
+  },
+  "doctor.hook_unreadable": {
+    "source_sha256": "4d0db41eb513e6118b09fb8838f15aeb77d6e83280be62dcf4e18d5684fe6dcc",
+    "text": "есть, не читается"
+  },
+  "doctor.index": {
+    "source_sha256": "1bc04b5291c26a46d918139138b992d2de976d6851d0893b0476b85bfbdfc6e6",
+    "text": "указатель"
+  },
+  "doctor.index_check_failed": {
+    "source_sha256": "f7bfc8a007de57f3608a81a7de21d29cefd354c9ccbcfeb1251bcff3d7da6f77",
+    "text": "проверка не запустилась"
+  },
+  "doctor.index_current": {
+    "source_sha256": "97b0560280ed60a5a1eaa1bc45492543c8a986ad5a25b468c427eb83c3e88191",
+    "text": "актуален"
+  },
+  "doctor.index_refresh": {
+    "source_sha256": "ea5c038e5fe301e4ff2be4b30a66d2598ee49ec0a7fbab5825c106216798669f",
+    "text": "запустите lipi index"
+  },
+  "doctor.index_run_check": {
+    "source_sha256": "c6d3f4d4cb130c556ae28f15ef54c22075a1af847290e36654352c3aae06ea1c",
+    "text": "исправьте ошибки: lipi check"
+  },
+  "doctor.index_stale": {
+    "source_sha256": "a03f2386ae06b21109577020844df367857b72c2fcce384c1896fed98a89c82b",
+    "text": "устарел"
+  },
+  "doctor.invalid_json": {
+    "source_sha256": "7fd5c27aad5c8ca1945c4a09f9eb2fb18f3291190e310b6e3562c09eef2618bb",
+    "text": "не читается как JSON"
+  },
+  "doctor.layout": {
+    "source_sha256": "1dc5ae5b68174891b6aa9850aa05ee0d9ae8a20468d9517259951a2dd9e9c0f0",
+    "text": "раскладка"
+  },
+  "doctor.lock_create": {
+    "source_sha256": "c056993c4d9df1205a3209e1193f492e5de203ef71d747f77f9e010f18984d74",
+    "text": "запустите lipi init — он создаст %s"
+  },
+  "doctor.lock_file": {
+    "source_sha256": "f22d3df9eecb55411bde23731c8e2b1cf0565484a04379d5faf2dffff837e8f0",
+    "text": "lock-файл"
+  },
+  "doctor.lock_no_version": {
+    "source_sha256": "0ced7f927dfd1f67c0b81753cb6d30d66d784e330e3c40547fda8436096996b1",
+    "text": "нет версии проекта"
+  },
+  "doctor.lock_restore": {
+    "source_sha256": "3a989b40434eefe25614a0dafb526e5021bc2cfb91b0401a62ff73c08856fea2",
+    "text": "восстановите lock-файл, затем запустите lipi init"
+  },
+  "doctor.lock_version": {
+    "source_sha256": "ebf515ec62d3123a4feec0e70043c69bc04e28ddd2fd6dea23581011c0d155c5",
+    "text": "есть, проект %s (lipi %s)"
+  },
+  "doctor.no_findings": {
+    "source_sha256": "75b4f17b611dd3168a264be0baaf5fcc9a895ff78f5a68428ce9632d55a873d1",
+    "text": "нарушений нет"
+  },
+  "doctor.no_problems_summary": {
+    "source_sha256": "adf1e32621ba12c656834795a286f4ef7020bf4b65c51929649a67098f2ca887",
+    "text": "итого: проблем нет"
+  },
+  "doctor.ok_line": {
+    "source_sha256": "b8bce6b62de9ab91cafffa9252c37f55bf5093c77e20f64b464e135dd8e37cd2",
+    "text": "%s — ок"
+  },
+  "doctor.present": {
+    "source_sha256": "bcc649cfdb8cc557053da67df7e7fcb740dcf7f721cebe1f2082597ad0d5e7d8",
+    "text": "есть"
+  },
+  "doctor.problem": {
+    "source_sha256": "594b685e0340812b26489f2c7dc78f4b9f33afab78bb896b3d352d64c52a37a4",
+    "text": "[проблема]"
+  },
+  "doctor.problems_summary": {
+    "source_sha256": "149edf1f6521d2f677358e9c67245c50a86cc8c9f4d0ed5dcd0709c2b945e13f",
+    "text": "итого: проблем %d — исправьте и запустите снова"
+  },
+  "doctor.project": {
+    "source_sha256": "244210e48437b6556980a70249a99369934a352429034cef9d7bd253b3bf2c01",
+    "text": "проект"
+  },
+  "doctor.project_init": {
+    "source_sha256": "8fd0688a1d18b2d03fb01e57f705d83ca63fb08ed2725d5201b1491d1c5468c8",
+    "text": "запустите lipi init — он развернёт каркас"
+  },
+  "doctor.project_missing": {
+    "source_sha256": "93776224917f5b2912b039b703f74dab0d530d8f93235e4fb73b8256ff886998",
+    "text": "lipi не найден (нет %s)"
+  },
+  "doctor.python_required": {
+    "source_sha256": "52ceebd3b4e9b9176f7c084455236fc177c9fa557c61eb910583caafab56e0c8",
+    "text": "нужен Python 3.9 или новее"
+  },
+  "grammar.plural": {
+    "source_sha256": "956ce47f6d02798440a85a12c8c0853755ab710f66229bc212ecdeca53c0c2df",
+    "text": "n==1 ? 0 : n%100>=11 && n%100<=14 ? 3 : n%10==1 ? 2 : n%10>=2 && n%10<=4 ? 1 : 3"
+  },
+  "init.agents_link": {
+    "source_sha256": "8769d93de0a8baf5ac1dcf9b78f01916019465247a9ba478593904aecef18e44",
+    "text": "добавьте вручную в AGENTS.md ссылку на правила: [правила](%s)"
+  },
+  "init.baseline": {
+    "source_sha256": "369fe9ef3338bd3c25e4e334e4699466a4ae6b7c18112219404ad7cc37766e98",
+    "text": "базовая линия: %s"
+  },
+  "init.baseline_checks_on_apply": {
+    "source_sha256": "6f00e4ac1a880c66892b08ace9d3605357b70b73d9bad8e371b14630705ea7f4",
+    "text": "команды проекта для первой базовой линии будут выполнены только при применении"
+  },
+  "init.baseline_create_plan": {
+    "source_sha256": "094df76b92579ec8432a69c6e638e95bb771a96717a49ccf7efb7470b24563a1",
+    "text": "будет создана базовая линия: %s"
+  },
+  "init.baseline_keep_plan": {
+    "source_sha256": "28087ebb717f6cd427c5d7be1206754f069ebe728ce76e2a3a8e8d6e126ba756",
+    "text": "будет сохранена базовая линия: %s"
+  },
+  "init.change_plan": {
+    "source_sha256": "8c209a0f536541a21a8134f3572c5817d939d7a2547a79ec814a9bd344286589",
+    "text": "будет изменён: %s"
+  },
+  "init.changing": {
+    "source_sha256": "539256d554621a4b4a77812509b31520468c5b6aaa9ec11442c614a1600c48ff",
+    "text": "изменяется: %s"
+  },
+  "init.ci_create_plan": {
+    "source_sha256": "e08bfdc6cf9ed95e3573dfdef0ba2de4588fdb102815ddd5b39ca6c4ed98f4eb",
+    "text": "будет создан:    %s"
+  },
+  "init.ci_created": {
+    "source_sha256": "1736304fe5e65fdcfe1391a6d7c9de9c5ba714f42ba2249066157e0d34c93ea1",
+    "text": "создан:    %s"
+  },
+  "init.ci_missing": {
+    "source_sha256": "1311a386b01711599292199886c70721231f9232020c27ef4456ffb2b0550b93",
+    "text": "в шаблонах lipi нет задания CI"
+  },
+  "init.ci_needs_init": {
+    "source_sha256": "6d30fc1557e5dc82969c8f42a45e79da1e9a8b4264ed83c312c6fa29bdba9128",
+    "text": "сначала разверните каркас: lipi init"
+  },
+  "init.ci_only_needs_provider": {
+    "source_sha256": "25e4a12b4e9e809df6f8d9d29fc169047040314e529c7dd9b13092020e1a5ffd",
+    "text": "--ci-only без --ci"
+  },
+  "init.ci_summary": {
+    "source_sha256": "2c787c93ae85e816cfa123dab23be6672f58aa896f4c51b34097dbd62cdce322",
+    "text": "lipi %s. Проверка: lipi check"
+  },
+  "init.ci_summary_plan": {
+    "source_sha256": "7d5af26b1b7577de8455bee9d45012ff078ef860b61b13f12166424adf875531",
+    "text": "dry-run: ничего не изменено; lipi %s. Проверка: lipi check"
+  },
+  "init.ci_update_plan": {
+    "source_sha256": "adc866bc76cc4e106b0e98f5a54b64f695a253955ba494401a48294c6b209582",
+    "text": "будет обновлён:  %s"
+  },
+  "init.ci_updated": {
+    "source_sha256": "98f7b766c9d51bfd664158b4a56e50be7a1e96a614a3cd6570ed37ead5146111",
+    "text": "обновлён:  %s"
+  },
+  "init.config_json": {
+    "source_sha256": "43cc8153460df4efd5df285fa8eb5ec000fc235ce371e9d213b84482cf6f7047",
+    "text": "lipi.json не читается как JSON"
+  },
+  "init.config_missing": {
+    "source_sha256": "eb84fa7135872ac6327d583906ce214474b71fba0b53c1ad5dd8561f11af9d9d",
+    "text": "есть lipi.lock, но нет lipi.json: восстановите настройки lipi.json"
+  },
+  "init.config_object": {
+    "source_sha256": "088ed98ac6c226d3a2c761c3add757cd0c1824e28f4e515ab199ac26473aec0a",
+    "text": "lipi.json должен быть объектом"
+  },
+  "init.destination_broken_symlink": {
+    "source_sha256": "c2180cb88b12d0f268b2170cb9c2d952cbe0d5d0da9c98346fd2c572626240ff",
+    "text": "повреждённая ссылка на каталог: %s"
+  },
+  "init.destination_inaccessible": {
+    "source_sha256": "d12f047488c12edc4ad517a39d46648634283a371e50328624bc574b037d388b",
+    "text": "нет доступа к каталогу: %s"
+  },
+  "init.destination_not_directory": {
+    "source_sha256": "054b261042f13e999f8619eaa7671424391a1d169dd16fc9fa3376bba65c1404",
+    "text": "это не каталог: %s"
+  },
+  "init.destination_not_file": {
+    "source_sha256": "a4d52e06804d9f126c401efc1270e677067809ab765079f25a52168215072540",
+    "text": "нельзя записать файл: %s (это не обычный файл)"
+  },
+  "init.destination_unwritable": {
+    "source_sha256": "e484c0dc6d49ed852aec4834611c5554658cfaa8d48453c48525486deb32f61f",
+    "text": "нет доступа для записи: %s"
+  },
+  "init.dry_run_summary": {
+    "source_sha256": "84c09ad3089ce3f5e3d622882c22b20d46f5ffc38da31a7a36bb520f604c0ac8",
+    "text": "dry-run: ничего не изменено; установленные правила lipi %s"
+  },
+  "init.existing_file": {
+    "source_sha256": "38f00ee4454ee3d06ea74ee775181e1a0730daebaf425c0a8521efd1628376e5",
+    "text": "оставлен:  %s (уже существует)"
+  },
+  "init.external_workflow": {
+    "source_sha256": "641a2ceebdbded672b70100575836389b1abe1c8d0e6aa7096edc1c547053ac1",
+    "text": "внешний workflow: перевод выполняется в его собственном проекте"
+  },
+  "init.foreign_workflow": {
+    "source_sha256": "8abe3e0c79be375e3e7c3590f3920b1d24663703150b2cc51105ede3b183b4e0",
+    "text": "рабочие материалы в %s: не тронуты, их проверка отключена; перенести на правила lipi: lipi migrate %s"
+  },
+  "init.help": {
+    "source_sha256": "c0429f5bf3fba2b586a11eff3ff10215b8799a609819bdc6e7f522675b94c36b",
+    "text": "Применить к проекту правила установленного lipi"
+  },
+  "init.help_ci": {
+    "source_sha256": "d2ed0ac2ea7e9de004efe93fdba16e0a088d1ab66f22d8858fda4888aaa72ee0",
+    "text": "подключить управляемый шаблон CI"
+  },
+  "init.help_docs": {
+    "source_sha256": "d9b3e46450dd9c581c3ebc37ac33bc6f4a3422c91d460755d8b6e61265ef27ff",
+    "text": "каталог описания нового проекта"
+  },
+  "init.help_dry_run": {
+    "source_sha256": "c3099bdbbb9fbac36da9d5504f9a19bdb3aa70a5c66b44141d58c2f6c2943faa",
+    "text": "показать изменения без записи"
+  },
+  "init.help_enforce": {
+    "source_sha256": "066ac699c523ca0805ded48b1b9909086dd849ed3d3a165b64d22e526c68ce17",
+    "text": "включить строгость в новом проекте"
+  },
+  "init.help_project": {
+    "source_sha256": "3857e49ac728bc3f7dd4146098ee91838c3ac705f7cb98a101069042d1e6213b",
+    "text": "корень проекта (по умолчанию текущая папка)"
+  },
+  "init.help_type": {
+    "source_sha256": "05696a7684dc44e8bfc283b2c38e1f2bdc0040c6d86c193f818ab26732e09394",
+    "text": "тип нового проекта: package (по умолчанию) или app"
+  },
+  "init.help_workflow": {
+    "source_sha256": "832a57cff4d5340be715d30272b8cf67faeb64253bfba1e9842f39c8740c9f1e",
+    "text": "каталог рабочих материалов нового проекта"
+  },
+  "init.hook_create_plan": {
+    "source_sha256": "90799a99de3df0a1cda71b2426a44d25c79f5857cc17fd744d14e183b65973da",
+    "text": "будет создан:    %s (lipi)"
+  },
+  "init.hook_created": {
+    "source_sha256": "578746da14d1944a675d67aff76cdfa12a8a8f7b531f38a44b8ee9623b0d1944",
+    "text": "создан:    %s (lipi)"
+  },
+  "init.hook_foreign": {
+    "source_sha256": "778bd3b87161489a3e7420d142145b34060d0771097701bc16fe40f6a03aff4c",
+    "text": "оставлен:  %s (чужой хук: lipi его не трогает)"
+  },
+  "init.hook_kept": {
+    "source_sha256": "4b709ede586caf6667908bb81760b948d46c0ac9142ad9eecfe68933e7d862eb",
+    "text": "оставлен:  %s (lipi)"
+  },
+  "init.hook_missing_command": {
+    "source_sha256": "069f42e16179da37204e0cd096ce6f0ffec45e1bc74edf00c848e3815794a9a4",
+    "text": "lipi не установлен. Установите: pipx install git+https://github.com/lipisutra/lipi"
+  },
+  "init.hook_no_git": {
+    "source_sha256": "702eb39ad6a24f8d4d468f547c9b79e1b108a411fac87639d11cb81182c7c721",
+    "text": "pre-commit не установлен: в проекте нет .git"
+  },
+  "init.hook_remove_plan": {
+    "source_sha256": "7e6ecd5e583a94991597b327cb922f562cb5907590a091ae93f3c6f0378b5172",
+    "text": "будет удалён:    %s (lipi)"
+  },
+  "init.hook_removed": {
+    "source_sha256": "054ccf5e30ec52076672966d2655b79d6788e8c42b46bddd177bc4ffb47a59bc",
+    "text": "удалён:    %s (lipi)"
+  },
+  "init.hook_update_plan": {
+    "source_sha256": "d7cfa03f162aad860bcb86892f7f3fbc0e3fe6dd16f87d4e85c3069691777ccd",
+    "text": "будет обновлён:  %s (lipi)"
+  },
+  "init.hook_updated": {
+    "source_sha256": "9b80d8052b2dcfaf0aa68172d63d73375058c5d25d3d3696931f63f75c2bd19a",
+    "text": "обновлён:  %s (lipi)"
+  },
+  "init.invalid_type_or_ci": {
+    "source_sha256": "80c472b229edade3887662a0394ec147bf344a1dd6d1521db32a4a2aa152ee33",
+    "text": "неверный тип проекта или CI"
+  },
+  "init.lock_digests": {
+    "source_sha256": "eec928fa187b771a1af0e16ad8644efe7748e7891fe1f699594f114c41b73433",
+    "text": "%s: неверные отпечатки files"
+  },
+  "init.lock_enforce": {
+    "source_sha256": "262fd1af98a218141a731ea64851d77160330f52f6350c993046423e37275e71",
+    "text": "%s: enforce должен быть логическим значением"
+  },
+  "init.lock_json": {
+    "source_sha256": "63ab69fcf75ebbcedec9c8e638ee393513d924a18ad56fc0994f8fa02b38b7b2",
+    "text": "%s не читается как JSON"
+  },
+  "init.lock_key": {
+    "source_sha256": "521c8d5019f7e832dac9280b05f05bfa7cd4e31885bcca13d2bf1c6ce0a213f5",
+    "text": "%s: неизвестный ключ"
+  },
+  "init.lock_object": {
+    "source_sha256": "dff297fcba60e45519891951f6c96dd0f4777d523ba046985df83b573d4d8a63",
+    "text": "%s должен быть объектом"
+  },
+  "init.lock_version": {
+    "source_sha256": "fa44717abc7c58c0b774a83d7c1e364a9ab55de7d6854a76159a708478f26f29",
+    "text": "%s: неверная версия lipi"
+  },
+  "init.matching_template": {
+    "source_sha256": "734a4885794d1a195f4e4582a7bf6d84038e194529df3d7ee0b183a2ee171a9a",
+    "text": "оставлен:  %s (совпадает с шаблоном)"
+  },
+  "init.newer_project": {
+    "source_sha256": "f0c815c2f2b66badfcc732d59429eb81670d2a26b94974c8abc2d9853c49e793",
+    "text": "проект lipi %s новее установленного: обновите программу lipi"
+  },
+  "init.option_conflict": {
+    "source_sha256": "8b686207e94718a2c263d51d1ed7d3c74c87542174d4335a0cc9165b5505b441",
+    "text": "--%s расходится с настройками: измените ключ «%s» в lipi.json"
+  },
+  "init.project_missing": {
+    "source_sha256": "8fc54ac7fcc37d61feb2542c49f117d7f26a8e78a5b0e640a27d690e5fc6258e",
+    "text": "нет каталога: %s"
+  },
+  "init.removed_templates": {
+    "source_sha256": "b4a840546e165e98f32304f5022cafac4cd20ed9cd95f63b9036dc92d3e0f4c0",
+    "text": "удалены из шаблонов lipi (файлы оставлены):"
+  },
+  "init.replace_plan": {
+    "source_sha256": "33828bbd23540b35e88757a145638e15f8b7f0397d04a1f5d3b689e5753cb13d",
+    "text": "ваши правки в %s будут заменены"
+  },
+  "init.replaced": {
+    "source_sha256": "5b35290e87d9b13508037ebe327a2570d2b5e1cb22fd44f3dca5380a1fe4b667",
+    "text": "ваши правки в %s заменены"
+  },
+  "init.summary": {
+    "source_sha256": "c12c631b8369e35ad02a6fb8f92f50b9e300765c5da09c46ac07be12ed461928",
+    "text": "правила проекта применены из установленного lipi %s. Проверка: lipi check"
+  },
+  "init.workflow_symlink": {
+    "source_sha256": "efc06352b925480981125e17aa246dbc495fa8ffcfce484c72d632d14b247423",
+    "text": "символическая ссылка в пути рабочих материалов: %s"
+  },
+  "lang.settings": {
+    "source_sha256": "9535f9a9fe1993e52508218907a2f0a4ce6456cf5686e7e38a3e73485060df81",
+    "text": "Не удалось сохранить настройку языка: %s"
+  },
+  "lang.unknown": {
+    "source_sha256": "6ce361e8263b8e15252bad5f06cb484d57883a62414bbc5a1a011e068be10181",
+    "text": "Неизвестный язык %s. Доступные языки: %s"
+  },
+  "lang.usage": {
+    "source_sha256": "10ae46d44a40191f9851d3616ffec3fd16e8385a259c21e947f280d0cfd1c47b",
+    "text": "использование: lipi lang [язык]"
+  },
+  "layout_migration.ambiguous_layout": {
+    "source_sha256": "2eac81d89788957792bbc21d6a47c12189f0ec07721462cabc60f4cc0feeacb0",
+    "text": "неоднозначная раскладка: %s"
+  },
+  "layout_migration.ambiguous_merge_closure": {
+    "source_sha256": "756270b11f7cd482550f21c64ca59a2808b614e12658c9abbdd80f72c7ea003c",
+    "text": "неоднозначная дата закрытия после merge %s: %s"
+  },
+  "layout_migration.ambiguous_merge_path": {
+    "source_sha256": "2a53337d54a66832a8669617fe8f1989179c1f106d58dfdb7ff60ac0c8e4aa63",
+    "text": "неоднозначный путь документа в merge: %s"
+  },
+  "layout_migration.ambiguous_number": {
+    "source_sha256": "926d459304b9d9c457c224c4be523d2229d1662a7243eb7559fe21ab67e7007e",
+    "text": "неоднозначный номер %s-%s"
+  },
+  "layout_migration.archive_excluded": {
+    "source_sha256": "438622b8247e4213653c5c1063e8e8715d81c815adfd34944e5321bedd0c8eaa",
+    "text": "history/ исключён: архив не изменён."
+  },
+  "layout_migration.baseline_failed": {
+    "source_sha256": "5dbdcacea306b022421c73a0a19f4bd7906a4ac7f917df2f8a14b8abcd3613d8",
+    "text": "базовая линия не создана"
+  },
+  "layout_migration.baseline_projection": {
+    "source_sha256": "31dfd1a99ac7ce7c60655ce294c1e5decc4dee105181a00040de279562cf202f",
+    "text": "не удалось подготовить Git-проекцию baseline: %s"
+  },
+  "layout_migration.changed_file": {
+    "source_sha256": "74655688a3cec61e466dcde53a4e1a6b7d7dc313fe7ab7ced61dd31963c5bc71",
+    "text": "файл изменился при подготовке перевода: %s"
+  },
+  "layout_migration.closed_notice": {
+    "source_sha256": "4bc046e4fa1a03278f0731c60864df1dd5419518cbe519473dec133807548d2b",
+    "text": "%s: Дата закрытия %s (%s)"
+  },
+  "layout_migration.closed_range": {
+    "source_sha256": "53d6d78264897bc1f71ee5c1453b6cd02f9bdfd651704ce7a1df468045a88897",
+    "text": "Дата закрытия %s вне диапазона %s — %s (%s)"
+  },
+  "layout_migration.commit_date": {
+    "source_sha256": "496e571a3795ad9af989a56d9267ae75e269b27f5cb72fba9ada8b5f8b30b161",
+    "text": "неверная дата коммита: %s"
+  },
+  "layout_migration.commit_timezone": {
+    "source_sha256": "507e58dc67fe5a20836c92d3226580fd3cd24634c8437af6cbb3e5f09caae12d",
+    "text": "нет часового пояса"
+  },
+  "layout_migration.external_workflow": {
+    "source_sha256": "641a2ceebdbded672b70100575836389b1abe1c8d0e6aa7096edc1c547053ac1",
+    "text": "внешний workflow: перевод выполняется в его собственном проекте"
+  },
+  "layout_migration.flat_without_git": {
+    "source_sha256": "449ecc5b033aba8dddda91309e85704f4e46cea139c9511a14a5533561c2340a",
+    "text": "плоские рабочие материалы без Git: перевод невозможен"
+  },
+  "layout_migration.git_history": {
+    "source_sha256": "26bf52816120d3a120878bd04fd98cb1119160f9b1c11f354ca11b17acba22e5",
+    "text": "история Git не читается: %s"
+  },
+  "layout_migration.header_missing": {
+    "source_sha256": "0db03ebb132f3737069f41fa9a917f1960851e6ad60ce554aafd0f74769653b7",
+    "text": "не найдена шапка для Даты закрытия"
+  },
+  "layout_migration.inconsistent_snapshots": {
+    "source_sha256": "e0593d3987618417e791bb18b7596631090457265c80e3d14796cff8e89b43de",
+    "text": "снимки файла расходятся при подготовке перевода: %s"
+  },
+  "layout_migration.invalid_closed": {
+    "source_sha256": "c42e6a654f6e46da5a18a63152faa4c76b426b9fae1effc1b8da406d9369d1d4",
+    "text": "неверная Дата закрытия: %s"
+  },
+  "layout_migration.invalid_date_bounds": {
+    "source_sha256": "e8f8f6609227aa57839dab81b4db22cd0ae9231f11f17370bb0dcf8dea670700",
+    "text": "неверная Дата создания или верхняя граница Даты закрытия"
+  },
+  "layout_migration.invalid_header_dates": {
+    "source_sha256": "79c81d39eac3037cc80009e8190c599fcbaf941a8ddbf0cfacbc3d2626218948",
+    "text": "неверные даты шапки: %s"
+  },
+  "layout_migration.no_git_closure": {
+    "source_sha256": "ef41e21901710e12336296e90c5818f94eb4405262cc4c82cb58c83edda0813f",
+    "text": "закрытие не записано в Git: HEAD не имеет финального статуса (%s)"
+  },
+  "layout_migration.outside_repository": {
+    "source_sha256": "3233f5a7fe9b5b8e4e9808025c5dc7ca7503bc50dffac75bca06e8546721f5fa",
+    "text": "документ вне репозитория: %s"
+  },
+  "layout_migration.requires_git_root": {
+    "source_sha256": "343c0ed8cec9518a9b388e31d61d05b14baea0150348c4f9382617a12dabc827",
+    "text": "для перевода запустите init в корне репозитория Git"
+  },
+  "layout_migration.shallow_history": {
+    "source_sha256": "66df45a79dee7a3c45bdfc78967d3963ca6ac22b6a3b75a7ea878d6520d23915",
+    "text": "дата закрытия не доказана на границе усечённой истории: %s"
+  },
+  "layout_migration.unknown_closure_commit": {
+    "source_sha256": "b9d8fdd89972f194c0d275e21bdc051e761a0863d05580248e085aa4578cda8e",
+    "text": "не удалось доказать коммит закрытия: %s"
+  },
+  "layout_migration.unreadable_document": {
+    "source_sha256": "26ac97151a43f76b997bcb219487b17b1b744796b180071ab9248cf79513923c",
+    "text": "не читается документ: %s"
+  },
+  "layout_migration.unreadable_head": {
+    "source_sha256": "4b71883ea7ef684ea47823032f31e7bd97606ee3d4ed2fd32115733696c76fb3",
+    "text": "HEAD не читается при существующей истории Git"
+  },
+  "layout_migration.unsupported_git_path": {
+    "source_sha256": "c7537827d1a10e89949e80847373210b5cf33de0ce2b992b9512e75ade0743ee",
+    "text": "неподдерживаемое имя в истории: %s"
+  },
+  "layout_migration.updated_without_file_history": {
+    "source_sha256": "d827ac5543e2d941cafaae7a455983f7b2e9dc96a1c779127da5dc4b78bd6a59",
+    "text": "Дата обновления (нет истории файла)"
+  },
+  "layout_migration.updated_without_git": {
+    "source_sha256": "cacb70538a41279704a70914002f71764f1df6883c3221560e4c948d313bb521",
+    "text": "Дата обновления (без истории Git)"
+  },
+  "layout_migration.year_mismatch": {
+    "source_sha256": "5e8faa5331bdffb4e43d3707ecafa8db3d26179620581120eff6515e83276e01",
+    "text": "год не совпадает с Датой создания: %s; сначала lipi mv"
+  },
+  "layout_reviews.ambiguous_mark": {
+    "source_sha256": "5aec9df42eaf057b4d8f49473074a03e70c657170a60aa7c2aa6983557cab43e",
+    "text": "неоднозначная исходная отметка: %s"
+  },
+  "layout_reviews.duplicate_path": {
+    "source_sha256": "1c5418cf31221bee77e60c64f3755089c4d03ea262db5779ee5e45c2f571ab20",
+    "text": "повторный путь в окончательном плане"
+  },
+  "layout_reviews.inactive_mark_changed": {
+    "source_sha256": "5bc0867fea5702163d7e0733b1699447ca72caca92c6454e1c00e0f8cdd54a21",
+    "text": "недействующая отметка изменена окончательным планом: %s"
+  },
+  "layout_reviews.new_mark": {
+    "source_sha256": "d057a4358ccff9100a2bd0560c287317d35bf17cdb940fc86d766ab282f3fea6",
+    "text": "окончательный план содержит новый просмотр"
+  },
+  "layout_reviews.original_bytes_changed": {
+    "source_sha256": "74fdc3ac876df8b83000ca1fdd80575255ea4ed3e7b51c9afd5753c42b9894f8",
+    "text": "исходные байты адресного переноса изменились: %s"
+  },
+  "layout_reviews.region_changed": {
+    "source_sha256": "2c928a0e3879e6f92d93f7eb9c8952fe962e55ea009d62b5cb3d08acd64e5681",
+    "text": "область просмотра изменилась во время финальной проверки: %s"
+  },
+  "layout_reviews.region_changed_by_init": {
+    "source_sha256": "213b631b6bde50a288d30c41250a4b5f0661e19afe42d5d4aae280c9b8905b7e",
+    "text": "прочие изменения init меняют просмотренную область: %s; нужен отдельный просмотр"
+  },
+  "layout_reviews.region_changed_early": {
+    "source_sha256": "ae976c0a04d373e32ba024fbca2c8aeb2abbe4995b8b80510a85b40e4d2c1267",
+    "text": "область просмотра изменилась до финальной проверки: %s"
+  },
+  "layout_reviews.region_symlink": {
+    "source_sha256": "734df5ce18b768b5088263567451efd459db5434a7c0871bd68523b3c5af9848",
+    "text": "область просмотра через символическую ссылку: %s"
+  },
+  "layout_reviews.region_unreadable": {
+    "source_sha256": "b040ee95592246401a475f6e2317c486734ab2e8d997d7026c6db0d5a56b7b44",
+    "text": "область просмотра не читается: %s"
+  },
+  "layout_reviews.registry_changed": {
+    "source_sha256": "28b8b3c35c4df216c483097485d86cff2f7d3977618181543e058b4299b9a954",
+    "text": "реестр просмотров изменился перед финальной проверкой"
+  },
+  "layout_reviews.registry_mismatch": {
+    "source_sha256": "93e1210776a753e4eec378ca9618d7d7e704b02727dfa42be464b8a84d41c48c",
+    "text": "итоговый реестр отличается от доказанного адресного переноса"
+  },
+  "layout_reviews.unaffected_mark_changed": {
+    "source_sha256": "6b062cf5b85104e5489a8b948286a3b2e77ef1050167b21c6158f712661ee947",
+    "text": "незатронутый просмотр изменён планом: %s"
+  },
+  "layout_reviews.unverified_mark": {
+    "source_sha256": "a6d0acd70363cf3e342ab21cc971573e1fc3a34bd9cb5553cdb5c341d9ece1f8",
+    "text": "нет доказанного адресного состояния просмотра: %s"
+  },
+  "layout_state.duplicate_path": {
+    "source_sha256": "7fb6c53a7dcc681008d183b82652b83d4f643dbd25961d68f1e24c69142aad3b",
+    "text": "повторный адресный план файла: %s"
+  },
+  "layout_state.file_changed": {
+    "source_sha256": "10e1494380f413c893f47d0b82a982599f77574179aa027cce2c97f0cba92c68",
+    "text": "файл базовой линии изменился после адресного прохода: %s"
+  },
+  "layout_state.invalid_baseline": {
+    "source_sha256": "7309f2c4881b3c43388e633ed4851b1cf2d0761c8461c20f9290e3c4265e7a9c",
+    "text": "неверная базовая линия (C1): %s"
+  },
+  "layout_state.key_collision": {
+    "source_sha256": "ecb374e80bf34cd71c515502e3aaf2e2ca3e94ccf40b4393c89007c0f901e7e7",
+    "text": "коллизия ключей базовой линии после переноса: %s %s %s"
+  },
+  "layout_state.missing_path_change": {
+    "source_sha256": "01ec497e02534cda508cc81b5ccce651216b4228a9632ffd7fe4f262b7caaaf3",
+    "text": "нет адресного плана для ключа базовой линии: %s"
+  },
+  "layout_state.registry_changed_while_planning": {
+    "source_sha256": "2a92997ebd1994e1becf17baf3590cc75ca72c89d7ce4ba1249ef816297c1717",
+    "text": "базовая линия изменилась при составлении плана"
+  },
+  "layout_state.registry_changed_while_reading": {
+    "source_sha256": "5e0eea5bd7ac751dcf445f3afc082f8b0b2d620f5ae2132048e9ab1693734c93",
+    "text": "базовая линия изменилась при чтении"
+  },
+  "layout_state.registry_not_file": {
+    "source_sha256": "99e8a6fa1b2dc169ff5f7c5d5002c4e3e59f0e5d60bc74439f3c7e72afa5f1d6",
+    "text": "базовая линия не является файлом: %s"
+  },
+  "layout_state.registry_symlink": {
+    "source_sha256": "994cedf92460a6e98ddf5038b708bf0861903401c7d0ddd57c51048601e24570",
+    "text": "символическая ссылка базовой линии: %s"
+  },
+  "layout_state.registry_unreadable": {
+    "source_sha256": "f0adba02c4da694f95a20d5d500a6375eb2fc862bbc59e08cf6514bb8043984a",
+    "text": "базовая линия не читается: %s"
+  },
+  "layout_state.transfer_notice": {
+    "source_sha256": "fcf5ba4c4846754eee06b5884a09706183365b8392e293bce0ac7dbccedea291",
+    "text": "Базовая линия %s: %s [%s] → %s [%s]; count=%d"
+  },
+  "layout_state.unverified_subject": {
+    "source_sha256": "e6d54c6f5bee305e9061f4cb4f14cc15ae6f16d7c7f586ada44ab22eef0391a8",
+    "text": "не доказана адресная замена subject базовой линии %s %s: %s"
+  },
+  "layout_state.unverified_transfer": {
+    "source_sha256": "53cccbb19f762d7661101d6e8eb7ee1341f3123a9128eba903ed9bea855a40e6",
+    "text": "не доказан перенос базовой линии для %s: %s"
+  },
+  "map.column.status": {
+    "source_sha256": "920e413c7d411b61ef3e8c63b1cb6ad058d5f95f8b481dbafe60248387d8c355",
+    "text": "Статус"
+  },
+  "map.column.target": {
+    "source_sha256": "978354db0c00fc78c3a5524f462a73bc425df3fb2767e51a5f46352ae26ae6f9",
+    "text": "Цель"
+  },
+  "map.column.tests": {
+    "source_sha256": "e5c9d7030bada2fe792ad7e4a26ca44379a73f3fe16805ac1359e46759a1571a",
+    "text": "Тесты"
+  },
+  "map.column.title": {
+    "source_sha256": "7e8cd2056da73a7fefb6cd91f4e5d199d08d9058c517b9a2476b1b520324d674",
+    "text": "Название"
+  },
+  "map.empty": {
+    "source_sha256": "1df97beb695e4e8c0a79c42fe5ec550d73514deb39a2270b236a70c94ee6f8c2",
+    "text": "подходящих целей нет"
+  },
+  "map.help.description": {
+    "source_sha256": "3913726639168fe52df28b8e3d6b32dcd08c6d791cd20bef61da222386ce0c2c",
+    "text": "lipi map — карта явных меток проекта по целям, слоям и тестам."
+  },
+  "map.help.epilog": {
+    "source_sha256": "a9dc4adfb85dbe0f5eafaf76087d7c6a399984236dafd843e940f63f6a1e94aa",
+    "text": "Форма ответа и подсчёт мест — docs/ru/map.md."
+  },
+  "map.signal.error": {
+    "source_sha256": "ca00fccfb408989eddc401062c4d1219a6aceb6b9b55412357f1790862e8f178",
+    "text": "ошибка"
+  },
+  "map.signal.warning": {
+    "source_sha256": "4bd9354bb652233497a0f42647464b81b83a83654fcf1511263a5d0120d74c91",
+    "text": "предупреждение"
+  },
+  "map.unmarked": {
+    "source_sha256": "9d9558d8bbc6884f0a84800ff64a58a1d45d24e0888dfb0f2d314db20f65e63d",
+    "text": " — меток нет"
+  },
+  "map.zero": {
+    "source_sha256": "37bc553dc12726621ab582e3ed671b873b2a6cc456b12bae0cfbadf03540172b",
+    "text": "0 означает: связей не найдено, а не отсутствие реализации."
+  },
+  "migrate.adr_no_year": {
+    "source_sha256": "27802d7e65f229320a5d391b05044ef7c6758fab1670954019d471f6ec578914",
+    "text": "ADR без года"
+  },
+  "migrate.already_placed": {
+    "source_sha256": "79c11815f5bb15c40347a6fa1b9dcb3ebf9d1ac5a7a26ad6e3ded5ea3853ba86",
+    "text": "\nУже на месте: %d"
+  },
+  "migrate.already_placed_plan": {
+    "source_sha256": "9183556dbed074697df7d3fdc7a68d93238567a648d00c1686a3f6552f208a44",
+    "text": "\nУже на месте (%d):"
+  },
+  "migrate.applied": {
+    "source_sha256": "3686d573e2e1600e660dac9a418bbc5fd6f115742fed43080c5016c6e225b418",
+    "text": "перенос выполнен: %s"
+  },
+  "migrate.apply_hint": {
+    "source_sha256": "33b25537533ceb13122bfed3707671120fb724005be5f943ab2608ee2b04d7a6",
+    "text": "\nЭто план: ничего не изменено. Выполнить: %s"
+  },
+  "migrate.archived": {
+    "source_sha256": "fbaf84e72fc05f502ac84724830bd8916ead9778cf326ec95958d2bdcfde3fd8",
+    "text": "в history/:"
+  },
+  "migrate.archived_plan": {
+    "source_sha256": "b7b684e2c3818511b1c31399566ae2059ebc55180ed19f0d07743ee70c86d0b0",
+    "text": "\nВ history/ (%d):"
+  },
+  "migrate.catalog_disabled": {
+    "source_sha256": "12c42da5ec74595cb91bba4e1db17df14c1756a4b09b75005f0216f5dfd15f9e",
+    "text": "в %s ключ «workflow» выключен (null) — укажите каталог: lipi migrate <каталог>"
+  },
+  "migrate.catalog_is_root": {
+    "source_sha256": "5bc8c022bf3f2d2a6422eb06a6adf3419dc75d6a7d82ceecf7ddc3ece47ea678",
+    "text": "каталог рабочих материалов не может быть корнем проекта: %s"
+  },
+  "migrate.catalog_missing": {
+    "source_sha256": "1c566be4668a630ee6d91f194ab5c9f3fa3128daeeee65ac98b68482978006b6",
+    "text": "каталог рабочих материалов не найден: %s\nУкажите его: lipi migrate <каталог>"
+  },
+  "migrate.catalog_symlink": {
+    "source_sha256": "7f80339d336408bf5383fcf197a151706657c8266b3cf12a860d8758929b9258",
+    "text": "символьная ссылка на пути каталога рабочих материалов: %s"
+  },
+  "migrate.catalog_type": {
+    "source_sha256": "d26ab899ea355f167f20e421de3cee0288a63d9a5c86fb72ff73304206b0d94a",
+    "text": "в %s ключ «workflow» — ожидается строка"
+  },
+  "migrate.catalog_unspecified": {
+    "source_sha256": "1ceb63521458c315432fdffe6be8c4ea4b1ad416213ce9166cdfc11543274824",
+    "text": "каталог рабочих материалов не задан"
+  },
+  "migrate.check_baseline": {
+    "source_sha256": "8d64aab66370aed45f16d0f0d805ff92a819816070c95b0628b9684908113d9f",
+    "text": "проверка: остались ошибки — занесите долг в базовую линию: lipi baseline"
+  },
+  "migrate.check_ok": {
+    "source_sha256": "1b8fd23f2ccd15c49b175a13b50ffe532ce8c235ae00d546b565f001cecaae4d",
+    "text": "проверка: ошибок нет"
+  },
+  "migrate.closed_invalid": {
+    "source_sha256": "26b59304daf6fd43603c78bcbfe7951678bc260848e5f1aee499506c728d0d8c",
+    "text": "%s: W3: неверная Дата закрытия «%s» (ожидается дата от %s до %s)"
+  },
+  "migrate.closed_kept": {
+    "source_sha256": "b6652420df508716bdb7feae3a45c64864b14512894e2f28363c77ff3b02ed9c",
+    "text": "шапка (сохранена)"
+  },
+  "migrate.closed_repeated": {
+    "source_sha256": "5624aede3f7adfc9ac5f0bd83c5ab80da194b3c0d8520da0bb443eecc1db13f5",
+    "text": "%s: W3: Дата закрытия записана несколько раз"
+  },
+  "migrate.commit_origin": {
+    "source_sha256": "95bcaa510e4cf8ecfb1075d0a4eaf66f95247a00232b80eeeed5e29eb415d65e",
+    "text": "первый коммит"
+  },
+  "migrate.config_keep_plan": {
+    "source_sha256": "0cea9ca25c4b5266d595131794d56b094c274d4bcf486a4c4daa8c772ebcc158",
+    "text": "%s: workflow не меняется"
+  },
+  "migrate.config_kept": {
+    "source_sha256": "df824ae6416e205caa599a48310a8178acea3658782177c5ee67fe0d6b3875ad",
+    "text": "%s: workflow не менялся"
+  },
+  "migrate.config_object": {
+    "source_sha256": "92942517aae74cf93bc5a7356d9e0d0bd81ebd698f3d57f0cd79ce7ee458ba5b",
+    "text": "%s: ожидается объект"
+  },
+  "migrate.config_update_plan": {
+    "source_sha256": "5bd21589f8d0a5fecda53751d046e9c3aa24a66df2f1c31b8e2958fdc793d33d",
+    "text": "%s: workflow = «%s» (изменится)"
+  },
+  "migrate.config_updated": {
+    "source_sha256": "cffdfa35360cec52fcb97ac6e75e6bf9013b77674f2c52cf177348b681d7d4a0",
+    "text": "%s: workflow = «%s»"
+  },
+  "migrate.create_plan": {
+    "source_sha256": "53337740eba0b33e1b36fe5cd04b12445c3cf06f97a8fdc29e8fc2aa7d33f85d",
+    "text": "\nБудет создано: %s"
+  },
+  "migrate.created": {
+    "source_sha256": "8ef48262021fc670d2ed610a20e50f535672e6a7508639c5e84d5a8e64486f38",
+    "text": "создан: %s"
+  },
+  "migrate.date_explanations": {
+    "source_sha256": "2c80778051a714832a0552af9a42b67906c46af7bc8117e59d9eadb0d7d1162d",
+    "text": "\nДаты и основание раскладки:"
+  },
+  "migrate.dates_corrected": {
+    "source_sha256": "f6551ed9403a65c7154ced0252bf144805ab19027cbecbddbeecc27943528e46",
+    "text": "«%s»: дата обновления оказалась раньше создания — выровнена"
+  },
+  "migrate.dates_from_git": {
+    "source_sha256": "adc06284db529f4c7dab50cace1eec5b3432496c44f02da21e3e1be41a96e621",
+    "text": "«%s»: недостающие даты взяты из коммитов файла"
+  },
+  "migrate.document_not_utf8": {
+    "source_sha256": "ef3b3114fba330dea8ea21b7502b37b2a6436186f832b2950434c340c48088b3",
+    "text": "документ не читается как UTF-8: %s"
+  },
+  "migrate.document_note": {
+    "source_sha256": "a5163f27b695ac4830e512f617f15e64efbb9950e7e8c46b9df9bb070787277b",
+    "text": "«%s»: %s"
+  },
+  "migrate.documents_moved": {
+    "source_sha256": "b165e8d51829e45ce8b8a82fe938a5bf32d03f71f5c5870a2fd2f00ff3e5c51b",
+    "text": "\nПеренесено документов: %d"
+  },
+  "migrate.documents_plan": {
+    "source_sha256": "9500ec93aedfb3e224522911408ebd4a19af355e1e2c058b86e7eb9779ef4369",
+    "text": "\nДокументы (%d):"
+  },
+  "migrate.failed": {
+    "source_sha256": "df36ab66dd38ee3d9d97ef25f33e5944d9e378a362e0ff8ac072c8f4f3ce9590",
+    "text": "перенос не выполнен: %s"
+  },
+  "migrate.git_dirty": {
+    "source_sha256": "dd15f44bea745dd0f0cb84a8f608824d134a56b02a2d7090c7205d87d0ea9d92",
+    "text": "рабочее дерево репозитория %s не чисто — закоммитьте или уберите изменения и повторите:\n%s"
+  },
+  "migrate.git_move_failed": {
+    "source_sha256": "827176c557a321fab893c09809eccf14bfcf6aaf09d56e38f4cb6aaf3eeaa582",
+    "text": "git mv не выполнен: %s"
+  },
+  "migrate.git_repository": {
+    "source_sha256": "139bf07a4d5dd8c7397a80c5a5788c1735639d425ca0c13e97c5c2b33f243937",
+    "text": "git-репозиторий: %s"
+  },
+  "migrate.git_required": {
+    "source_sha256": "fb813e3c9efc7d52150d3b38fc6927bb92ac4009298fdddae2c5581556f5038b",
+    "text": "каталог рабочих материалов не лежит в git-репозитории: %s\nПеренос идёт только через git (git mv), чтобы его можно было просмотреть и откатить. Создайте репозиторий или укажите каталог внутри него."
+  },
+  "migrate.git_status_failed": {
+    "source_sha256": "356efd1e5c0e461a02c513d0e3285d7d16b869655efb549afdd6da6a847fd35a",
+    "text": "git status не выполнился в %s"
+  },
+  "migrate.git_tracked_directory": {
+    "source_sha256": "e540ff1e90df449fd9d3343fd195e92ecf60c27b5b0c9931d9aa55f9c165a6ac",
+    "text": "не удалось проверить содержимое переносимых каталогов Git"
+  },
+  "migrate.git_tracked_files": {
+    "source_sha256": "e60dff0d5ba2538f6f08152674f6f96e3eefb8fcdb134d91af8a529e07b3b70a",
+    "text": "не удалось получить перечень отслеживаемых файлов Git"
+  },
+  "migrate.git_untracked": {
+    "source_sha256": "eb7f349e791528e9c8f10403b0b5b221434e67b6a4600cc115eae36ba604ba01",
+    "text": "эти файлы не под версионным контролем, а перенос идёт через git mv — добавьте их в git или уберите из каталога материалов:\n%s"
+  },
+  "migrate.header_origin": {
+    "source_sha256": "1e0584a25d9f43bf5cbd0aec01eb1af2220ed085b4e7f1837b0d89958cae353a",
+    "text": "шапка"
+  },
+  "migrate.help": {
+    "source_sha256": "561de64db300de1fd7c0075b52dd2cd862680c20669379a4734ea5f8061f2ca4",
+    "text": "Перенести рабочие материалы существующего проекта на правила lipi"
+  },
+  "migrate.help_apply": {
+    "source_sha256": "58502f444f7cf02be1f46eaa16decdb38b54705be1f82d3b7284e01906943478",
+    "text": "выполнить перенос; без него печатается план"
+  },
+  "migrate.help_workflow": {
+    "source_sha256": "b80caf2abac4cf35b3da547ec1f2ddcd5c64a0f37e9f2b78fbb3478bb0348733",
+    "text": "каталог рабочих материалов (по умолчанию — из lipi.json, ключ workflow)"
+  },
+  "migrate.index_rebuilt": {
+    "source_sha256": "bde26f334427f1014f7021b0602338a93073f872c7719f0023d06d9c4459b841",
+    "text": "указатель пересобран: %s"
+  },
+  "migrate.invalid_closed_fallback": {
+    "source_sha256": "e6de1c15871b8cfe0e9a488bd16dffd1f3dfba53f52069ca185c29226ac75605",
+    "text": "%s: W3: Дата обновления %s не может стать Датой закрытия"
+  },
+  "migrate.invalid_json": {
+    "source_sha256": "7e7b335c10aa45b9232973cf12bc011a185720dd593977f9ac0a798f6caa7b09",
+    "text": "%s не читается как JSON: %s"
+  },
+  "migrate.links_rewritten": {
+    "source_sha256": "f13d595cc3f1e8072007f513700f8a2cb769cc45430d63bc1ac0288de979a9b6",
+    "text": "\nСсылок переписано: %d в %d файлах"
+  },
+  "migrate.migration_log_intro": {
+    "source_sha256": "b7bb97734616bc9e2693c0537b1738098c2e1487394ffd372deadca62b910ec1",
+    "text": "Перенос выполнен командой `lipi migrate --apply` %s. Таблица: старый путь → новый путь → ID; пути — от корня рабочих материалов."
+  },
+  "migrate.migration_log_table": {
+    "source_sha256": "7397d5251e568433cd691031130922ed39e6d69947d2dd1b25fe2ba612dadec0",
+    "text": "| Старый путь | Новый путь | ID |"
+  },
+  "migrate.migration_log_title": {
+    "source_sha256": "d0d3c32875b1f56ebd2adbf58c1a6c1a5faa3778b77b39f6aaa6d500fa0f86b7",
+    "text": "# Перенос рабочих материалов"
+  },
+  "migrate.migration_origin": {
+    "source_sha256": "114d0e40e2b57a6a9496cc04814125fc171440e38aae45b4180b49075a43843c",
+    "text": "дата переноса"
+  },
+  "migrate.migration_table_plan": {
+    "source_sha256": "5129ddc46e5f8a017018707ea15702bbe67a402cb6dc972763f753b671dad170",
+    "text": "%s (таблица переноса)"
+  },
+  "migrate.move_symlink": {
+    "source_sha256": "e843e6e2e260d29786feeb2a250c8082b815ceac1144fe031eb7598e787137cf",
+    "text": "символьная ссылка на пути переноса: %s"
+  },
+  "migrate.moved_summary": {
+    "source_sha256": "561dbf18a1aa0586110bca2fd05a17bcf4c7184283e8794987781ec4e1c7d197",
+    "text": "\nитого: документов перенесено %d, без изменений %d, в history/ %d"
+  },
+  "migrate.no_status": {
+    "source_sha256": "039cfd8bd601d14a54da4f87649df82cbb8ff3b972adb89585d0b6332489533d",
+    "text": "без статуса"
+  },
+  "migrate.notes": {
+    "source_sha256": "7b41adf245628e09408b08accb17d974f4adb209f4c3436ade4cdffc69ac6951",
+    "text": "\nЗамечания (%d):"
+  },
+  "migrate.number_collision": {
+    "source_sha256": "003d0d651984087e6ff6404d0ce2488db5d6f09a27973fd294811645f89c96b0",
+    "text": "номер %03d занят — назначен %03d"
+  },
+  "migrate.override_audit_status": {
+    "source_sha256": "86f2677bfd2929ca3be7ff92367592ef47f6c2cde89824c04c537de09729a54e",
+    "text": "%s: «%s»: у типа %s нет статуса"
+  },
+  "migrate.override_entry_key": {
+    "source_sha256": "df648f3085310c4491ad1ef175bb556e76c6825948e4b52d397b41a1dfa78a49",
+    "text": "%s: «%s»: неизвестный ключ «%s» (допустимо: type, status, number)"
+  },
+  "migrate.override_entry_object": {
+    "source_sha256": "dd5f7e3b9387786e2dba0ef5411c9f9e77aa7a0570dbdd17df056a9dbc39cbbd",
+    "text": "%s: «%s»: ожидается объект. Допустимые поля: type, status, number."
+  },
+  "migrate.override_files_object": {
+    "source_sha256": "86c3f11bafd3bde7f378d0c1f30632709d12ce153f0a5807d24756f5a02cfa43",
+    "text": "%s: ключ «files» — ожидается объект"
+  },
+  "migrate.override_key": {
+    "source_sha256": "62c10d9f4531b07e5ad5e74d58a3f729f9c8e9cee3de4cbfce46e6d6e21881be",
+    "text": "%s: неизвестный ключ «%s» (допустимо: files)"
+  },
+  "migrate.override_missing_main": {
+    "source_sha256": "e589fd3ff88b583a31b8af93bed27d25401e765b1359037996df4d56efab335b",
+    "text": "%s: «%s»: в папке нет основного файла (readme.md или <имя>-readme.md)"
+  },
+  "migrate.override_needs_type": {
+    "source_sha256": "d3460061066825aaf550a639ecd209be02ce90d3b4650ce3a25f7622c0e3fcd5",
+    "text": "%s: «%s»: типу неоткуда взяться — укажите type в migrate.json"
+  },
+  "migrate.override_not_document": {
+    "source_sha256": "30752d9329df668a82294b1e5f82f1fddf02d1f93a36c833d10b9c1ef0ddae52",
+    "text": "%s: «%s»: папка не похожа на документ"
+  },
+  "migrate.override_number": {
+    "source_sha256": "243729df924711768139ef35eb46b9d2cbd032b0663aa33ed610d057c8d2a02c",
+    "text": "%s: «%s»: номер — целое больше нуля"
+  },
+  "migrate.override_object": {
+    "source_sha256": "8c2c1057e669a11aac9291e23834698e9dc842e53c7fd5e461031bf650991b02",
+    "text": "%s: ожидается объект с ключом «files»"
+  },
+  "migrate.override_path_missing": {
+    "source_sha256": "87d71c1a84e420aa3eec55d4ba50e9038a2cbb6a31750d852dd529dd508947ec",
+    "text": "%s: «%s»: такого файла или папки нет в каталоге рабочих материалов"
+  },
+  "migrate.override_status": {
+    "source_sha256": "9e61b5c96131b1ed723c6966007d5ed9c8da24d9dc06bc777ee714d2cba46def",
+    "text": "%s: «%s»: статус «%s» не из списка для %s: %s"
+  },
+  "migrate.override_symlink": {
+    "source_sha256": "f9e1a0aeb98cff04f67757b03c751f4b9c4e992a3268e10a4f98142ba638944e",
+    "text": "символьная ссылка на пути %s"
+  },
+  "migrate.override_type": {
+    "source_sha256": "ef225f3d26b8af7e90aad2b49ddbf53bd4b2a43c933cb13aefdffa7d2b0f3284",
+    "text": "%s: «%s»: неизвестный тип «%s» (допустимо: %s)"
+  },
+  "migrate.override_unused": {
+    "source_sha256": "116511e5772074f0d52e27ca8b463ce2cf84ca71c555ee68b18d121e0b34010b",
+    "text": "%s: «%s»: нечего переопределять (нет такого документа или он уже в history/)"
+  },
+  "migrate.plan": {
+    "source_sha256": "85b3a0a15f47735cbd713329fb97a0dc3fa0c7f61a8a55721911265372118743",
+    "text": "план переноса рабочих материалов: %s"
+  },
+  "migrate.result_added": {
+    "source_sha256": "143c290a474e36b176d5eaa8c95bc00c1c9583496c12f3026a2b30989bb64c2a",
+    "text": "%s: дописан «- %s: %s»"
+  },
+  "migrate.result_missing": {
+    "source_sha256": "97994a16f8513f81a1225a7b64761c194e639dbc6028d8fbfc3d2282e1a41d15",
+    "text": "не записан (перенесено %s)"
+  },
+  "migrate.rewrite_plan": {
+    "source_sha256": "5fe96b06270616905fdf2d738ed07da7253a831315280e26dd6cda0d07de1302",
+    "text": "\nСсылок переписать: %d в %d файлах"
+  },
+  "migrate.unknown_kind": {
+    "source_sha256": "c7bd87d9bb0aefe31f8d18806afd924cdd85ed37cb97bc3103549810fdd18ceb",
+    "text": "«%s»: вид замечания не распознан — поставлен «question»"
+  },
+  "migrate.unknown_status": {
+    "source_sha256": "98efb684f6ae90549843ddc80e36b3bc57c60c8cee5afa15b7b2bebc264deb39",
+    "text": "«%s»: статус «%s» не распознан — поставлен «%s»"
+  },
+  "migrate.updated_origin": {
+    "source_sha256": "38fae7fed6984a1273acd727a7050fd2dc2e971aaaba7e6a7a1a24f925e8b33a",
+    "text": "Дата обновления (неоформленный исходный материал)"
+  },
+  "migrate.written": {
+    "source_sha256": "be24145f601933309a981e4b60c05e39ea636b90bfe4418558176b1ceb3bff8b",
+    "text": "записан: %s"
+  },
+  "migrate.year": {
+    "source_sha256": "4d7bf8c2c322e44791d2ef2be82d00598ec3368ec84e8ffdbf26852f96835f81",
+    "text": "год %s"
+  },
+  "move.arguments.exclusive": {
+    "source_sha256": "e354eb1252effa5fcbeb2eea9a83d45820aac502170779eb0c15a3513ae789db",
+    "text": "--from нельзя сочетать с позиционными путями"
+  },
+  "move.arguments.markdown": {
+    "source_sha256": "74a33ee69a1b0d93cec6b96caa9d57657f94a3fa1dcda917e96ad83c8339f172",
+    "text": "исходный и новый путь должны быть Markdown-файлами (.md)"
+  },
+  "move.arguments.paths": {
+    "source_sha256": "5ad76909748f00ab49d7807d4ee6946d762bccd3a5b7b4b9745c96074ab83d06",
+    "text": "нужны два пути либо --from <файл>"
+  },
+  "move.batch.empty": {
+    "source_sha256": "a88bd6209f68f0d27081318f29903965e69e44f1bfac75a1522b2d3221ad97f6",
+    "text": "список переносов пуст"
+  },
+  "move.batch.line": {
+    "source_sha256": "9d18b77150fc3cc96151e59b843aebcad84e45477c8822a116e8364cd094d67f",
+    "text": "список переносов, строка %d: %s"
+  },
+  "move.batch.line.two": {
+    "source_sha256": "517bb1c23e649bda13cb8147db441a64b9eb4cab1737a78adfdd6d2dfc058608",
+    "text": "список переносов, строка %d: нужны два пути"
+  },
+  "move.cli.interrupted": {
+    "source_sha256": "08c301dc08aa23c16138b143629a85cce576860fe15ac748b60fc0f885e35fbf",
+    "text": "lipi mv: прерывание"
+  },
+  "move.destination.collision": {
+    "source_sha256": "e9bcee1737eec8b0f110f8b41522e6d436624542575bcfc88b5394fc8a55afb4",
+    "text": "перекрывающиеся назначения: %s"
+  },
+  "move.destination.excluded": {
+    "source_sha256": "63d24d5903fe44ec17cd343122a8805d33b9d2832fee8303c85f6000174e73e8",
+    "text": "путь назначения исключён: %s"
+  },
+  "move.destination.exists": {
+    "source_sha256": "7737e2f6f4f94f1922931a5e066e471947c6c00f164ad2d8121733894b77b321",
+    "text": "назначение уже существует: %s"
+  },
+  "move.destination.overlap": {
+    "source_sha256": "232507ffba473db92f284acec6d13ef60291ae6f2bc182ba1a82a6ebb3c7b522",
+    "text": "повторные или перекрывающиеся назначения: %s, %s"
+  },
+  "move.destination.parent": {
+    "source_sha256": "e175f02067cea10db952d02df4be7c465223ff56ad8dd6921987865015ab9c38",
+    "text": "родитель назначения не является каталогом: %s"
+  },
+  "move.destination.tracked": {
+    "source_sha256": "a3b05103f85fbde1499e1947a0fbce35fa4ae704f00e4e73342202205f5f6588",
+    "text": "назначение уже отслеживается Git: %s"
+  },
+  "move.destination.unavailable": {
+    "source_sha256": "fa9f65471487d17f47f6d209a657d617c4dded1852b2e72c262dfa298f6af771",
+    "text": "назначение уже существует или отслеживается Git: %s"
+  },
+  "move.directory.access": {
+    "source_sha256": "d3c9e9876a3b1b3599d0b96f85822325d24324854528a244a67f0d248ddb3dbb",
+    "text": "нет доступа к каталогу: %s"
+  },
+  "move.failed": {
+    "source_sha256": "88dcf59d16d42e73f55250373163e03421769a5ba9ad7f270bdd09964ab9a900",
+    "text": "перенос не выполнен: %s%s"
+  },
+  "move.file.changed": {
+    "source_sha256": "566d3c547b25f052494bcf82f00d882db04e3bfe8e8778f47642c4b101313391",
+    "text": "файл изменился после составления плана: %s"
+  },
+  "move.file.changed_after_read": {
+    "source_sha256": "259ddbdddab956a3285140d4167c178f4db9c8ec2757f1db86c9d81682026c5e",
+    "text": "файл изменился после чтения при подготовке плана: %s"
+  },
+  "move.file.changed_during": {
+    "source_sha256": "8c4873134d05dd6b30375a21671ddf049d1b07aa573ebf3b0f7e63337da7b211",
+    "text": "файл изменился во время переноса: %s"
+  },
+  "move.file.data_type": {
+    "source_sha256": "f0e14d3e5d97de117fcac59ea1ba9e08ae1fad5f0c0d60889e83c817458b67ff",
+    "text": "содержимое файла должно быть bytes или None: %s"
+  },
+  "move.file.encoding": {
+    "source_sha256": "ec592561c5821e2582d965694cdd61cc6780a466bfaf827fef6c7bc8ec461867",
+    "text": "не UTF-8: %s"
+  },
+  "move.file.mode": {
+    "source_sha256": "777cbf8f8620cddb8e05a1f0067bebaff2134e7b4332ca9e22cd4b31cfa0b132",
+    "text": "неверный режим файла: %s"
+  },
+  "move.file.no_links": {
+    "source_sha256": "bfa46083ecf0a45ac1eea0df7dd08e4bcf7d388439ebb9bbc4f809fc788fcb38",
+    "text": "ожидается обычный файл без ссылок: %s"
+  },
+  "move.file.out_of_scope": {
+    "source_sha256": "abb86f11329bd7b1c30632b1f3cdfc798d4b34964f4f91cb8fff8116dd393e8b",
+    "text": "файл больше не входит в доступные файлы проекта: %s"
+  },
+  "move.file.regular": {
+    "source_sha256": "084ec142491730d49754b851fe603e7fd2a14bd4c34071349e558d028925fff1",
+    "text": "ожидается обычный файл без жёстких ссылок: %s"
+  },
+  "move.file.seed": {
+    "source_sha256": "246e7121c01eb57b9eef8acdd7ff6f24720ba6aab4f04aa84e830bf348d2b382",
+    "text": "вне проекта разрешено только создание seed-файла: %s"
+  },
+  "move.file.write_access": {
+    "source_sha256": "ffb3f5e0bd7909d5d2cdc06cc099e8a2f67fa45e2ce82a9045d3bca510a054c0",
+    "text": "нет доступа для записи: %s"
+  },
+  "move.files.dirty": {
+    "source_sha256": "19347a01b1655ac05c63f83203ca42a95e4ddfd482c6c1a42cc9ec24e0e71843",
+    "text": "затрагиваемые файлы имеют незакоммиченные изменения (дерево или индекс): "
+  },
+  "move.git.conflict": {
+    "source_sha256": "d7b84605a73f6e4c4ff2931fc9c76bbef8d812eff8916c177338e5f497e2b67e",
+    "text": "неразрешённый конфликт Git: %s"
+  },
+  "move.git.failed": {
+    "source_sha256": "50ebbb0437d337081df4ab7ddc329047203712773135d0086acaeb644ce99f45",
+    "text": "не удалось выполнить git %s"
+  },
+  "move.git.list_failed": {
+    "source_sha256": "7ac1aaed814e5474faa057c352a4a4d6f2714bf4afa920c7f03771f108741dbc",
+    "text": "не удалось получить перечень файлов Git"
+  },
+  "move.help.apply": {
+    "source_sha256": "c0238b918d0eaa590faa35c4ea4901c70b8f36776bbd7975f9e36f1f412a27f6",
+    "text": "выполнить план переноса"
+  },
+  "move.help.description": {
+    "source_sha256": "5e023b971b144173e66a05eaf7d4cb1e41576728485ed569c1369d4fc7dce990",
+    "text": "lipi mv — план и безопасный перенос файлов и каталогов внутри Git-проекта."
+  },
+  "move.help.file": {
+    "source_sha256": "9ef2faffd23e7fdda264eeeb3114357fcb304142506cbb023c2894ac10f71654",
+    "text": "ФАЙЛ"
+  },
+  "move.help.from": {
+    "source_sha256": "345771b927272e192cfe370fb95f0aa2841595439c8942b0ee219c40148045f6",
+    "text": "список пар путей от корня Git-репозитория; сам ФАЙЛ — от текущего каталога"
+  },
+  "move.help.new": {
+    "source_sha256": "3282506e6f9bf24be5b69d882d10ffbd8a0dd4809383e0078529e5ceb45023ac",
+    "text": "новый путь от текущего каталога"
+  },
+  "move.help.old": {
+    "source_sha256": "e9f18b5815c85909c594cb9402f83191d4f997fb25a97ff518e50bf362362b88",
+    "text": "исходная страница или каталог, путь от текущего каталога"
+  },
+  "move.index.changed": {
+    "source_sha256": "375a56ccb25a895cded74a0499c6cdc0ac1e0b2725d2127861cec2a8bcb031d0",
+    "text": "индекс Git изменился после составления плана"
+  },
+  "move.index.changed_during": {
+    "source_sha256": "83ef7c6935c4da2a6a1a686d6f4d76709e2888bbbba2fb4fa0ec56ed081b167f",
+    "text": "индекс Git изменился во время переноса"
+  },
+  "move.index.locked": {
+    "source_sha256": "32acd0ff4dfb561a944cf892f83c50c08b6a3546c5658a90cfdae50aaaa2b7c9",
+    "text": "индекс Git занят: index.lock"
+  },
+  "move.interrupted": {
+    "source_sha256": "d512d96ea31ab0b9bb9b66da70c4d675f7db657518f4b6c0cc6d5823e6da5509",
+    "text": "прерывание"
+  },
+  "move.neighbor.marks.ending_one": {
+    "source_sha256": "16f2dcd7dbe0f69cc3d674a9b330dc4dbd95331377f5f4974d72dfb41fab2c86",
+    "text": "у соседа %s %d метка на %s — поправьте там"
+  },
+  "move.neighbor.marks.few": {
+    "source_sha256": "16f2dcd7dbe0f69cc3d674a9b330dc4dbd95331377f5f4974d72dfb41fab2c86",
+    "text": "у соседа %s %d метки на %s — поправьте там"
+  },
+  "move.neighbor.marks.one": {
+    "source_sha256": "488adaa12f47b2c8218f9e887dcbfff3b3ca70e809b23071fc9e312fb8e671d6",
+    "text": "у соседа %s %d метка на %s — поправьте там"
+  },
+  "move.neighbor.marks.other": {
+    "source_sha256": "16f2dcd7dbe0f69cc3d674a9b330dc4dbd95331377f5f4974d72dfb41fab2c86",
+    "text": "у соседа %s %d меток на %s — поправьте там"
+  },
+  "move.neighbor.no_config": {
+    "source_sha256": "501c608146450ead63430f54afd294b23c6c9dd109a0fad13661bf57584cb0aa",
+    "text": "нет lipi.json для обратного поиска"
+  },
+  "move.neighbor.partial": {
+    "source_sha256": "f8e575d9fcc4f60d463c116174a4b9cc51994e066b97357ec9d39f0f722c766e",
+    "text": "сосед %s не проверен полностью: %s"
+  },
+  "move.neighbor.read_limit": {
+    "source_sha256": "4b90eca83d4cfe2ad14d5df70db381bc67ec9485112c488e7b02b33fdb1e2e28",
+    "text": "%s больше предела чтения кода"
+  },
+  "move.neighbor.this_page": {
+    "source_sha256": "270e420dd35f9c27db37b181c6ed4e478216044423f94afbfe6ca4946523af2b",
+    "text": "эту страницу"
+  },
+  "move.neighbor.unchecked": {
+    "source_sha256": "61e595a13ca77f3cdf988e240f5f29893e18d78e2fad6a52387465cda52ca6e8",
+    "text": "сосед %s не проверен: %s"
+  },
+  "move.notice.complete": {
+    "source_sha256": "103868b476e91bc080674c6727e69f62fe44d94c214edef986c3ef4443b9a1c7",
+    "text": "Перенос выполнен; проверьте git diff и git diff --cached."
+  },
+  "move.notice.excluded": {
+    "source_sha256": "a56f9222aeb0ed1ce11fb03e6c90424caf940cbed542dde761d446689f168e24",
+    "text": "Исключён, остаётся на месте: %s"
+  },
+  "move.notice.external": {
+    "source_sha256": "9b25079ad63fdd1f5d1f991f8a451aa75934163f8026c6c9cadf00c871898d5a",
+    "text": "Неизвестные внешние ссылки не обнаруживаются."
+  },
+  "move.notice.history": {
+    "source_sha256": "8a46114d70d28c41be01b4ea05eeb6d9c9017944c3de7a1190ac263d201fff20",
+    "text": "history/ исключён: архив не читался, ссылки в нём не обновлены."
+  },
+  "move.notice.plan": {
+    "source_sha256": "f34a36f1129c695b3b6b91acb3c6004e8453c52a7a3fd212fd964278fba429db",
+    "text": "План без записи. Для переноса повторите с --apply."
+  },
+  "move.notice.untracked": {
+    "source_sha256": "450ce63cec270d411238166efe85a6624197607a872562c3568c5a76a1ce5258",
+    "text": "Не отслеживается Git, остаётся на месте: %s"
+  },
+  "move.parent.not_dir": {
+    "source_sha256": "3986e6cb060b0b49e7bfac69296bd6584b684a8ea7ce2ed06add176d22406f0b",
+    "text": "родитель не является каталогом: %s"
+  },
+  "move.path.excluded": {
+    "source_sha256": "b4b04edb185e9146141d4f41b0f09e4f343542daf9d6b83f93643aeda7a80426",
+    "text": "путь исключён: %s"
+  },
+  "move.path.outside": {
+    "source_sha256": "f73a1197c77b4aaea1d029a55757759908910361c2183c392e58885baddc8d1b",
+    "text": "путь вне репозитория: %s"
+  },
+  "move.path.symlink": {
+    "source_sha256": "fda99817be1858288f5b3afe27983989a6dff45e6fba2e88b339e481acae71b8",
+    "text": "символическая ссылка недопустима: %s"
+  },
+  "move.paths.changed_during": {
+    "source_sha256": "d5e2a314ee42a48c61908f0255394ff6211751e2027e7a83f8fbb2cc5ad027bf",
+    "text": "пути изменились во время переноса: %s"
+  },
+  "move.plan.destination_changed": {
+    "source_sha256": "34dce6d0a4236a8190dcbd69f0671c518ef546c91b001d28171f6d765e9873e1",
+    "text": "назначение переноса отдельно изменяется в плане"
+  },
+  "move.plan.duplicate_path": {
+    "source_sha256": "3f0daa9c7fe59601310101b88b0410e19a79f2bc30bb60337720c0880bfc0984",
+    "text": "повторный путь в плане изменения файлов"
+  },
+  "move.plan.overlap": {
+    "source_sha256": "dcd72bba901d4b0cd8e8a1bca9ace109f921d0e2154ba3e1aca1b8b4afd18427",
+    "text": "перекрывающиеся назначения переноса"
+  },
+  "move.project.root": {
+    "source_sha256": "2b0b34754443c1e7fa9255c45027d4ddf188ebe8c39a052d743d237a79e74538",
+    "text": "нельзя удалить корень проекта"
+  },
+  "move.review.address_only": {
+    "source_sha256": "2ea18d514ea9d637d2760d2970b341168da00d8f8f5198a858a4ea3574ee5980",
+    "text": "изменение области не является адресной заменой плана"
+  },
+  "move.review.cannot_verify_address": {
+    "source_sha256": "e0bdeb9a257ab61a79ffc0e0cb37b139952423ef9180680d1c7a97f952accb47",
+    "text": "невозможно доказать адресные замены отметки просмотра"
+  },
+  "move.review.cannot_verify_region": {
+    "source_sha256": "e01d203b133f02618b60e25b1898c91c7719c8c8b452595d814625c4184f3d9b",
+    "text": "не удалось доказать перенос области просмотра: %s"
+  },
+  "move.review.collision": {
+    "source_sha256": "bddea7bcdd274b3403c5f6e691a082662f911889842b62a5a6a7f2b5a47e95ee",
+    "text": "коллизия id отметок просмотра после переноса"
+  },
+  "move.review.kept": {
+    "source_sha256": "96df4f9dde8497e3c000a8fa980fd47ecd57d921d9a3f72e5c76c37eec7f1c80",
+    "text": "%s отметка сохранена без изменений: %s (%s)"
+  },
+  "move.review.mark_ambiguous": {
+    "source_sha256": "65acb68c4727b6869eda4f321d1cf90086eeaa3f10fe94ea306732a8410410f4",
+    "text": "неоднозначная действующая отметка: %s"
+  },
+  "move.review.obsolete": {
+    "source_sha256": "a97fc8713fcd1e65fff8ef036a453def02aa91bef1a7b88c0b0f97233b3a4b67",
+    "text": "Устаревшая"
+  },
+  "move.review.region_ambiguous": {
+    "source_sha256": "3cbd33ac930041154ae9c6e28e06fe68d84e3debd4a7818c4c0196701a75fea9",
+    "text": "область просмотра больше не однозначна: %s"
+  },
+  "move.review.region_changed": {
+    "source_sha256": "db6e3da8c7e2a411f0be4b29801a1e21c191b1dce7e3443460a7bd7a26d66833",
+    "text": "область просмотра изменилась после составления плана: %s"
+  },
+  "move.review.region_changed_during": {
+    "source_sha256": "58f388da19bb50eb0d826baddde38f23fbc9a0be3160709b51c04242441f5d05",
+    "text": "область изменилась при составлении плана: %s"
+  },
+  "move.review.region_changed_read": {
+    "source_sha256": "83918822f9525d1b65d959c2240071c0a2c77176548389fa67844fd483989815",
+    "text": "область изменилась при чтении: %s"
+  },
+  "move.review.registry_changed": {
+    "source_sha256": "e5cc08d3d419bca1e3175a415c3a0cba1c7e1a4400549ee7c632395483952348",
+    "text": "реестр просмотров изменился после составления плана"
+  },
+  "move.review.registry_changed_during": {
+    "source_sha256": "d185ef25a5e622a27465587f9df4c545522040ccdab1228dd26e0604c12b5c9a",
+    "text": "реестр просмотров изменился при составлении плана"
+  },
+  "move.review.symlink": {
+    "source_sha256": "f709b7d2a88dbe06005322d3dd3c43b10ba51284a69d52b2b3d6d0a4fa0e9ddc",
+    "text": "невозможно перенести просмотр через символическую ссылку: %s"
+  },
+  "move.review.transferred": {
+    "source_sha256": "9100c8e37fd3248ab9ec62f02e54633fe9f3b91d41dddf12c32d354878d313a5",
+    "text": "Просмотр %s → %s (%s): %s → %s; %s#%s → %s#%s"
+  },
+  "move.review.unchecked": {
+    "source_sha256": "33fddd0ed6c0d8f0c9e9e818ab78615b253515bcb2029cab96e6fb0447af1330",
+    "text": "Непроверенная"
+  },
+  "move.rollback.complete": {
+    "source_sha256": "88e71844c3b55cb08e58f707398f1e2f96de0f614440f5c220cf09cc831aaa47",
+    "text": "; изменения отменены"
+  },
+  "move.rollback.directory": {
+    "source_sha256": "e699fa1c6dfb06552e5850c977dedbafb7a71a994b0dd2bb3de9b17be4aa645c",
+    "text": "каталог изменился; откат пропущен: %s"
+  },
+  "move.rollback.file": {
+    "source_sha256": "f45e92fbae0d47f75f9d88077ede6f4f90643d7cd98874cbdf50ebaae06e463e",
+    "text": "файл изменился; откат пропущен: %s"
+  },
+  "move.rollback.incomplete": {
+    "source_sha256": "d790b2899c38c6fc5375dc97c90102b742c73d9382660c4f3e3b71da5fae3752",
+    "text": "; откат неполон: "
+  },
+  "move.rollback.index": {
+    "source_sha256": "64c5c51ae306d2d90dd6f230fcb7509afa26e2b861bf4e89d0e7490f827e548f",
+    "text": "индекс изменился; его автоматический откат пропущен"
+  },
+  "move.rollback.paths": {
+    "source_sha256": "8fa6622f35807b659fa18490037f0895934561a3cbdc8b4fef9d26095bf88ffc",
+    "text": "пути изменились; откат пропущен: %s"
+  },
+  "move.source.duplicate": {
+    "source_sha256": "a3970e9d9e698b4661d37e9951a3028983756baf5c3042e7ff3f38ef99201e16",
+    "text": "повторный источник: %s"
+  },
+  "move.source.missing": {
+    "source_sha256": "87ddb875a79ba5de8aaf92c13482d07a59ea7cd52ce2bd135deedd923fb60898",
+    "text": "исходный файл не найден: %s"
+  },
+  "move.source.no_tracked": {
+    "source_sha256": "267a51436c5dbc8a87e1e12cf6e8ce203a203a05a4fab2f6d371ac25f589ce83",
+    "text": "нет допустимых отслеживаемых файлов: %s"
+  },
+  "move.source.not_available": {
+    "source_sha256": "3fa07e41059423e841325216f458869f5149778e8c4978c81db04b8c7b4369d7",
+    "text": "исходный файл не входит в доступные файлы проекта: %s"
+  },
+  "move.source.out_of_scope": {
+    "source_sha256": "d3f7da8a3fa4dc6710bac303f846f6a24b204ae0f65f446bbb20b4a0512562f6",
+    "text": "исходный файл не входит в доступные файлы проекта"
+  },
+  "move.source.overlap": {
+    "source_sha256": "3850660d7ed30eb5f9fcb4db826d403a9da283d9cab17aa147721d527bc0f77e",
+    "text": "повторные или перекрывающиеся источники: %s, %s"
+  },
+  "move.source.same": {
+    "source_sha256": "4b2de6c8722d4cf631133fa4fe63805883f0617322467098f8ea9859bb573656",
+    "text": "перенос в самого себя: %s"
+  },
+  "move.source.snapshot": {
+    "source_sha256": "48c33e0f7ca44248e6a6040238794ed72ca8a45356f9baed83983ec82496bb03",
+    "text": "нет снимка переносимого файла: %s"
+  },
+  "move.source.untracked": {
+    "source_sha256": "8ac9758864fe6bea9106c6c44743aad60a6edfca79e18a9f1136b7ffceec897c",
+    "text": "исходный файл не отслеживается Git: %s"
+  },
+  "output.help.format": {
+    "source_sha256": "c9982c68197f020fd4ce3990df8ee265a4d402836643640140d9383eced32115",
+    "text": "формат ответа"
+  },
+  "repo.directory.unreadable": {
+    "source_sha256": "bee70cb88a627255d85733032cc1467665b0dd235cd0a144661368fade80f10d",
+    "text": "каталог не читается: %s"
+  },
+  "repo.file.encoding": {
+    "source_sha256": "f7aaf6a7dad5edd374f8971a4aef5fb05c9139e3acbb23c468fd3dfbe5ae9fa3",
+    "text": "файл %s не читается как UTF-8"
+  },
+  "repo.file.unreadable": {
+    "source_sha256": "61526ae090dc2f964e92ca5621403c24605c7353c4c6b5389b306d4afb915c33",
+    "text": "файл %s не читается: %s"
+  },
+  "repo.label.local": {
+    "source_sha256": "25bf8e1a2393f1108d37029b3df5593236c755742ec93465bbafa9b290bddcf6",
+    "text": "свой"
+  },
+  "repo.layer.reserved": {
+    "source_sha256": "ef4e0b0a27beecaacbade88c5e6940123ea771e1c8a8e997149eb22c10172306",
+    "text": "имя слоя «%s» содержит зарезервированный разделитель ::"
+  },
+  "repo.note.cross_staleness": {
+    "source_sha256": "e931785ccf3a99d2e59cc2072b66f52eb03090b25b0736cfcfdfd3cbcadb5e19",
+    "text": "межрепозиторное устаревание не проверено"
+  },
+  "repo.note.incomplete": {
+    "source_sha256": "8013d615cfa94130a72df6a6bd5530852afbcbca2ddb6501baf22685bd4b92a2",
+    "text": "%s недоступен: %s; связи не проверены"
+  },
+  "repo.note.scope": {
+    "source_sha256": "87c8c6e0c6c41367382bcb718bebf0ca8276670af00dfac2add679dd323db1fc",
+    "text": "Доступные источники: %s."
+  },
+  "repo.note.unreproducible": {
+    "source_sha256": "1cb8d59f79eaff073f92738ef9f46d079f9f85a02ccbdddf802edd4b7e1aaa33",
+    "text": "%s: %s; ответ невоспроизводим."
+  },
+  "repo.page.encoding": {
+    "source_sha256": "c2f01a438f5133f72ab7bbbe360c3b3dc71ffdf451bb28559d69a967f43a1a75",
+    "text": "страница %s не читается как UTF-8"
+  },
+  "repo.render.clean": {
+    "source_sha256": "3b066804f6d1d077173cfe4d06002e6a61e6f21c2b2e648417962115f1afcd8e",
+    "text": "чистый"
+  },
+  "repo.render.no_git": {
+    "source_sha256": "83d3ed7163a536a0bc4296edf698a48efb8f5d4d0593f3648d7409ec35224daa",
+    "text": " без Git"
+  },
+  "repo.render.sources": {
+    "source_sha256": "38a167e58336b86a85818420a7ec2fab3d2fa6971cc39d6c116f84d142d0e010",
+    "text": "источники: "
+  },
+  "repo.render.unavailable": {
+    "source_sha256": "441c8d69e0e92d765b2ae7762a529c4f64ecba68388a7eeae0014aa1942ee8f0",
+    "text": " недоступен"
+  },
+  "repo.render.unknown": {
+    "source_sha256": "46da5a742c34a03f8cc5b3dae87de2e70419f920e1f190df76dabfb817bbdcb1",
+    "text": "состояние неизвестно"
+  },
+  "repo.signal.unavailable": {
+    "source_sha256": "2c537f54ec77875e0e76fbf00db805ea3e26ce8da6f5eb52fba7a444d4f44b85",
+    "text": "%s недоступен: %s — связь не проверена"
+  },
+  "repo.state.dirty": {
+    "source_sha256": "9be049c5bd3a3bfe7bc8b7e00d5ac192533af9d9a5d180a0de59221e421ce873",
+    "text": "грязное дерево"
+  },
+  "repo.state.no_git": {
+    "source_sha256": "8dfaf97785f0cd146cdd9a57a675e55d9a0f80ad69e04bf4c5889f46070c6f42",
+    "text": "нет Git"
+  },
+  "repo.state.no_head": {
+    "source_sha256": "59f97d6b75cd49a9328c7d45b81ed6c0f13185dd0eeb8f038d4ed5529eca5cf4",
+    "text": "HEAD неизвестен"
+  },
+  "repo.state.unknown": {
+    "source_sha256": "81eee564e97f2572194faf5d5bf5efbf4a0e69115769c859f1432dee097de3b2",
+    "text": "состояние дерева неизвестно"
+  },
+  "repo.target.foreign_code": {
+    "source_sha256": "4dade8bb1ccab207a0c4eacd447e881ed2d0e3916722960f24976de48dadeafa",
+    "text": "внешние файлы кода не поддерживаются"
+  },
+  "repo.target.no_config": {
+    "source_sha256": "1d8441b9f4156a633c44dd9b61ae8bde8b074d2bc824fe8afab51d3d6bf58782",
+    "text": "нет lipi.json: доступны только цели путь#якорь"
+  },
+  "repo.target.unavailable": {
+    "source_sha256": "be3b4c7cafb9d4045f8d44f371e3faec6567830d311f87916e954b392392c348",
+    "text": "цель отсутствует или вне разрешённого чтения"
+  },
+  "repo.target.unknown_repo": {
+    "source_sha256": "a04244c56962e3548654fb6247d8ae96fc3a00b6797a5c28cc6f1563fe84cf00",
+    "text": "неизвестное подключение «%s»"
+  },
+  "review.arguments.anchor": {
+    "source_sha256": "7185772569f3e535824d9e32333ab7b96724bd4929b9fad00fde5996f873e657",
+    "text": "укажите точный ID якоря"
+  },
+  "review.arguments.confirm": {
+    "source_sha256": "012133edbad9ab52d9e401f5ee22752dbf7acfe678902c45a1f7da761bf26539",
+    "text": "--by и --reason передаются вместе с --confirm"
+  },
+  "review.arguments.confirm_details": {
+    "source_sha256": "3a863706d347392e5a2effa91d25c1b4385e863708d71ceddf2733bff43859f9",
+    "text": "подтверждение требует непустые --by и --reason"
+  },
+  "review.arguments.line": {
+    "source_sha256": "2a778399a984b2d34d6bc930e1f2e88af1665c9d650db71c1ce62c2d0de23c00",
+    "text": "номер строки после : должен быть положительным целым"
+  },
+  "review.arguments.missing": {
+    "source_sha256": "1e43da6ff0deb212881b3caad37d8cb534c11b2c67092ccadb5d822f0db7eb1f",
+    "text": "укажите TARGET и --at PATH[:LINE]"
+  },
+  "review.arguments.path": {
+    "source_sha256": "f5c299d36c090b726fd4b5523dea03ce50f59121d4fd3e060318f9693e5a5897",
+    "text": "ожидается путь файла от корня проекта"
+  },
+  "review.arguments.prune": {
+    "source_sha256": "ea761a096272e951d7044743a1d07075db5353c8e8c6ff36281c2de82bcd1e7f",
+    "text": "--prune несовместим с выбором пары, --full, --by и --reason"
+  },
+  "review.arguments.target": {
+    "source_sha256": "edc6edb99f96ba13a1e70c6736220bc0a9492ee00480d81fe7b8311c36928fb9",
+    "text": "TARGET — точный местный путь#якорь"
+  },
+  "review.arguments.token": {
+    "source_sha256": "7699da777a93bd4a4dc4eb9169d84e521c605284bfa7fc24f5913136fe5e21fe",
+    "text": "TOKEN должен быть строкой SHA-256 из preview"
+  },
+  "review.confirm.changed": {
+    "source_sha256": "13703d27ac5e51da74bac8f6003d3d5333a46356092fc03707b26eb40ea416b2",
+    "text": "состояние изменилось после просмотра; получите новый preview"
+  },
+  "review.confirm.changed_before_write": {
+    "source_sha256": "626f9c9063386b59374b76d1765ebdc4d5eae4981e5d08cecf2701a156c09921",
+    "text": "состояние изменилось перед записью; получите новый preview"
+  },
+  "review.confirm.pair_changed": {
+    "source_sha256": "4dced5cd6cee11d7ec6bad2e7c2be65e6b76624322f7320c9e42357c82353ab0",
+    "text": "выбранная пара изменилась; получите новый preview"
+  },
+  "review.help.at": {
+    "source_sha256": "aeb2ef8772cf5bef8864b985bcc44db5de60876bce3275ad0eb58ff2011ab838",
+    "text": "файл кода и строка внутри области"
+  },
+  "review.help.by": {
+    "source_sha256": "767f9924e04fd618bf872598a820805540311eac7c2c12f1293e5ef222f28369",
+    "text": "явный автор просмотра"
+  },
+  "review.help.confirm": {
+    "source_sha256": "f7abb7fadc4a4d220ad7239e63220811793a762119701a92ca98c617a1c4fb62",
+    "text": "подтвердить показанное состояние"
+  },
+  "review.help.description": {
+    "source_sha256": "1899c6c0b641db14e0c1d8b434670c1b4e23313ebac9d481a806659259c65ab5",
+    "text": "lipi review — просмотр одной пары A4 и уборка устаревших отметок."
+  },
+  "review.help.full": {
+    "source_sha256": "fa99a720a6b0a1d52d33ffe0f8f474c231314dbded1cb56074712556c9899b51",
+    "text": "показать все строки обеих областей"
+  },
+  "review.help.prune": {
+    "source_sha256": "8509f5a29b0a0b99506511a6bc40fb08f1dc3795995b0d27bce826551b8422e3",
+    "text": "план уборки устаревших отметок"
+  },
+  "review.help.reason": {
+    "source_sha256": "438745f85902c59c736aab0d1edddf0fa53aab86b74599224fd5357bb5e12ee0",
+    "text": "почему описание осталось верным"
+  },
+  "review.help.target": {
+    "source_sha256": "527d6e757aaea8b2cfe23b2799f928043962ad68c9c826b6672b7ca71ea08135",
+    "text": "точный местный путь#якорь"
+  },
+  "review.pair.disabled": {
+    "source_sha256": "ec5e8d6b4ae0093ae7ae354d60d68a6534e083d7268455203a465871ed75a9be",
+    "text": "A4 выключен настройками проекта"
+  },
+  "review.pair.identical": {
+    "source_sha256": "62793fced7268408be7b649860c4f739194e4e36ffa45c7272ef9b4284201211",
+    "text": "одинаковые состояния групп нельзя различить номером строки"
+  },
+  "review.pair.line": {
+    "source_sha256": "cbfed2eca588882b04abe0319ab5b3458e0594eab2ad3960205b3468e6693989",
+    "text": "уточните группу номером строки в --at"
+  },
+  "review.pair.missing": {
+    "source_sha256": "bea1f5b7716ae7d7c3a4f714c883b34f863ab94250a7e4b688fb9b81cdf1cb6a",
+    "text": "для выбранной области нет допустимой пары trace"
+  },
+  "review.pair.no_history": {
+    "source_sha256": "98629584fe3854d7c8f327743d53f82418588c7c56fad9bcb64b2e781fb90520",
+    "text": "нет истории выбранной области описания"
+  },
+  "review.pair.no_staleness": {
+    "source_sha256": "e3a19c6f2cc553f132ef5ddbb56ea34d3dc8b3ea8a1bd5cc9eff051a0479b458",
+    "text": "выбранная пара не даёт A4"
+  },
+  "review.read.changed": {
+    "source_sha256": "dfa204fc854b504be65b910184b37e3509320030bc6f10cb28d0eb678f974749",
+    "text": "файл изменился во время чтения: %s"
+  },
+  "review.read.region_changed": {
+    "source_sha256": "83918822f9525d1b65d959c2240071c0a2c77176548389fa67844fd483989815",
+    "text": "область изменилась во время чтения: %s"
+  },
+  "review.registry.changed": {
+    "source_sha256": "2340e4ae69255e30f12d5d3f016ef668c40c8e7d3cb4cf7ebfae3699c4d96f55",
+    "text": "реестр изменился после просмотра"
+  },
+  "review.registry.changed_before_write": {
+    "source_sha256": "5f68ee2b436944df67ff20172b12e5a3915a3eb011f66abcc156f227841e1a41",
+    "text": "реестр изменился перед записью"
+  },
+  "review.registry.locked": {
+    "source_sha256": "c761f126ec31153d4257264ee0cf14fb434ef431fb771ed8d1dd426d01897cd2",
+    "text": "реестр занят другим писателем: %s"
+  },
+  "review.registry.unreadable": {
+    "source_sha256": "79fa7191d8b4e0d45b65a04de38ea3e2add5c3ea3e6a30668f1bfe916df32df3",
+    "text": "реестр не читается: %s"
+  },
+  "review.render.omitted": {
+    "source_sha256": "614218471492c14a65100d44a5b3ce4ea87cae0b619b860d517148de2a96fa62",
+    "text": "не показано строк: %s"
+  },
+  "review.render.prune.preview": {
+    "source_sha256": "519b3a8138587b558b4ec7bf4e35d87c38ed349d2835bac28d8401c5e7489fb5",
+    "text": "Уборка %s (рабочее дерево)"
+  },
+  "review.render.prune.remove": {
+    "source_sha256": "7e5608ab610017afe6c1894fdd4f56848823dcb1d12302bd49751d16a290f774",
+    "text": "удалить"
+  },
+  "review.render.prune.result": {
+    "source_sha256": "b16ae0acfc0034cbe94d4dd1c2aec39d8de8aa3732153005c174200ff82b31e9",
+    "text": "%s: удалено %s; осталось %s; не проверено %s"
+  },
+  "review.render.prune.unchecked": {
+    "source_sha256": "54bfa4373eaf956917d71576ed0514b8e4a563f5e4e726760d09d2ef01ddd046",
+    "text": "не проверено"
+  },
+  "review.worktree.changed": {
+    "source_sha256": "e846c6c33f5e57697988f86e03cc81f8654ba3e55fa22fde245eb97051d2d146",
+    "text": "рабочее дерево изменилось во время просмотра"
+  },
+  "slice.arguments.diff": {
+    "source_sha256": "c9021f53968d0a2111a49c9096f9cad59c819dbbe4800c76d346c3ebd7bbde09",
+    "text": "укажите одно: --diff <база> или --staged"
+  },
+  "slice.arguments.only": {
+    "source_sha256": "f63b0b267b30ededcf34de9d38378ef586ad398b16135fadaa01ff7d811d67ec",
+    "text": "блоки через запятую: %s"
+  },
+  "slice.arguments.query": {
+    "source_sha256": "493046d38793212ff439ebd0ec86e7e41c460467849fdec272e72f8d7f06b88a",
+    "text": "укажите одно: цель, --diff <база> или --staged"
+  },
+  "slice.block.code": {
+    "source_sha256": "dcadc0999858878e1e12edccc3dcd1c08793cc54314931c83ccaf42089173d4a",
+    "text": "Места в коде"
+  },
+  "slice.block.concepts": {
+    "source_sha256": "0d0a8c6df3ace225e9a8e34274e5c1c1116d1db8319aa5357a8448e8a9ad732f",
+    "text": "Понятия"
+  },
+  "slice.block.context": {
+    "source_sha256": "a6e600a10fede40f648be37a700467776215ed2da3c271e9d02fa2987190a0a0",
+    "text": "Контекст"
+  },
+  "slice.block.entry": {
+    "source_sha256": "e59e10bd0bcf199b06dc443820be94f5b4c34dda2448243622150619dd6f2232",
+    "text": "С чего начинать"
+  },
+  "slice.block.excerpt": {
+    "source_sha256": "e1098352b26a647a46ebf0df7dd4919c33111e6690a6c0fe2d16b9f231f917b9",
+    "text": "Выдержка"
+  },
+  "slice.block.obey": {
+    "source_sha256": "25adcbba6c8899dec5f9a3dc0e7618f8aed786a42f10b4b64ea6a4fd0c4ab865",
+    "text": "Соблюдать"
+  },
+  "slice.block.signals": {
+    "source_sha256": "88b01c8a4bff9a08b6b56b8de43beb07205956d64d1c58eff683de7eaf3645e5",
+    "text": "Сигналы"
+  },
+  "slice.block.targets": {
+    "source_sha256": "e5531975349949d198d8186c362d3cef0c6cc13d9e16893ab83f736508a38790",
+    "text": "Цели работы"
+  },
+  "slice.block.tests": {
+    "source_sha256": "e5c9d7030bada2fe792ad7e4a26ca44379a73f3fe16805ac1359e46759a1571a",
+    "text": "Тесты"
+  },
+  "slice.code.title": {
+    "source_sha256": "61241285ab0682612f8c8e84f7688afdebb140f4f475f77f46eb039ab9db7cf3",
+    "text": "файл кода"
+  },
+  "slice.count.code.ending_one": {
+    "source_sha256": "ff975bc73c921be939040dbfebc9c865c759fa1c43702b0a8628b628edecdcdd",
+    "text": "%d место в коде"
+  },
+  "slice.count.code.few": {
+    "source_sha256": "ff975bc73c921be939040dbfebc9c865c759fa1c43702b0a8628b628edecdcdd",
+    "text": "%d места в коде"
+  },
+  "slice.count.code.one": {
+    "source_sha256": "2bac00b8469f5bae9ed17482cde69c552a793025c171e4d28e0dde1bd4db8028",
+    "text": "%d место в коде"
+  },
+  "slice.count.code.other": {
+    "source_sha256": "ff975bc73c921be939040dbfebc9c865c759fa1c43702b0a8628b628edecdcdd",
+    "text": "%d мест в коде"
+  },
+  "slice.count.concepts.ending_one": {
+    "source_sha256": "ec889c9d77717ce13bb2be0af94b02c4298c0be5de28a65ba732f1f532e91bb7",
+    "text": "%d понятие"
+  },
+  "slice.count.concepts.few": {
+    "source_sha256": "ec889c9d77717ce13bb2be0af94b02c4298c0be5de28a65ba732f1f532e91bb7",
+    "text": "%d понятия"
+  },
+  "slice.count.concepts.one": {
+    "source_sha256": "d8f3df22754e0308edd45f48fa7be5895f9e142b03b2105c830247fe24bd8ea2",
+    "text": "%d понятие"
+  },
+  "slice.count.concepts.other": {
+    "source_sha256": "ec889c9d77717ce13bb2be0af94b02c4298c0be5de28a65ba732f1f532e91bb7",
+    "text": "%d понятий"
+  },
+  "slice.count.decisions.ending_one": {
+    "source_sha256": "a177eb07103ec584ea94575025f9df21f5dc77e2c43eeab04f39642ef2d94a43",
+    "text": "%d решение"
+  },
+  "slice.count.decisions.few": {
+    "source_sha256": "a177eb07103ec584ea94575025f9df21f5dc77e2c43eeab04f39642ef2d94a43",
+    "text": "%d решения"
+  },
+  "slice.count.decisions.one": {
+    "source_sha256": "f8d4c7e3a8b49810dd7cd18dc74daa65ff7c2a4c907263d7d954a1972b0a3355",
+    "text": "%d решение"
+  },
+  "slice.count.decisions.other": {
+    "source_sha256": "a177eb07103ec584ea94575025f9df21f5dc77e2c43eeab04f39642ef2d94a43",
+    "text": "%d решений"
+  },
+  "slice.count.diff_locations.ending_one": {
+    "source_sha256": "fa3ee8f547c935a20a088789e8ab7eb9ba1ddc8e7b55bc48ffd004d2a76d60c2",
+    "text": "%d место"
+  },
+  "slice.count.diff_locations.few": {
+    "source_sha256": "fa3ee8f547c935a20a088789e8ab7eb9ba1ddc8e7b55bc48ffd004d2a76d60c2",
+    "text": "%d места"
+  },
+  "slice.count.diff_locations.one": {
+    "source_sha256": "a33b910041021681bfc79e4f1a5341c7157b05a61edd67f3e5793975fbeabccc",
+    "text": "%d место"
+  },
+  "slice.count.diff_locations.other": {
+    "source_sha256": "fa3ee8f547c935a20a088789e8ab7eb9ba1ddc8e7b55bc48ffd004d2a76d60c2",
+    "text": "%d мест"
+  },
+  "slice.count.entry.ending_one": {
+    "source_sha256": "d7926de6b04e72800be25ee998348f1cd16b446a83e90d54002a0704ee8cbb36",
+    "text": "%d точка входа"
+  },
+  "slice.count.entry.few": {
+    "source_sha256": "d7926de6b04e72800be25ee998348f1cd16b446a83e90d54002a0704ee8cbb36",
+    "text": "%d точки входа"
+  },
+  "slice.count.entry.one": {
+    "source_sha256": "2a4f2255f34e6576ca49d4d4379e16337a7815c4539585c560a91ea2041ef240",
+    "text": "%d точка входа"
+  },
+  "slice.count.entry.other": {
+    "source_sha256": "d7926de6b04e72800be25ee998348f1cd16b446a83e90d54002a0704ee8cbb36",
+    "text": "%d точек входа"
+  },
+  "slice.count.errors.ending_one": {
+    "source_sha256": "e3ab5d09cb0bde86a59012c018cc88a56e313dc5e53acf6855d5a99f3e55e11a",
+    "text": "%d ошибка"
+  },
+  "slice.count.errors.few": {
+    "source_sha256": "e3ab5d09cb0bde86a59012c018cc88a56e313dc5e53acf6855d5a99f3e55e11a",
+    "text": "%d ошибки"
+  },
+  "slice.count.errors.one": {
+    "source_sha256": "7baff2161ee68bd1554d39c7eeee05a65d5dc501dc0a9144705fbaec72a58391",
+    "text": "%d ошибка"
+  },
+  "slice.count.errors.other": {
+    "source_sha256": "e3ab5d09cb0bde86a59012c018cc88a56e313dc5e53acf6855d5a99f3e55e11a",
+    "text": "%d ошибок"
+  },
+  "slice.count.layers.ending_one": {
+    "source_sha256": "cbf53b2a35732202b9bd615f54e7b79c942bc9ef0491ddcffe21926200a05ce6",
+    "text": "%d слой"
+  },
+  "slice.count.layers.few": {
+    "source_sha256": "cbf53b2a35732202b9bd615f54e7b79c942bc9ef0491ddcffe21926200a05ce6",
+    "text": "%d слоя"
+  },
+  "slice.count.layers.one": {
+    "source_sha256": "8be15e952616ae6d9ed5aa524d09132744e36ee15f82ba3926934f56345fdfb8",
+    "text": "%d слой"
+  },
+  "slice.count.layers.other": {
+    "source_sha256": "cbf53b2a35732202b9bd615f54e7b79c942bc9ef0491ddcffe21926200a05ce6",
+    "text": "%d слоёв"
+  },
+  "slice.count.open_work.ending_one": {
+    "source_sha256": "bffed407ad7ebd8456f4ec0176d9e8d3945ad633fffdd3cc36ed077da5ede1a0",
+    "text": "%d открытая работа"
+  },
+  "slice.count.open_work.few": {
+    "source_sha256": "bffed407ad7ebd8456f4ec0176d9e8d3945ad633fffdd3cc36ed077da5ede1a0",
+    "text": "%d открытые работы"
+  },
+  "slice.count.open_work.one": {
+    "source_sha256": "dff7ad4df626e91632259b13238cd4287ca3c3f8b18c90cda7669d8661cad884",
+    "text": "%d открытая работа"
+  },
+  "slice.count.open_work.other": {
+    "source_sha256": "bffed407ad7ebd8456f4ec0176d9e8d3945ad633fffdd3cc36ed077da5ede1a0",
+    "text": "%d открытых работ"
+  },
+  "slice.count.repos.ending_one": {
+    "source_sha256": "ba76056302332e3977a0122ec2df0970b8a5cb128c1aea137fd19043095539d3",
+    "text": "%d репозиторий"
+  },
+  "slice.count.repos.few": {
+    "source_sha256": "ba76056302332e3977a0122ec2df0970b8a5cb128c1aea137fd19043095539d3",
+    "text": "%d репозитория"
+  },
+  "slice.count.repos.one": {
+    "source_sha256": "7638196323e3c484940ad1d682b9571c541bf56ba2500b6d015c68824cff14b9",
+    "text": "%d репозиторий"
+  },
+  "slice.count.repos.other": {
+    "source_sha256": "ba76056302332e3977a0122ec2df0970b8a5cb128c1aea137fd19043095539d3",
+    "text": "%d репозиториев"
+  },
+  "slice.count.rules.ending_one": {
+    "source_sha256": "e20aab12df0fee5e5e37a50e8a537fa727176da50c7c7a8ad8c47fbba960069e",
+    "text": "%d правило"
+  },
+  "slice.count.rules.few": {
+    "source_sha256": "e20aab12df0fee5e5e37a50e8a537fa727176da50c7c7a8ad8c47fbba960069e",
+    "text": "%d правила"
+  },
+  "slice.count.rules.one": {
+    "source_sha256": "967d8dc746122d4badb3a8b976876844349ac94de519f29495747f8484a188e3",
+    "text": "%d правило"
+  },
+  "slice.count.rules.other": {
+    "source_sha256": "e20aab12df0fee5e5e37a50e8a537fa727176da50c7c7a8ad8c47fbba960069e",
+    "text": "%d правил"
+  },
+  "slice.count.targets.ending_one": {
+    "source_sha256": "7f498fedd56691a1de5726d1cc7a8c479877e71fbc955d6ae597ca7dc97cacdf",
+    "text": "%d цель"
+  },
+  "slice.count.targets.few": {
+    "source_sha256": "7f498fedd56691a1de5726d1cc7a8c479877e71fbc955d6ae597ca7dc97cacdf",
+    "text": "%d цели"
+  },
+  "slice.count.targets.one": {
+    "source_sha256": "299a5aabe94d5f3ab79f962c0cd403e6e8326a2e4dbea37632c30ad23aa40d3c",
+    "text": "%d цель"
+  },
+  "slice.count.targets.other": {
+    "source_sha256": "7f498fedd56691a1de5726d1cc7a8c479877e71fbc955d6ae597ca7dc97cacdf",
+    "text": "%d целей"
+  },
+  "slice.count.tests.ending_one": {
+    "source_sha256": "60f206430b91995ca7a72ed94e11647c58892f0a72e96dc62df74c89aab7e686",
+    "text": "%d тест"
+  },
+  "slice.count.tests.few": {
+    "source_sha256": "60f206430b91995ca7a72ed94e11647c58892f0a72e96dc62df74c89aab7e686",
+    "text": "%d теста"
+  },
+  "slice.count.tests.one": {
+    "source_sha256": "ca1c61f5a942eb77a9310af64b8e6f4cdd8a289f599cc2426dcc31bbfa0f58e0",
+    "text": "%d тест"
+  },
+  "slice.count.tests.other": {
+    "source_sha256": "60f206430b91995ca7a72ed94e11647c58892f0a72e96dc62df74c89aab7e686",
+    "text": "%d тестов"
+  },
+  "slice.count.warnings.ending_one": {
+    "source_sha256": "74ccb43976d703e7e801e9a6f50c0da24bf14c65265825ffb2324bc7e72b4b4f",
+    "text": "%d предупреждение"
+  },
+  "slice.count.warnings.few": {
+    "source_sha256": "74ccb43976d703e7e801e9a6f50c0da24bf14c65265825ffb2324bc7e72b4b4f",
+    "text": "%d предупреждения"
+  },
+  "slice.count.warnings.one": {
+    "source_sha256": "bfac4a47a0046c9c031e6dd0b6f8ee67eddf19db6f1a9962e1897a662d4eefcf",
+    "text": "%d предупреждение"
+  },
+  "slice.count.warnings.other": {
+    "source_sha256": "74ccb43976d703e7e801e9a6f50c0da24bf14c65265825ffb2324bc7e72b4b4f",
+    "text": "%d предупреждений"
+  },
+  "slice.diff.error": {
+    "source_sha256": "b2f51b91daca0d74300ad883a01d1f98226a7ba9864e4acb5e687b0458915392",
+    "text": "срез по изменениям: %s"
+  },
+  "slice.diff.title": {
+    "source_sha256": "16a1ba9429b1e0af83358d3deaa44542b65f404a98ae5db2f1919da014c65d85",
+    "text": "проверьте связанные места"
+  },
+  "slice.git.base": {
+    "source_sha256": "a824b9af75a1eec202ae40a23bb2df97507530b02cf2f68259f8c608ec7cfc8c",
+    "text": "неверная база Git"
+  },
+  "slice.git.conflict": {
+    "source_sha256": "de75852edc2e9a69d9e6ec465a2993337e14d738fcc6ab2d2a4839eca09127b4",
+    "text": "сначала разрешите конфликты Git"
+  },
+  "slice.git.incomplete_diff": {
+    "source_sha256": "4fd7bcfd35df0105aedf59dd08f4de05313c06af0ff5e81e9a35dcb87042530f",
+    "text": "Git вернул неполный diff"
+  },
+  "slice.git.inconsistent_diff": {
+    "source_sha256": "c05835575eb18689706c1cca8e68d91ec416254193b4cc652e7f0419bddea5ee",
+    "text": "Git вернул несогласованные файлы и участки diff"
+  },
+  "slice.git.invalid_header": {
+    "source_sha256": "3005009a002dde5a81e28e011366342e631339afe7d08dda23438d159e9762f0",
+    "text": "Git вернул неверный заголовок diff"
+  },
+  "slice.git.read": {
+    "source_sha256": "2c755be9f8c51b6530d603dc9eb65804621003a18606ec93b82ea199425f23c7",
+    "text": "не удалось прочитать %s: %s"
+  },
+  "slice.git.unavailable": {
+    "source_sha256": "ab15c885ff0ac66fc45a8d1d542168b1a04b1aca7064e2861f1477b24c2662b8",
+    "text": "Git недоступен: %s"
+  },
+  "slice.git.worktree": {
+    "source_sha256": "5c40cb00c0eeb20b7016edcefc561c95e51276784e3e09da7c3882ae4d4ae6db",
+    "text": "нужен рабочий каталог Git"
+  },
+  "slice.help.base": {
+    "source_sha256": "cae662172fd450bb0cd710a769079c05bfc5d8e35efa6576edc7d0377afdd4a2",
+    "text": "база"
+  },
+  "slice.help.blocks": {
+    "source_sha256": "fa947088f272c563f6ae404075a5f1f6609c76a6c4c92aa14aa4e2a915166189",
+    "text": "блок[,блок]"
+  },
+  "slice.help.depth": {
+    "source_sha256": "306769f7c92285e0114813826047d1cc147b67a129580d2771dfcddd21eeb079",
+    "text": "глубина связей (по умолчанию 1)"
+  },
+  "slice.help.description": {
+    "source_sha256": "1553ecb6941b423e271c995f533520fe44f18a6aa07a740fa0f734f82c28b777",
+    "text": "lipi slice — срез карты проекта под одну задачу, без записи файлов."
+  },
+  "slice.help.diff": {
+    "source_sha256": "3ade1b5a3dd17f00e585978e218b190af5dc047412e6856b7ab9693686fc7e5c",
+    "text": "связи изменённого кода относительно ревизии Git"
+  },
+  "slice.help.epilog": {
+    "source_sha256": "9b0bc6ffa035fb95591f99239d5bcb3345c5e90d4e3c032ea5ee96ebc6e6743a",
+    "text": "Форма ответа и примеры — docs/ru/slice.md. Сигналы сохраняются при любом --only."
+  },
+  "slice.help.full": {
+    "source_sha256": "1e3d4dbccf4acf74244efda201934bc978eca76f96ec58a755a0e3db951949fa",
+    "text": "полная выдержка вне предела остальных блоков"
+  },
+  "slice.help.layer": {
+    "source_sha256": "ab7872ab4c991a2b552af1c8e482280013b32fd914e37f264f2d3b82b1345243",
+    "text": "оставить места выбранного слоя; можно повторять"
+  },
+  "slice.help.only": {
+    "source_sha256": "d2e6ae500622d3941d0e5b09e3f9d02f7d4b669ef98e6141f718ad81c97bebff",
+    "text": "оставить выбранные блоки и сигналы"
+  },
+  "slice.help.query": {
+    "source_sha256": "f50eb257109f5ee565ad3fec2cf3ec22a8d36e8c2f67c52c7dd5179809f8f51d",
+    "text": "путь#якорь, страница, файл кода, номер работы или поиск"
+  },
+  "slice.help.staged": {
+    "source_sha256": "249efebdb29336b58a8a91c42447fa25ab5daa02609147027ed6148dd89986c1",
+    "text": "связи подготовленных к коммиту изменений"
+  },
+  "slice.help.target": {
+    "source_sha256": "34a04005bcaf206eec990bd9637d9fdb6725e0a0c0d4aebf003f17f4c956eb5c",
+    "text": "цель"
+  },
+  "slice.history.decision": {
+    "source_sha256": "fc857f982341735267939739b3c2f1f996172c9c1c70c8934e0f9488618008b7",
+    "text": "действующему решению"
+  },
+  "slice.history.note": {
+    "source_sha256": "5e9b5104dc935f83476c7afe54944610510fdebd236233ae3f9623aaf9056e4d",
+    "text": "%s — срез по истории, не по %s"
+  },
+  "slice.history.plan": {
+    "source_sha256": "de2f82915c11c6e1d51a4157a38355640a108176183fb0acf4cc500652b8aa49",
+    "text": "текущему плану"
+  },
+  "slice.history.work": {
+    "source_sha256": "c2878de2de4ecaa422c60544c0ad39d7fbfe99a38ae9fe3e5cee77864e7ead8a",
+    "text": "текущей работе"
+  },
+  "slice.note.decision_no_code": {
+    "source_sha256": "1ea7642a3b71c835dda30f5675a1a09d1aa6288710701489bf6f202912aa9539",
+    "text": "кода по этому решению нет"
+  },
+  "slice.note.diff_review": {
+    "source_sha256": "ccbed2f437501792d8a43f00a8d2b544806ab4b26897f7d749a79f0f84958c16",
+    "text": "проверьте связанные места, решения и тесты"
+  },
+  "slice.note.diff_unmarked": {
+    "source_sha256": "c5cf3dc1fc35f3b40b3bf04a97fdf909ab8c83219858abfa04b8cdb99826ae41",
+    "text": "изменения без меток: %s"
+  },
+  "slice.note.file_no_marks": {
+    "source_sha256": "478f45a3f26f28d49870721f034916271c13f769868b1f041c83cb191241ebd2",
+    "text": "в файле нет меток — понятия неизвестны, ищите по коду"
+  },
+  "slice.note.layers_no_marks": {
+    "source_sha256": "4983fe7b44c05489bce1446959e5804749585a8fa43cf1eda650b1521ac3e308",
+    "text": "в слоях %s меток нет"
+  },
+  "slice.note.no_git": {
+    "source_sha256": "5955ea5f1e31fe6d92640f212c9b6ff21ac75a459ca9dae1d46c86d0930ced74",
+    "text": "устаревание не проверено (нет git)"
+  },
+  "slice.note.no_marks": {
+    "source_sha256": "554a7d82b134389dc3f8de406721af433c5bd333c7b41097ee6d498735058055",
+    "text": "меток нет — ищите по коду"
+  },
+  "slice.note.staleness_full": {
+    "source_sha256": "f6e043debf2cc337f2910f707da91da38b374880ad3e101c33b9d3e4b524e7d1",
+    "text": "устаревание проверено для %d из %d мест"
+  },
+  "slice.note.staleness_partial": {
+    "source_sha256": "d4352ced66c653e4de28ee97ab93da908120a00c68d179187f2811fbfc7b1491",
+    "text": "устаревание проверено для %d из %d мест; полная проверка — lipi audit"
+  },
+  "slice.note.work_empty": {
+    "source_sha256": "a9cf1de6a624722dde62b8d22e4f8f4dce22555c4b12ac3b9bbbe4c19841867a",
+    "text": "работа ни на что не ссылается и меток на неё нет"
+  },
+  "slice.relation.mark": {
+    "source_sha256": "dcf779f3ecefc7a29373b409fca847b6473a83a696645336fae50fbe88b1df7a",
+    "text": "метка у того же объявления"
+  },
+  "slice.relation.refines": {
+    "source_sha256": "402be534eda0435a97a8747d28fccb873cfd47a1da4d136dd33aea31b3bd1d76",
+    "text": "связано строкой «%s»"
+  },
+  "slice.relation.section": {
+    "source_sha256": "50d581db64479a5cdf57e947f55d073215b6a3df81c48ead4aa660ead07dafc3",
+    "text": "ссылается на раздел"
+  },
+  "slice.relation.target": {
+    "source_sha256": "6340992d1d4da4d37c19f3cab1ecc4ad50b87656277a0c7fc4ba3036cc3777e0",
+    "text": "ссылается на цель"
+  },
+  "slice.render.ambiguous": {
+    "source_sha256": "198e68c7db93345d62c9fca4081445691109dfd7cde68b95a62402945938b5d0",
+    "text": "цель «%s» неоднозначна%s"
+  },
+  "slice.render.candidates": {
+    "source_sha256": "3a4463ad79e2115d3c470414ec61d8cbf96100e5d3e390c6d0f7f3708ec78c03",
+    "text": "; кандидаты:"
+  },
+  "slice.render.concepts_omitted.ending_one": {
+    "source_sha256": "0f3dd9b20cf41690a2d3fdf7061c38029fb60a51005dcd5cdbabed6f2c766d0d",
+    "text": "реализует ещё %d понятие"
+  },
+  "slice.render.concepts_omitted.few": {
+    "source_sha256": "0f3dd9b20cf41690a2d3fdf7061c38029fb60a51005dcd5cdbabed6f2c766d0d",
+    "text": "реализует ещё %d понятия"
+  },
+  "slice.render.concepts_omitted.one": {
+    "source_sha256": "529947694624de576192aa53d384baf8acd34b1b598f4a4d3dbe3f670376d629",
+    "text": "реализует ещё %d понятие"
+  },
+  "slice.render.concepts_omitted.other": {
+    "source_sha256": "0f3dd9b20cf41690a2d3fdf7061c38029fb60a51005dcd5cdbabed6f2c766d0d",
+    "text": "реализует ещё %d понятий"
+  },
+  "slice.render.excerpt_omitted": {
+    "source_sha256": "9942bd7b8d5f7f3e9adef56bcaa0d2ed300b15777e503a508e355813c1033710",
+    "text": "обрезано; показано %d из %d строк"
+  },
+  "slice.render.found": {
+    "source_sha256": "72979c9051c0d14cc64a51e11c9dcbf85b09348c6ce9106318e491d851b121d0",
+    "text": " (найдено: %s)"
+  },
+  "slice.render.not_found": {
+    "source_sha256": "be52ae60070ffc04a99cf5d7cadb84a0984ad794e4c7b466d354e98c367bb7c8",
+    "text": "цель «%s» не найдена%s"
+  },
+  "slice.render.omitted": {
+    "source_sha256": "e4a0f04a8676e3ac4b8447c0c75340424d718f91ada54e36f33919568c134553",
+    "text": "показано %d из %d"
+  },
+  "slice.render.reviewed": {
+    "source_sha256": "04ad3580671ba2076978892367b7a4b1953ff607daed891d3d729b2e2b106ef5",
+    "text": "просмотрено пар устаревания: %d"
+  },
+  "slice.render.show_more": {
+    "source_sha256": "5e006eed26e5ce8c56ecb49e787c455b4e84f6e3b74858b278a013f33647ce45",
+    "text": "  %s; ещё — %s"
+  },
+  "slice.render.signals_omitted": {
+    "source_sha256": "114c1b1300acb42b16aa754f3014ebfd6bda790b7de6a97b506201d89b16890f",
+    "text": "показано %d из %d сигналов"
+  },
+  "slice.render.via": {
+    "source_sha256": "270259f016820a4a0dcebcc884b29afb2c8f0a646c63e35033d78a5e8c81d0fa",
+    "text": " — через %s"
+  },
+  "slice.signal.stale": {
+    "source_sha256": "c72edafca30a4eb9d2b580cac536964124d94bd1ba004077d2671565a3a361a0",
+    "text": "код менялся %s, позже раздела (%s)"
+  }
+}

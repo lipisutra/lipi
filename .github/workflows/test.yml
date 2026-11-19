@@ -1,0 +1,94 @@
+name: test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Python 3.9 setup-python даёт только на старых образах: на
+          # ubuntu-latest (26) и macos-latest (arm64) сборок 3.9 нет.
+          - { os: ubuntu-24.04,   python: "3.9" }
+          - { os: ubuntu-latest,  python: "3.x" }
+          - { os: macos-latest,   python: "3.x" }
+          - { os: windows-latest, python: "3.x" }
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Имя и почта git для тестов с коммитами
+        run: |
+          git config --global user.name "lipi-tests"
+          git config --global user.email "lipi-tests@example.com"
+      - name: Тесты
+        run: python -m unittest discover -s tests
+      - name: Установка пакета и smoke из установленного пакета
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          repo="$(pwd)"
+          python -m pip install --quiet .
+          tmp="$(mktemp -d)"
+          cd "$tmp"
+          lipi init .
+          lipi check
+          # lipi сам — как любой проект, из установленного пакета
+          cd "$repo"
+          lipi check --audit
+      - name: Чекер по самому lipi
+        run: python src/lipi/check.py --audit
+
+  test-macos-39:
+    # Для arm64-macOS setup-python сборок Python 3.9 не даёт: ставим
+    # универсальный (universal2) установщик с python.org. Не зависит от
+    # образа macos-13, который выводится из эксплуатации и подолгу стоит
+    # в очереди.
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Python 3.9 (установщик с python.org)
+        run: |
+          curl -L -o /tmp/python39.pkg https://www.python.org/ftp/python/3.9.13/python-3.9.13-macos11.pkg
+          sudo installer -pkg /tmp/python39.pkg -target /
+          /usr/local/bin/python3.9 --version
+      - name: Имя и почта git для тестов с коммитами
+        run: |
+          git config --global user.name "lipi-tests"
+          git config --global user.email "lipi-tests@example.com"
+      - name: Тесты
+        run: /usr/local/bin/python3.9 -m unittest discover -s tests
+      - name: Чекер по самому lipi
+        run: /usr/local/bin/python3.9 src/lipi/check.py --audit
+
+  test-windows-39:
+    # Для Windows setup-python сборок Python 3.9 не даёт вовсе: ставим
+    # установщиком с python.org (последняя версия 3.9 с бинарниками для
+    # Windows — 3.9.13).
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Python 3.9 (установщик с python.org)
+        shell: pwsh
+        run: |
+          Invoke-WebRequest -Uri https://www.python.org/ftp/python/3.9.13/python-3.9.13-amd64.exe -OutFile $env:RUNNER_TEMP\py39.exe
+          Start-Process -Wait -FilePath $env:RUNNER_TEMP\py39.exe -ArgumentList "/quiet","InstallAllUsers=1","PrependPath=1","TargetDir=C:\Python39","Include_launcher=0"
+          & C:\Python39\python.exe --version
+      - name: Имя и почта git для тестов с коммитами
+        run: |
+          git config --global user.name "lipi-tests"
+          git config --global user.email "lipi-tests@example.com"
+      - name: Тесты
+        run: C:\Python39\python.exe -m unittest discover -s tests
+      - name: Чекер по самому lipi
+        run: C:\Python39\python.exe src\lipi\check.py --audit

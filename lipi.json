@@ -1,0 +1,28 @@
+{
+  "docs": "docs/en",
+  "workflow": "workflow",
+  "skip_dirs": [
+    "src/lipi/locale",
+    "tests/fixtures"
+  ],
+  "release_notes": "../../CHANGELOG.md",
+  "layers": {
+    "src/lipi/checker/*": "checks",
+    "src/lipi/*": "commands",
+    "tests/*": "tests"
+  },
+  "entry": [
+    "^    if cmd (?:==|in\\b)"
+  ],
+  "languages": {
+    "default": "en",
+    "editions": {
+      "en": "docs/en",
+      "ru": "docs/ru"
+    },
+    "required": [
+      "en",
+      "ru"
+    ]
+  }
+}

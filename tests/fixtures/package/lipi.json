@@ -1,0 +1,5 @@
+{
+  "docs": "docs",
+  "workflow": "workflow",
+  "stale_days": {"active": 100000, "review": 100000, "issue": 100000}
+}
