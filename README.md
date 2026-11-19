@@ -6,6 +6,12 @@
 
 <p align="center">Write. Link. Organize.</p>
 
+<p align="center">
+  <a href="https://github.com/lipisutra/lipi/releases/latest"><img src="https://img.shields.io/github/v/release/lipisutra/lipi" alt="Latest release"></a>
+  <a href="#install"><img src="https://img.shields.io/badge/Python-3.9%2B-blue" alt="Python 3.9+"></a>
+  <a href="docs/ru/README.md"><img src="https://img.shields.io/badge/docs-%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9-blue" alt="Документация на русском"></a>
+</p>
+
 lipi provides rules, a scaffold, and a checker for project documentation.
 It is designed primarily for new projects.
 
