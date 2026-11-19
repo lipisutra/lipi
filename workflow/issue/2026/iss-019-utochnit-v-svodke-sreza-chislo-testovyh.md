@@ -2,7 +2,9 @@
 
 - Created: 2026-11-20
 - Updated: 2026-11-20
-- Status: in progress
+- Status: closed
+- Closed: 2026-11-20
+- Result: В пилоте подтверждены понятность сводки, явный охват локальной A4 и совместимость JSON со схемой 1.
 - Kind: friction
 
 ## Observation

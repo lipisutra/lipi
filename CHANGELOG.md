@@ -1,10 +1,12 @@
 # lipi releases
 
-## 1.0.1 — Unreleased
+## 1.0.1 — 2026-11-20
 
 - `lipi slice` counts marked test locations and explains how to read them.
   With connected repositories it reports local staleness coverage and how many
-  locations have cross-repository links outside that check.
+  locations have cross-repository links outside that check. The JSON schema remains at version 1.
+- The plans shown by `lipi init` and `lipi mv` mention an archive only when it exists.
+- `lipi new pln` omits a leading `Plan:` or `План:` from the generated filename.
 
 ### Проекту при обновлении
 
