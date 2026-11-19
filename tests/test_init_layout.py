@@ -120,6 +120,21 @@ class InitLayoutTests(unittest.TestCase):
         self.commit()
         return entry
 
+    def test_init_mentions_only_an_existing_archive(self):
+        for dry_run in (True, False):
+            code, output = self.run_init(dry_run=dry_run)
+            self.assertEqual(code, 0, output)
+            self.assertNotIn("history/", output)
+
+        for directory in (self.root, self.root / self.cfg["workflow"]):
+            with self.subTest(directory=directory):
+                archive = directory / "history"
+                archive.mkdir()
+                code, output = self.run_init(dry_run=True)
+                self.assertEqual(code, 0, output)
+                self.assertEqual(output.count("history/"), 1, output)
+                archive.rmdir()
+
     def test_prepare_is_pure_and_moves_yearly_documents_and_folder_attachments(self):
         documents = [self.document(prefix, status) for prefix, status in
                      (('pln', 'new'), ('iss', 'open'), ('dsc', 'open'))]
@@ -142,6 +157,7 @@ class InitLayoutTests(unittest.TestCase):
         self.assertNotIn(adr, plan.moves)
         self.assertNotIn(feedback, plan.moves)
         self.assertNotIn(archived, plan.moves)
+        self.assertEqual(sum("history/" in notice for notice in plan.notices), 1, plan.notices)
         layout_migration.apply_layout(plan)
         for old, new in plan.moves.items():
             self.assertFalse(old.exists())

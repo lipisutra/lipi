@@ -119,7 +119,7 @@ lipi check
 The plan shows the old and new paths and changes to rules, state, and
 indexes. PLN, ISS, DSC, and AUD move into the year from `Created`. A
 document directory moves with all its attachments. Document IDs stay the
-same. ADR, `.agents/lipi-feedback/`, and archives stay in place. Both an
+same. ADR, `.agents/lipi-feedback/`, and archives stay in place. The plan mentions an archive only when one exists. Both an
 initial setup and a subsequent update can move documents that already
 follow the format. Use [`lipi migrate`](commands.md#migrate) to import
 documents in another format.

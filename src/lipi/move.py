@@ -22,7 +22,7 @@ if __package__ in (None, ""):
 
 from lipi.i18n import ArgumentParser, cli_output, tr
 from lipi.checker.config import load_config, validate_settings
-from lipi.checker.conventions import CODE_EXT, CONFIG_NAME, LOCK_NAME, LIPI_DIR
+from lipi.checker.conventions import CODE_EXT, CONFIG_NAME, HISTORY_DIR, LOCK_NAME, LIPI_DIR
 from lipi.checker.model import Project, is_within
 from lipi.checker.paths import SkipDirs
 from lipi.move_links import replacements
@@ -268,6 +268,18 @@ def _clean_affected(root, changes, tracked):
                         ', '.join(str(path.relative_to(root)) for path in affected))
 
 
+def archive_present(project):
+    roots = [project.root]
+    if project.wf is not None:
+        roots.append(project.wf)
+    for directory in roots:
+        archive = directory / HISTORY_DIR
+        if not archive.is_symlink() and archive.is_dir():
+            return True
+    return any(HISTORY_DIR in path.relative_to(project.root).parts[:-1] and path.parent.is_dir()
+               for path in project.git_files or ())
+
+
 # @trace docs/ru/move.md#plan,ADR-017
 def make_plan(cwd, old_arg=None, new_arg=None, *, from_file=None, pairs=None, config=None):
     cwd = Path(cwd).resolve()
@@ -349,12 +361,7 @@ def make_plan(cwd, old_arg=None, new_arg=None, *, from_file=None, pairs=None, co
     if bulk:
         _clean_affected(root, changes, tracked)
     notices.extend(reviews.notices)
-    archive_dirs = [root / 'history']
-    if cfg.get('workflow'):
-        archive_dirs.append(root / cfg['workflow'] / 'history')
-    if (any(path.is_dir() and not path.is_symlink() for path in archive_dirs)
-            or any('history' in path.relative_to(root).parts[:-1] and path.parent.is_dir()
-                   for path in project.git_files)):
+    if not internal and archive_present(project):
         notices.append(tr('move.notice.history'))
     notices.append(tr('move.notice.external'))
     notices.extend(neighbor_notices(project, moves))

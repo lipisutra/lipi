@@ -52,7 +52,7 @@ does not scan the destination as another source.
 Untracked files and files in excluded areas stay in place. The report
 lists them except for files ignored by Git. The exclusions include
 `skip_dirs`, internal directories, lipi-managed files, `history/`,
-and connected repositories. The report mentions the archive only when present.
+and connected repositories.
 The command neither moves symbolic links nor follows them outside the
 project. A `skip_dirs` entry without a slash excludes a directory name
 at any depth. An entry containing `/` is relative to the project root.
@@ -90,7 +90,8 @@ there. The command can detect only known external references.
 ## Validate the plan <a id="plan"></a>
 
 The plan lists all moves, exact replacements by file and line, and
-skipped items. Before any write, the command rejects:
+skipped items. If an archive exists, the plan mentions it once, even when
+the archive is empty at the project or workflow root. Before any write, the command rejects:
 
 - Missing, untracked, or ineligible sources.
 - Duplicate sources, overlapping source directories, or a file included

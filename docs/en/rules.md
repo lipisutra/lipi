@@ -113,6 +113,7 @@ See the [agent documentation rules](https://github.com/lipisutra/lipi/blob/v1.0.
 
 - Use a name such as `pln-001-korotkoe-imya.md`. IDs are permanent and
   unique across years and archives.
+- `lipi new pln` omits a leading `Plan:` or `План:` from the filename. The document heading keeps the full title.
 - In the decision directory, `001-…`, `0001-…`, and `adr-001-…` all
   mean `ADR-001`. Multiple files with the same ID make it ambiguous.
   `lipi new adr` respects the existing number width and omitted prefix.

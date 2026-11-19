@@ -147,7 +147,8 @@ def cmd_new(pr, argv, fmt="text"):
         widths = [width for _, width, bare in names if bare]
         if widths:
             file_prefix, file_num = '', str(int(num)).zfill(max(widths))
-    path = tdir / ("%s%s-%s.md" % (file_prefix, file_num, slugify(title)))
+    filename_title = re.sub(r"^(?:Plan|План):", "", title) if prefix == "pln" else title
+    path = tdir / ("%s%s-%s.md" % (file_prefix, file_num, slugify(filename_title)))
     if pr.git_root is not None and has_symlink(path, boundary):
         print(tr("checker.commands.new_path_symlink") % path, file=sys.stderr)
         return 2

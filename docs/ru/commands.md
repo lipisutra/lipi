@@ -14,7 +14,7 @@
 | <a id="audit"></a>`lipi audit` | Check и расширенный [аудит](checking.md); справочно — ignore-trace и авторы отметок. `--reviews-since <ревизия>` показывает [новые отметки](checking.md#review-authors). |
 | <a id="index"></a>`lipi index` | Пересобирает полный [комплект указателей](workflow.md): короткий INDEX, живые списки и журнал по году поля `Closed`. |
 | <a id="baseline"></a>`lipi baseline [--prune]` | Записывает ошибки в `.agents/lipi/baseline.json`, после чего проверка падает только на новых. Предупреждения не входят; `--prune` убирает исправленное, не добавляя нового. Линия коммитится вместе с проектом. |
-| <a id="new"></a>`lipi new <тип> "Название" [вид] [lipi]` | Создаёт документ в годе создания со сквозным номером; ADR/feedback плоские. Типы: `pln`, `iss`, `dsc`, `adr`, `aud`. У замечания `Kind` — bug, friction, request или question; адресат `lipi` позволяет создать его и без рабочих материалов в `.agents/lipi-feedback/`. |
+| <a id="new"></a>`lipi new <тип> "Название" [вид] [lipi]` | Сквозной номер, каталог года (кроме ADR/feedback). Типы: pln, iss, dsc, adr, aud. В имени pln опускаются начальные `Plan:` и `План:`. Для iss: bug, friction, request, question; адресат lipi допускает запись в `.agents/lipi-feedback/` при отключённых рабочих материалах. |
 | <a id="selftest"></a>`lipi selftest` | Запускает локальный набор unittest самого lipi из его репозитория. Если каталога тестов нет — сообщение и код 2. |
 | <a id="version"></a>`lipi version [--path]` | Версия пакета; `--path` добавляет путь к его чекеру. `lipi --version` — тот же обработчик. |
 

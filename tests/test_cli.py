@@ -690,6 +690,28 @@ class TestCli(unittest.TestCase):
         self.assertIn("Observation", out)
         self.assertIn(support.localized('fill in', 'заполните'), out)
 
+    def test_new_plan_filename_omits_only_an_explicit_plan_label(self):
+        root = self.tmp / "project"
+        root.mkdir()
+        code, out = cli(root, "init")
+        self.assertEqual(code, 0, out)
+        cases = [
+            ("pln", "Plan: Agent guide", "agent-guide"),
+            ("pln", "План: Agent guide", "agent-guide"),
+            ("pln", "Plan comparison", "plan-comparison"),
+            ("pln", "План работ", "plan-rabot"),
+            ("pln", "Compare Plan: A", "compare-plan-a"),
+            ("iss", "Plan: Agent guide", "plan-agent-guide"),
+        ]
+        for kind, title, expected in cases:
+            with self.subTest(kind=kind, title=title):
+                code, out = cli(root, "new", kind, title, "--format", "json")
+                self.assertEqual(code, 0, out)
+                doc = json.loads(out)
+                path = root / doc["path"]
+                self.assertEqual(path.name, f"{doc['id'].lower()}-{expected}.md")
+                self.assertEqual(path.read_text(encoding="utf-8").splitlines()[0], "# " + title)
+
     def test_new_plan_hints_sections(self):
         """`lipi new pln` печатает оба обязательных раздела с пометкой о статусах."""
         p = self.tmp / "p"

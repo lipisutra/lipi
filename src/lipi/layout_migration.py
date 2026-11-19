@@ -202,7 +202,7 @@ def prepare_layout(root, cfg, updates, *, hook=None, external_creates=()):
     from .checker.workflow import scan_workflow
     from .checker.workflow_layout import discover_workflow, YEARLY
     from .checker.workflow_index import build_project_index, plan_index, read_index_files
-    from .move import (MovePlan, make_plan, _index_path, _clean_affected,
+    from .move import (MovePlan, archive_present, make_plan, _index_path, _clean_affected,
                        _git as move_git)
     from .move_reviews import prepare_transfer
     from .layout_state import transfer_baseline
@@ -332,7 +332,8 @@ def prepare_layout(root, cfg, updates, *, hook=None, external_creates=()):
         # New outputs are allowed; existing untracked files are user changes.
         _clean_affected(root, [change for change in plan.changes
                               if change.before is not None and '.git' not in change.path.relative_to(root).parts], tracked)
-    plan.notices.append(tr('layout_migration.archive_excluded'))
+    if archive_present(project):
+        plan.notices.append(tr('layout_migration.archive_excluded'))
     return plan
 
 
