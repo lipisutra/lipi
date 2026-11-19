@@ -84,6 +84,73 @@ class RepositorySettings(unittest.TestCase):
                 self.assertTrue(errors)
                 self.assertIn(support.localized('"core": "read":', '«core»: «read»:'), errors[0][1])
 
+    def test_page_dirs_schema_requires_docs_and_relative_directory_paths(self):
+        for value in (None, False, 1, "docs", {}, [None], [1], [""], ["  "],
+                      ["nul\0path"], ["/absolute"], [r"C:\absolute"],
+                      ["../other"], ["docs/../../other"], ["../neighbor/docs"]):
+            with self.subTest(value=value):
+                errors = self.errors({"core": dict(self.connection(), page_dirs=value)})
+                self.assertEqual(len(errors), 1, errors)
+                self.assertIn("page_dirs", errors[0][1])
+        for value in ([], ["docs"]):
+            errors = self.errors({"core": dict(self.connection(read=["code"]), page_dirs=value)})
+            self.assertEqual(len(errors), 1, errors)
+            self.assertIn("page_dirs", errors[0][1])
+
+    def test_page_dirs_allow_overlap_and_missing_directories(self):
+        for entries in ([], ["docs", "docs/drafts"], [".", "docs/chapters/../drafts"]):
+            with self.subTest(entries=entries):
+                item = dict(self.connection(), page_dirs=entries)
+                self.assertEqual(self.errors({"core": item}), [])
+
+    def test_page_dirs_compare_resolved_directories(self):
+        neighbor = self.directory / "neighbor"
+        (neighbor / "notes").mkdir(parents=True)
+        (neighbor / "alias").symlink_to("notes", target_is_directory=True)
+        repeats = ["notes/", "./notes", "drafts/../notes", "alias"]
+        if (neighbor / "NOTES").exists():
+            repeats.append("NOTES")
+        for entry in repeats:
+            with self.subTest(entry=entry):
+                item = dict(self.connection(), page_dirs=["notes", entry])
+                errors = self.errors({"core": item})
+                self.assertEqual(len(errors), 1, errors)
+                self.assertIn("page_dirs", errors[0][1])
+        self.assertEqual(self.errors({"core": dict(self.connection(), page_dirs=["alias"])}), [])
+
+    def test_page_dirs_resolve_parent_components_after_symbolic_links(self):
+        neighbor = self.directory / "neighbor"
+        (neighbor / "notes/drafts").mkdir(parents=True)
+        (neighbor / "alias").symlink_to("notes/drafts", target_is_directory=True)
+        item = dict(self.connection(), page_dirs=["alias/../docs", "notes/docs"])
+        errors = self.errors({"core": item})
+        self.assertEqual(len(errors), 1, errors)
+        self.assertIn("notes/docs", errors[0][1])
+        item["page_dirs"] = ["alias/../docs", "docs"]
+        self.assertEqual(self.errors({"core": item}), [])
+
+    def test_page_dirs_reject_files_and_paths_through_them(self):
+        neighbor = self.directory / "neighbor"
+        support.w(neighbor / "page.md", "# A file\n")
+        (neighbor / "alias").symlink_to("page.md")
+        for entry in ("page.md", "alias", "page.md/child", "alias/../notes"):
+            with self.subTest(entry=entry):
+                errors = self.errors({"core": dict(self.connection(), page_dirs=[entry])})
+                self.assertEqual(len(errors), 1, errors)
+                self.assertIn("page_dirs", errors[0][1])
+
+    def test_page_dirs_cannot_leave_the_neighbor_even_to_return_through_symlinks(self):
+        neighbor = self.directory / "neighbor"
+        (neighbor / "notes").mkdir(parents=True)
+        (neighbor / "escape").symlink_to("../project", target_is_directory=True)
+        (neighbor / "loop").symlink_to("loop", target_is_directory=True)
+        (self.root / "return").symlink_to(neighbor / "notes", target_is_directory=True)
+        for entry in ("escape", "escape/return", "escape/../notes", "loop"):
+            with self.subTest(entry=entry):
+                errors = self.errors({"core": dict(self.connection(), page_dirs=[entry])})
+                self.assertEqual(len(errors), 1, errors)
+                self.assertIn("page_dirs", errors[0][1])
+
     def test_missing_directory_and_regular_file_are_not_c1(self):
         support.w(self.directory / "neighbor-file", "content")
         for path in ("../missing", "nested/missing", "../neighbor-file", "../neighbor-file/child"):
@@ -134,10 +201,15 @@ class RepositorySettings(unittest.TestCase):
 
     def test_neighbor_validation_does_not_resolve_its_connections(self):
         (self.root / "loop").symlink_to("loop")
-        repos = {"core": self.connection("loop"), "self": self.connection(".")}
-        with patch.object(Path, "resolve", side_effect=AssertionError("third root was resolved")):
+        repos = {"core": dict(self.connection("loop"), page_dirs=["alias"]),
+                 "self": self.connection(".")}
+        no_access = AssertionError("third root was accessed")
+        with patch.object(Path, "resolve", side_effect=no_access), \
+                patch.object(Path, "lstat", side_effect=no_access):
             self.assertEqual(self.errors(repos, repo_roots=False), [])
             self.assertTrue(self.errors({"core": {"path": "loop"}}, repo_roots=False))
+            self.assertTrue(self.errors({"core": dict(self.connection(), page_dirs=["../escape"])},
+                                        repo_roots=False))
 
     def test_settings_validation_skips_lock_and_baseline(self):
         support.w(self.root / support.LOCK_REL, "invalid JSON")
@@ -162,7 +234,9 @@ class RepositorySettingsCLI(support.Case):
         support.w(root / "docs/broken.md", "# Broken\n\n[Missing](missing.md)\n")
         for repos in ([], {"Core": {"path": "../neighbor", "read": ["docs"]}},
                       {"core": {"path": ".", "read": ["docs"]}},
-                      {"core": {"path": "../neighbor", "read": []}}):
+                      {"core": {"path": "../neighbor", "read": []}},
+                      {"core": {"path": "../neighbor", "read": ["docs"], "page_dirs": "notes"}},
+                      {"core": {"path": "../neighbor", "read": ["code"], "page_dirs": []}}):
             with self.subTest(repos=repos):
                 support.set_config(root, repos=repos)
                 code, data = support.check_json(root)

@@ -26,6 +26,7 @@ of slice.
 | `ISS-007`, `PLN-005`, `DSC-002`, `AUD-001` | Work item |
 | `src/domain/discount.py` | Existing file other than `.md`, subject to [exclusions](map.md#rows) and Git filtering |
 | Text, such as a word or quoted phrase, without a path, `.md`, anchor, or ID form | Search query |
+| `name::phrase` | Search one connected repository |
 
 Search tries an exact anchor or ID, then a substring of anchors and IDs, then
 a substring of titles. A single match produces a slice and the target line
@@ -50,7 +51,7 @@ limit is cut within the word and followed by `…`.
 - **0** means the slice was returned, including an empty or incomplete
   one. Signal levels do not affect the exit code.
 - **1** means the target was missing or ambiguous. The response lists
-  candidates.
+  candidates. Suggested commands on a local miss also use exit code 1.
 - **2** means invalid arguments, C1 settings or state errors, or a
   Git diff error.
 
@@ -198,7 +199,8 @@ Missing trace markers, Git, or locations in some layers are reported in
 
 ## JSON <a id="json"></a>
 
-`schema: 1` uses the [response schema](slice-output.md#json). When
+`schema: 1` uses the [response schema](slice-output.md#json). A local miss may include
+[`suggestions`](slice-output.md#repo-search). When
 `reviews.json` exists, the summary includes
 [`reviewed_pairs`](review.md#summary). New keys are compatible. Removing a key
 or changing its meaning requires a new schema and major version.
@@ -215,12 +217,10 @@ Connection fields appear only with `repos`. They use the same metadata as the
 
 ### Targets and links
 
-- Queries and searches without a prefix are local. For external
-  targets, use `core::docs/api.md#request`, `core::docs/api.md`, or
-  `core::ADR-018`. `core::request` searches allowed targets. A neighbor
-  without `lipi.json` supports only an exact `path#anchor`, with no
-  search or backlinks. External code files, work items other than
-  decisions, and agent instructions are unsupported.
+- An unqualified query searches the local project. See [searching a connected
+  repository](slice-output.md#repo-search) for query forms and suggestions.
+  External code files, work items other than decisions, and agent instructions
+  are unsupported.
 - An unknown connection or missing or disallowed target exits with
   1 and returns `error: not-found` with the reason in `message`.
   Ambiguity uses `ambiguous`. Refusals for a work item ID or search

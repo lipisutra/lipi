@@ -179,7 +179,7 @@ def _item_text(kind, item):
 
 
 # @trace docs/ru/slice.md#json
-def render_text(response):
+def render_text(response, *, target_path=None):
     """Печатает уже отобранные элементы, не меняя их состава."""
     if "error" in response:
         key = "slice.render.ambiguous" if response["error"] == "ambiguous" else "slice.render.not_found"
@@ -189,6 +189,9 @@ def render_text(response):
             lines.append(response["message"])
         lines += ["  %s — %s" % ((item["repo"] + "::" if item.get("repo") else "") + item["target"], item["title"])
                   for item in response.get("candidates", [])]
+        if response.get("suggestions"):
+            lines.append(tr("slice.render.suggestions"))
+            lines.extend("  " + item["command"] for item in response["suggestions"])
         from .repo_output import render_repository_status
         lines.extend(render_repository_status(response))
         lines.extend(note["text"] for note in response.get("notes", []))
@@ -204,6 +207,8 @@ def render_text(response):
     if target.get("found") not in (None, "exact"):
         line += tr("slice.render.found") % target["found"]
     lines = [line]
+    if target_path:
+        lines.append(tr("slice.render.open_path") % target_path)
     summary = _summary(response["summary"])
     if summary:
         lines.append(summary)

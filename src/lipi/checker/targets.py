@@ -244,12 +244,13 @@ def _external_path_kind(source, path):
         return "work"
     if path.name == "AGENTS.md":
         return None
-    bases = (pr.docs, pr.descr, *pr.editions.values())
-    matching = [base for base in bases if is_within(path, base)]
-    if (is_within(path, pr.root / ".agents")
-            and not any(is_within(base, pr.root / ".agents") for base in matching)):
-        return None
-    if path == pr.root / "README.md" or matching:
+    agents = pr.root / ".agents"
+    bases = source.documentation_roots
+    if is_within(path, agents):
+        bases = tuple(base for base in bases if is_within(base, agents))
+    else:
+        bases += source.page_dirs
+    if path == pr.root / "README.md" or any(is_within(path, base) for base in bases):
         return "docs"
     return None
 

@@ -107,19 +107,28 @@ These settings apply to the map and slice. The set of checks run by
 
 ```json
 {"repos": {
-  "core": {"path": "../core", "read": ["docs", "decisions"]},
+  "core": {"path": "../core", "read": ["docs", "decisions"], "page_dirs": ["notes/drafts"]},
   "client": {"path": "../client", "read": ["code", "tests"]}
 }}
 ```
 
 Connection names are nonempty and contain lowercase ASCII letters,
-digits, and hyphens. Each connection requires exactly two keys.
+digits, and hyphens. Each connection requires `path` and `read`.
 
 - `path` is a nonempty path relative to the project root. It may contain
   `..`. Absolute paths and NUL characters are invalid.
 - `read` is a nonempty array with unique entries drawn from `docs`,
   `decisions`, `code`, and `tests`. These values authorize read access
   to those scopes.
+- `page_dirs` is an optional array of Markdown page directories. It extends
+  the `docs` scope used by [slices](slice.md#repos), [maps](map.md#repos),
+  `@trace`, and `covers`. Each entry is a nonempty path relative to the
+  neighbor's root and must stay within it, including after resolving
+  symlinks. Missing `docs` in `read`, an invalid value, or a repeated
+  resolved path raises C1. Entries may overlap one another or the neighbor's
+  documentation directory. Each page is considered once. A directory may
+  be absent; an existing file in its place raises C1. In Git, a directory
+  symlink does not add its destination to the read scope.
 
 Wrong types, unknown keys, and unknown scopes raise C1. Paths are
 compared after resolving symlinks. Two names for the same root and a
@@ -133,7 +142,7 @@ A connected root nested in the current project is excluded from local
 scans and target resolution. The connection reads it instead. Git
 filtering runs from each source root before symlinks are resolved.
 Git-ignored files are skipped and cannot serve as external targets.
-Directories and exclusions come from the neighbor's `lipi.json`.
+The base directories and exclusions come from the neighbor's `lipi.json`.
 Its `skip_dirs` paths are relative to its own root. The neighbor's
 `history/`, `<workflow>/history/`, and `<decisions>/history/` archives are
 skipped even with `docs: "."`. Invalid settings or settings that escape

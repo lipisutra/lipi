@@ -85,6 +85,68 @@ class RepositoryIndex(unittest.TestCase):
             index = self.index()
         self.assertFalse(index.places)
 
+    def test_page_dirs_keep_git_workflow_and_source_exclusions(self):
+        support.set_config(self.root, repos={'engine': {
+            'path': '../engine', 'read': ['docs'],
+            'page_dirs': ['notes', 'third', 'history', 'workflow', '.agents']}})
+        support.set_config(self.neighbor, repos={'third': {'path': 'third', 'read': ['docs']}},
+                           skip_dirs=['notes/private'])
+        allowed = 'notes/guide.md'
+        denied = ('notes/private/hidden.md', 'notes/ignored.md', 'third/hidden.md',
+                  'history/hidden.md', 'workflow/hidden.md', 'workflow/adr/adr-001-hidden.md',
+                  '.agents/rules.md', 'notes/AGENTS.md')
+        for path in (allowed, *denied):
+            support.w(self.neighbor / path, '# Document <a id="section"></a>\n')
+        support.w(self.neighbor / '.gitignore', 'notes/ignored.md\n')
+        support.git_init(self.neighbor)
+        original = Path.read_text
+
+        def read(path, *args, **kwargs):
+            self.assertNotIn(path, {self.neighbor / item for item in denied})
+            return original(path, *args, **kwargs)
+
+        with patch.object(Path, 'read_text', read):
+            index = self.index()
+            self.assertIn('engine::' + allowed, index.nodes)
+            for path in denied:
+                with self.subTest(path=path):
+                    target = 'engine::' + path
+                    self.assertNotIn(target, index.nodes)
+                    self.assertIsNone(index.mark(target + '#section'))
+
+    def test_page_dirs_apply_git_and_lexical_skip_dirs_to_directory_aliases(self):
+        relative = 'notes/guide.md'
+        support.w(self.neighbor / relative, '# Document <a id="section"></a>\n')
+        (self.neighbor / 'notes/work').mkdir()
+        (self.neighbor / 'skipped').mkdir()
+        for alias in ('alias', 'skipped/alias'):
+            (self.neighbor / alias).symlink_to(self.neighbor / 'notes/work', target_is_directory=True)
+        support.set_config(self.neighbor, skip_dirs=['skipped'])
+        target = 'engine::' + relative
+        for alias, git, allowed in (('skipped/alias/..', False, False),
+                                    ('alias/..', False, True), ('alias/..', True, False)):
+            if git:
+                support.git_init(self.neighbor)
+            support.set_config(self.root, repos={'engine': {
+                'path': '../engine', 'read': ['docs'], 'page_dirs': [alias]}})
+            index = self.index()
+            self.assertEqual(target in index.nodes, allowed, alias)
+            self.assertEqual(index.mark(target + '#section') is not None, allowed, alias)
+
+    def test_page_dirs_do_not_reopen_history_under_an_aliased_decisions_directory(self):
+        support.set_config(self.root, repos={'engine': {
+            'path': '../engine', 'read': ['docs', 'decisions'], 'page_dirs': ['notes']}})
+        support.set_config(self.neighbor, decisions='decision-link')
+        live = 'notes/decisions/adr-001-live.md'
+        archived = 'notes/decisions/history/adr-002-archived.md'
+        for path in (live, archived):
+            support.w(self.neighbor / path, '# Decision <a id="section"></a>\n')
+        (self.neighbor / 'decision-link').symlink_to('notes/decisions', target_is_directory=True)
+        index = self.index()
+        self.assertIn('engine::ADR-001', index.nodes)
+        self.assertNotIn('engine::' + archived, index.nodes)
+        self.assertIsNone(index.mark('engine::' + archived + '#section'))
+
     def test_external_decision_refinements_keep_namespace_and_status_metadata(self):
         support.w(self.neighbor / 'workflow/adr/adr-001-base.md',
                   '# Base\n\n- Status: accepted\n\n## Decision\n\nBase.\n')

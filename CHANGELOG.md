@@ -1,5 +1,21 @@
 # lipi releases
 
+## 1.1.0 — 2026-11-20
+
+- A connection can extend its `docs` scope with `page_dirs`. Trace markers,
+  slices, and maps use the same set of pages.
+- When a local phrase has no match, `lipi slice` suggests commands to search
+  connected repositories. JSON clients receive the commands in `suggestions`.
+  A title match in a neighbor includes an openable path in text output.
+
+### Проекту при обновлении
+
+1. Обновите программу: `pipx upgrade lipi`.
+2. Правила и шаблоны не изменились — `lipi init` не нужен.
+
+Update Lipi before adding `page_dirs` to `lipi.json`. Version 1.0.1 reports C1
+for this key.
+
 ## 1.0.1 — 2026-11-20
 
 - `lipi slice` counts marked test locations and explains how to read them.

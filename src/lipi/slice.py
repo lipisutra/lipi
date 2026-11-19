@@ -2,6 +2,7 @@
 """lipi slice — срез карты проекта под одну задачу, без записи файлов."""
 import argparse
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -59,6 +60,37 @@ def _config_errors(errors, fmt):
         report.dump()
 
 
+# @trace docs/ru/slice.md#target
+def _project_root(cwd):
+    """Ближайшая конфигурация в текущем рабочем дереве."""
+    for directory in (cwd, *cwd.parents):
+        if (directory / CONFIG_NAME).is_file():
+            return directory
+        if os.path.lexists(directory / '.git'):
+            break
+    return cwd
+
+
+# @trace docs/ru/slice-output.md#repo-search
+def _external_title_path(project, target, cwd):
+    repo = target.get('repo')
+    if repo is None or target.get('found') != 'title':
+        return None
+    source = project.sources.get(repo)
+    address = target['target']
+    if target['kind'] == 'decision':
+        path = source.project.mark_work[address].path
+    elif target['kind'] == 'section':
+        path = source.root / address.rpartition('#')[0]
+    else:
+        path = source.root / address
+    try:
+        return os.path.relpath(path, cwd)
+    except ValueError:
+        # Windows: корни на разных дисках.
+        return str(path)
+
+
 # @trace docs/ru/slice.md#exit
 @cli_output
 def main(argv=None):
@@ -66,8 +98,9 @@ def main(argv=None):
     args = ap.parse_args(argv)
     if (args.query is not None) + (args.diff is not None or args.staged) != 1:
         ap.error(tr('slice.arguments.query'))
-    root = Path.cwd().resolve()
+    cwd = Path.cwd().resolve()
     try:
+        root = _project_root(cwd)
         cfg = load_config(root, None)
     except (ValueError, OSError) as error:
         _config_errors([(CONFIG_NAME, tr('config.read.query') % error)], args.format)
@@ -106,7 +139,11 @@ def main(argv=None):
             _config_errors([(REVIEWS_NAME, str(error))], args.format)
             return 2
     response = select_response(response, cfg["slice_budget"], args.full, args.only)
-    print(json.dumps(response, ensure_ascii=False) if args.format == "json" else render_text(response))
+    if args.format == 'json':
+        print(json.dumps(response, ensure_ascii=False))
+    else:
+        target_path = _external_title_path(project, response.get('target', {}), cwd)
+        print(render_text(response, target_path=target_path))
     return code
 
 

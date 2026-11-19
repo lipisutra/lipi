@@ -136,3 +136,33 @@ decision ID, such as `ADR-001` for `0001-….md`.
 
 Adding a field is compatible. Removing a field or changing its meaning
 requires a new `schema` number and a major lipi release.
+
+## Search in a connected repository <a id="repo-search"></a>
+
+Use `core::docs/api.md#request`, `core::docs/api.md`, or `core::ADR-018` for a
+known address. To search only that connection, run
+`lipi slice 'core::export report'`. The [usual search rules](slice.md#target)
+apply within its [read scope](settings.md#repos), including pages in `page_dirs`.
+A neighbor without `lipi.json` supports only exact `path.md#anchor` targets
+and supplies no backlinks.
+
+When a local free-text query returns `not-found`, lipi suggests a command
+for each available direct connection with `docs` in `read` and its own
+`lipi.json`, in `repos` order. For `lipi slice 'export report'`, one suggestion
+could be `lipi slice 'core::export report'`. Suggestions use the original
+phrase and are generated without searching the neighbor. Following one may
+still return `not-found`.
+
+The schema 1 error response includes a `suggestions` array of `{repo, command}`
+objects when there are suggestions. The field is absent for other outcomes,
+including local ambiguity, a query by address or with a repository prefix,
+and a miss with no eligible connections.
+
+A title match shows the repository, title, match method, and a file path
+relative to the working directory in text output. For a page at
+`notes/drafts/export.md` in `../core`, that path is
+`../core/notes/drafts/export.md` from the local root and
+`../../core/notes/drafts/export.md` from `src/`. In JSON, the target has
+`repo: "core"`, `target: "notes/drafts/export.md"`, `kind: "page"`, and
+`found: "title"` from either directory. Candidates for an ambiguous query
+also use `repo` and an owner-relative `target`.

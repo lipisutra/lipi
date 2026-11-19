@@ -1,5 +1,10 @@
 """Срез подключений: общий индекс, локальная история, явные адреса ответа."""
 
+import os
+import re
+from shlex import quote
+from urllib.parse import unquote
+
 from .i18n import plural_form, tr
 from .repo_output import repository_status
 from .slice_index import document_order
@@ -8,6 +13,30 @@ from .slice_index import document_order
 def _split(target):
     repo, separator, local = target.partition('::')
     return (repo, local) if separator else (None, target)
+
+
+# @trace docs/ru/slice-output.md#repo-search
+def _suggestions(index, query):
+    path = unquote(query)
+    if (not query.strip() or path in ('.', '..')
+            or any(separator in path for separator in ('#', '/', '\\'))
+            or re.fullmatch(r'\S+\.[a-zA-Z][\w-]*', path)):
+        return []
+    suggestions = []
+    for source in index.sources.all:
+        if source.name is None or 'docs' not in source.read or not source.has_config:
+            continue
+        if source.state == 'unavailable':
+            continue
+        target = source.name + '::' + query
+        if os.name == 'nt':
+            # PowerShell распознаёт и типографские одинарные кавычки.
+            quoted = "'%s'" % re.sub(r"['‘’‚‛]", r'\g<0>\g<0>', target)
+        else:
+            quoted = quote(target)
+        command = 'lipi slice -- ' if target.startswith('-') else 'lipi slice '
+        suggestions.append({'repo': source.name, 'command': command + quoted})
+    return suggestions
 
 
 def _empty(target):
@@ -66,6 +95,10 @@ def _finish(index, response):
         for candidate in response.get('candidates', []):
             repo, target = _split(candidate['target'])
             candidate.update(repo=repo or candidate.get('repo'), target=target)
+        if response.pop('_local_title_miss', False):
+            suggestions = _suggestions(index, response['query'])
+            if suggestions:
+                response['suggestions'] = suggestions
         return response
 
     target = response['target']

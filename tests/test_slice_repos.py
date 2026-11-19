@@ -1,5 +1,7 @@
 """Срез прямых подключений: области чтения, адреса, неполнота и общий отбор."""
 import json
+import os
+import shlex
 import sys
 from pathlib import Path
 from unittest.mock import patch
@@ -86,6 +88,118 @@ class RepositorySlices(support.Case):
         self.assertFalse(self.items(result, 'code'))
         self.assertEqual(self.note(result, 'cross-repo-staleness'),
                          '0 locations with cross-repository links. Staleness of these links was not checked')
+
+    # @trace docs/ru/slice-output.md#repo-search
+    def test_title_search_suggestions_preserve_order_and_shell_arguments(self):
+        another = self.root.parent / 'another'
+        support.w(another / 'lipi.json', '{"workflow": null}')
+        decisions = self.root.parent / 'decisions'
+        support.w(decisions / 'lipi.json', '{"workflow": null}')
+        unconfigured = self.root.parent / 'unconfigured'
+        unconfigured.mkdir()
+        support.set_config(self.root, repos={
+            'z-core': {'path': '../' + self.neighbor.name, 'read': ['docs']},
+            'decisions': {'path': '../decisions', 'read': ['decisions']},
+            'missing': {'path': '../absent', 'read': ['docs']},
+            'unconfigured': {'path': '../unconfigured', 'read': ['docs']},
+            '-another': {'path': '../another', 'read': ['docs']},
+        })
+        phrase = '  writer\'s "$REPORT" & editor’s preview  '
+        project = Project(self.root, load_config(self.root, None))
+        with patch('lipi.repo_index._NeighborIndex._search_candidates',
+                   side_effect=AssertionError('suggestions must not search titles')):
+            result, status = build_slice(project, phrase)
+        self.assertEqual(status, 1)
+        self.assertEqual(result['error'], 'not-found')
+        self.assertEqual(result['candidates'], [])
+        self.assertEqual([item['repo'] for item in result['suggestions']], ['z-core', '-another'])
+        for item in result['suggestions']:
+            target = item['repo'] + '::' + phrase
+            args = ['lipi', 'slice'] + (['--'] if target.startswith('-') else [])
+            if os.name == 'nt':
+                quoted = "'" + target.replace("'", "''").replace('’', '’’') + "'"
+                self.assertEqual(item['command'], ' '.join([*args, quoted]))
+            else:
+                self.assertEqual(shlex.split(item['command']), [*args, target])
+        self.assertEqual(self.response(phrase, expected=1)['suggestions'], result['suggestions'])
+        code, output = support.cli(self.root, 'slice', phrase)
+        self.assertEqual(code, 1, output)
+        self.assertEqual([line.strip() for line in output.splitlines() if line.startswith('  lipi slice ')],
+                         [item['command'] for item in result['suggestions']])
+
+    # @trace docs/ru/slice-output.md#repo-search
+    def test_suggestions_only_for_local_text_misses_with_eligible_connections(self):
+        for query, status in (
+                ('Local', 0), ('core::word missing', 1), ('missing.md', 1), ('missing.py', 1),
+                ('docs%2Fmissing', 1), ('docs/README.md#absent', 1), ('ADR-099', 1)):
+            with self.subTest(query=query):
+                self.assertNotIn('suggestions', self.response(query, expected=status))
+        for name in ('first', 'second'):
+            support.w(self.root / ('docs/' + name + '.md'), '# Shared report\n')
+        result = self.response('shared report', expected=1)
+        self.assertEqual(result['error'], 'ambiguous')
+        self.assertNotIn('suggestions', result)
+        result = self.response('Working with Node.js', expected=1)
+        self.assertEqual([item['repo'] for item in result['suggestions']], ['core'])
+        support.set_config(self.root, repos={'core': {'path': '../' + self.neighbor.name,
+                                                     'read': ['decisions']}})
+        result = self.response('word missing', expected=1)
+        self.assertNotIn('suggestions', result)
+
+    # @trace docs/ru/slice-output.md#repo-search
+    def test_neighbor_title_lookup_from_root_and_subdirectory(self):
+        file = self.neighbor / 'notes/drafts/export.md'
+        title = 'Повторная выгрузка отчёта'
+        phrase = 'выгрузка отчёта'
+        support.w(file, '# ' + title + '\n\nКарточка.\n')
+        support.set_config(self.root, repos={'core': {'path': '../' + self.neighbor.name,
+            'read': ['docs'], 'page_dirs': ['notes/drafts']}})
+        src = self.root / 'src'
+        src.mkdir()
+        support.git_init(self.root)
+        expected = self.response('core::' + phrase)
+        self.assertEqual(expected['target'], {'repo': 'core', 'target': 'notes/drafts/export.md',
+                                              'title': title, 'found': 'title', 'kind': 'page'})
+        for cwd, language, match, opening in (
+                (self.root, 'en', '(found: title)', 'Open '),
+                (src, 'ru', '(найдено: title)', 'Открыть ')):
+            with self.subTest(cwd=cwd, language=language):
+                env = support.language_env(self.root.parent / ('profile-' + language), language)
+                cli = support.PY + [str(support.CLI), 'slice']
+                code, output = support.run(cli + [phrase, '--format', 'json'], cwd=cwd, env=env)
+                self.assertEqual(code, 1, output)
+                suggestion, = json.loads(output)['suggestions']
+                self.assertEqual(suggestion, {'repo': 'core', 'command': "lipi slice 'core::" + phrase + "'"})
+                code, output = support.run(cli + [phrase], cwd=cwd, env=env)
+                self.assertEqual(code, 1, output)
+                self.assertIn(suggestion['command'], output)
+                query = shlex.split(suggestion['command'])[-1]
+                code, output = support.run(cli + [query, '--format', 'json'], cwd=cwd, env=env)
+                self.assertEqual(code, 0, output)
+                self.assertEqual(json.loads(output), expected)
+                code, output = support.run(cli + [query], cwd=cwd, env=env)
+                self.assertEqual(code, 0, output)
+                self.assertIn('core::notes/drafts/export.md — ' + title, output)
+                self.assertIn(match, output)
+                opened = next(line[len(opening):] for line in output.splitlines() if line.startswith(opening))
+                self.assertEqual(opened, os.path.relpath(file, cwd))
+                self.assertEqual((cwd / opened).read_text(encoding='utf-8'), file.read_text(encoding='utf-8'))
+
+    # @trace docs/ru/slice.md#target
+    def test_project_discovery_stops_at_nested_git_boundary(self):
+        support.git_init(self.root)
+        nested = self.root / 'nested'
+        cwd = nested / 'src'
+        cwd.mkdir(parents=True)
+        support.git_init(nested)
+        code, output = support.cli(cwd, 'slice', 'Local', '--format', 'json')
+        self.assertEqual(code, 1, output)
+        self.assertNotIn('checks', json.loads(output))
+        support.w(nested / 'lipi.json', '{"workflow": null}')
+        support.w(nested / 'docs/local.md', '# Local\n')
+        code, output = support.cli(cwd, 'slice', 'Local', '--format', 'json')
+        self.assertEqual(code, 0, output)
+        self.assertEqual(json.loads(output)['target']['target'], 'docs/local.md')
 
     def test_reverse_places_use_physical_backlink_and_qualified_layer(self):
         self.code(targets=('docs/README.md#local',))

@@ -104,6 +104,20 @@ class MapRepositories(unittest.TestCase):
         self.assertEqual(rows['engine', 'docs/tested.md#one']['tests'], 1)
         self.assertIn((None, 'docs/local.md'), rows)
 
+    def test_page_dirs_include_only_allowed_pages_marked_by_own_code(self):
+        support.set_config(self.root, repos={'engine': {
+            'path': '../engine', 'read': ['docs'], 'page_dirs': ['notes', 'notes/drafts']}})
+        allowed = 'notes/drafts/guide.md'
+        denied = 'private/guide.md'
+        for path in (allowed, denied, 'notes/unused.md'):
+            self.page(self.engine, path, 'one', 'two')
+        self.mark(self.root, 'src/main.py', 'engine::' + allowed + '#one', 'engine::' + denied + '#one')
+        rows = self.rows(self.result())
+        self.assertEqual({key for key in rows if key[0] == 'engine'},
+                         {('engine', allowed + '#one'), ('engine', allowed + '#two')})
+        self.assertEqual(rows['engine', allowed + '#one']['code'], {'src': 1})
+        self.assertEqual(rows['engine', allowed + '#two']['code'], {'src': 0})
+
     def test_reverse_consumers_match_physical_root_and_count_distinct_repositories(self):
         (self.base / 'client-link').symlink_to(self.root, target_is_directory=True)
         support.set_config(self.engine, repos={

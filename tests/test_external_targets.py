@@ -214,6 +214,25 @@ class ExternalTargets(support.Case):
                     self.assertEqual({item[5] for item in denied}, set(choices) - allowed)
                     self.assertTrue(all('read' in item[4] or support.localized('allowed reads', 'разреш') in item[4] for item in denied))
 
+    def test_page_dirs_extend_trace_and_covers_with_matching_boundaries(self):
+        self.configure_neighbor(workflow=None, decisions='notes/drafts/decisions')
+        support.set_config(self.root, repos={'engine': {
+            'path': '../' + self.neighbor.name, 'read': ['docs'], 'page_dirs': ['notes/drafts']}})
+        allowed = 'notes/drafts/guide.md'
+        denied = ('notes/private/guide.md', 'notes/drafts/decisions/adr-001-choice.md',
+                  'notes/drafts/iss-001-work.md', 'notes/drafts/AGENTS.md')
+        for path in (allowed, *denied):
+            support.w(self.neighbor / path, '# Guide <a id="request"></a>\n')
+        expected = 'engine::' + allowed + '#request'
+        denied_targets = {'engine::' + path + '#request' for path in denied}
+        self.targets(expected, *sorted(denied_targets))
+        _, report, tags, _, _, _, covers, _ = self.inspect()
+        self.assertEqual(set(tags), {expected}, report.items)
+        self.assertEqual(set(covers), {expected}, report.items)
+        for code in ('T1', 'D6'):
+            self.assertEqual({item[5] for item in self.findings(report, code)}, denied_targets)
+        self.assertFalse(self.findings(report, 'T4'), report.items)
+
     def test_denied_capabilities_are_checked_before_reading_target_contents(self):
         self.connect(('code', 'tests'))
         self.decision()

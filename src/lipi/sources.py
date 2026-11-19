@@ -9,7 +9,7 @@ from pathlib import Path
 
 from lipi.i18n import tr
 from . import __version__
-from .checker.config import check_lock, load_config, validate_settings
+from .checker.config import check_lock, load_config, resolve_page_dir, validate_settings
 from .checker.conventions import CONFIG_NAME, HISTORY_DIR, LOCK_NAME, LIPI_DIR
 from .checker.model import Project, git_worktree_root, has_symlink, is_within
 from .checker.paths import SkipDirs
@@ -63,6 +63,7 @@ class Source:
         self._owner = owner
         self._reason = None
         self._has_config = None
+        self._page_dirs = ()
         if name is None:
             self.root = owner.root
             self.cfg = owner.cfg
@@ -70,6 +71,8 @@ class Source:
             self.read = ('docs', 'decisions', 'code', 'tests')
             return
         self.read = tuple(connection['read'])
+        if 'docs' in self.read:
+            self._page_dirs = tuple(connection.get('page_dirs', ()))
         self.cfg = None
         self.project = None
         self._has_config = False
@@ -175,11 +178,32 @@ class Source:
         return SkipDirs(self.root, self.cfg.get('skip_dirs', []), include_agents=True)
 
     @cached_property
+    def documentation_roots(self):
+        pr = self.project
+        return tuple(base for base in (pr.docs, pr.descr, *pr.editions.values()) if base is not None)
+
+    @cached_property
+    def page_dirs(self):
+        roots = []
+        for entry in self._page_dirs:
+            try:
+                path = resolve_page_dir(self.root, entry, path_allowed=self._path_allowed,
+                                        follow_symlinks=self.project.git_root is None)
+                if path is not None:
+                    path = self.resolve_path(path, directory=True)
+                if path is not None and path.is_dir():
+                    roots.append(path)
+            except (OSError, RuntimeError, ValueError):
+                continue
+        return tuple(roots)
+
+    @cached_property
     def _archive_roots(self):
         workflow = self.cfg.get('workflow')
         decisions = self.cfg.get('decisions', str(Path(workflow) / 'adr') if workflow else None)
-        return (self.root / HISTORY_DIR, *(self.root / base / HISTORY_DIR
-                                          for base in (workflow, decisions) if base))
+        bases = (self.project.wf, self.project.decisions,
+                 *(self.project.lexical_path(base) for base in (workflow, decisions) if base))
+        return (self.root / HISTORY_DIR, *(base / HISTORY_DIR for base in bases if base))
 
     def is_archived(self, path):
         """Путь архива, в том числе отсутствующий в рабочем дереве."""

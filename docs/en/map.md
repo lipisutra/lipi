@@ -68,6 +68,8 @@ A nonempty `repos` adds sources. Without connections the ordinary schema and beh
 
 External rows are included only for targets directly marked by **local** code or tests. A readable external page expands according to the [usual row rules](#rows), including file-order anchors and an ID row for decisions. Reading requires `docs` or `decisions` according to target type. If the connected repository has no `lipi.json`, only the explicit anchors on a readable page are available. It contributes no ID or page target and cannot be searched for consumers. Rows are identified by `(repo, target)`. Local groups come first, then external groups in `repos` key order. Normal ordering applies within each source. Markdown links and `covers` add neither rows nor locations.
 
+The [`docs` scope](settings.md#repos) includes any directories listed in `page_dirs` for the connection.
+
 Reverse lookup searches direct connections with `read: code` or `tests`. It adds locations only when the repository name in an external marker resolves to the **local** project root. The two ends may use different names for the connection. Lookup stops at the direct neighbor. Its local markers and markers targeting third repositories do not expand the map. Its agent instructions are not imported.
 
 `code` grants access to ordinary code locations, `tests` to test locations. With only `code`, external tests do not count. With only `tests`, the neighbor contributes no ordinary code layers. Its settings determine classification, layers, and exclusions. The text and the `repos-scope` note identify the declared, readable sources covered by the counts.

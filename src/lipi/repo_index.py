@@ -48,6 +48,12 @@ class _LocalIndex(SliceIndex):
             return self._answer(query, [], 'exact')
         return super().resolve(query)
 
+    def _answer(self, query, matches, found):
+        node, error = super()._answer(query, matches, found)
+        if found == 'title' and not matches:
+            error['_local_title_miss'] = True
+        return node, error
+
 
 # @trace docs/ru/slice.md#repos,docs/ru/map.md#repos
 class _NeighborIndex(SliceIndex):
@@ -78,8 +84,7 @@ class _NeighborIndex(SliceIndex):
             return
         roots, paths = [], set()
         if 'docs' in source.read:
-            roots.extend(base for base in (pr.docs, pr.descr) if base)
-            roots.extend(base for base in pr.editions.values() if base is not None)
+            roots.extend((*source.documentation_roots, *source.page_dirs))
             paths.add(pr.root / 'README.md')
         if 'decisions' in source.read and pr.decisions:
             roots.append(pr.decisions)
@@ -93,7 +98,7 @@ class _NeighborIndex(SliceIndex):
             paths.update(pr.walk_md(root, exclusions=pr.target_skip_dirs, onerror=self._walk_error))
         for path in sorted(paths):
             safe = source.resolve_path(path)
-            if (safe is None or not safe.is_file()
+            if (safe is None or safe.suffix.lower() != '.md' or not safe.is_file()
                     or _external_path_kind(source, safe) not in source.read):
                 continue
             self.add_page(safe, work_by_path.get(safe))

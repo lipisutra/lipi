@@ -507,6 +507,10 @@
     "source_sha256": "9a5387f57dff82d2b9ae27055a3f168187ae9b2b9dbc789c6e4cb3a6f1c75663",
     "text": "«%s»: «read»: повтор возможности «%s»"
   },
+  "checker.config.repo_duplicate_page_dir": {
+    "source_sha256": "2dd5904463adfec691627b6639b88b8b72ee8e58d298453d8172b90c50183890",
+    "text": "ключ «repos»: «%s»: «page_dirs»: пути %s и %s разрешаются в один каталог"
+  },
   "checker.config.repo_duplicate_root": {
     "source_sha256": "ec021e97aa1851056a07f9793271cf8afae3f1515a8f40ee2ae762009ba05b90",
     "text": "ключ «repos»: «%s» и «%s» — один корень"
@@ -514,6 +518,18 @@
   "checker.config.repo_missing_key": {
     "source_sha256": "66f4aa2817df30bfa1075f37739505a7259418445c424e80669fdd9811774e2b",
     "text": "«%s»: нет ключа «%s»"
+  },
+  "checker.config.repo_page_dir_not_directory": {
+    "source_sha256": "d60ddf34465e07492d03c5e84c1d67c9cf2d2f406751741d68a0d97ba60e4216",
+    "text": "ключ «repos»: «%s»: «page_dirs»: путь %s не является каталогом"
+  },
+  "checker.config.repo_page_dir_outside_root": {
+    "source_sha256": "e64513a59cf5f2686803faa0901c1777b33b41a847a1f6beb3925e4a0239d897",
+    "text": "ключ «repos»: «%s»: «page_dirs»: путь %s должен разрешаться внутри корня подключённого репозитория"
+  },
+  "checker.config.repo_page_dirs_require_docs": {
+    "source_sha256": "833ba72f611834616fa93daf6fb3ba6281203b76c9ce652be18f766033faa5ce",
+    "text": "«%s»: для «page_dirs» нужно «docs» в «read»"
   },
   "checker.config.repo_path_not_string": {
     "source_sha256": "1582c97c32e30db8f66858a2dd512755eb0ee95c663f9c636f8f33ad89ce4faf",
@@ -3567,6 +3583,10 @@
     "source_sha256": "e4a0f04a8676e3ac4b8447c0c75340424d718f91ada54e36f33919568c134553",
     "text": "показано %d из %d"
   },
+  "slice.render.open_path": {
+    "source_sha256": "e0d9c50c2e46483225e1ee9448ae2e66211c4ce7af348f5e03b8b007bdb6b6ce",
+    "text": "Открыть %s"
+  },
   "slice.render.reviewed": {
     "source_sha256": "04ad3580671ba2076978892367b7a4b1953ff607daed891d3d729b2e2b106ef5",
     "text": "просмотрено пар устаревания: %d"
@@ -3578,6 +3598,10 @@
   "slice.render.signals_omitted": {
     "source_sha256": "114c1b1300acb42b16aa754f3014ebfd6bda790b7de6a97b506201d89b16890f",
     "text": "показано %d из %d сигналов"
+  },
+  "slice.render.suggestions": {
+    "source_sha256": "d79e93a84d75b7579cc794643fda88be2cdf5a4072281b7809c30d4159445246",
+    "text": "Поиск в подключённых репозиториях"
   },
   "slice.render.via": {
     "source_sha256": "270259f016820a4a0dcebcc884b29afb2c8f0a646c63e35033d78a5e8c81d0fa",

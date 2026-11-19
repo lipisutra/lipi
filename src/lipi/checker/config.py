@@ -3,7 +3,9 @@ import difflib
 import json
 import os
 import re
-from pathlib import Path
+import stat
+from collections import deque
+from pathlib import Path, PureWindowsPath
 
 from lipi.i18n import quoted, tr
 from .conventions import BASE_NAME, CONFIG_NAME, LOCK_NAME
@@ -44,7 +46,8 @@ CHECK_MODES = ("quick", "audit")
 # каталог и есть каталог описания), required — редакции, где страница
 # обязательна (L1). Пути меток и covers считаются от редакции по умолчанию.
 LANG_KEYS = ("default", "editions", "required")
-REPO_KEYS = ("path", "read")
+REPO_REQUIRED = ("path", "read")
+REPO_KEYS = (*REPO_REQUIRED, "page_dirs")
 REPO_READ = ("docs", "decisions", "code", "tests")
 
 
@@ -343,6 +346,26 @@ def _check_codes(value):
 
 
 # @trace docs/ru/codes.md#c1
+def _check_page_dirs(value):
+    problem = _check_str_list(value)
+    if problem:
+        return problem
+    for number, entry in enumerate(value, 1):
+        if not entry.strip():
+            return tr("checker.config.empty_item") % number
+        if '\0' in entry or PureWindowsPath(entry).anchor or Path(entry).is_absolute():
+            return tr("checker.config.invalid_item") % (
+                number, tr("checker.config.relative_path_inside_root"))
+        depth = 0
+        for part in Path(entry).parts:
+            depth += -1 if part == ".." else 1
+            if depth < 0:
+                return tr("checker.config.invalid_item") % (
+                    number, tr("checker.config.relative_path_inside_root"))
+    return None
+
+
+# @trace docs/ru/codes.md#c1
 def _check_repos(value):
     """Явные подключения: имя, относительный путь и разрешённое чтение."""
     if not isinstance(value, dict):
@@ -356,7 +379,7 @@ def _check_repos(value):
             if key not in REPO_KEYS:
                 return tr("checker.config.repo_unknown_key") % (
                     alias, key, _suggest(key, REPO_KEYS))
-        for key in REPO_KEYS:
+        for key in REPO_REQUIRED:
             if key not in item:
                 return tr("checker.config.repo_missing_key") % (alias, key)
         path = item["path"]
@@ -380,26 +403,105 @@ def _check_repos(value):
             if capability in seen:
                 return tr("checker.config.repeated_repo_capability") % (alias, capability)
             seen.add(capability)
+        if "page_dirs" in item:
+            if "docs" not in seen:
+                return tr("checker.config.repo_page_dirs_require_docs") % alias
+            problem = _check_page_dirs(item["page_dirs"])
+            if problem:
+                return "%s: %s: %s" % (quoted(alias), quoted("page_dirs"), problem)
     return None
+
+
+def _path_identity(path, *, directory=False):
+    try:
+        status = path.stat()
+    except NotADirectoryError:
+        if directory:
+            raise
+        return path
+    except OSError:
+        return path
+    if directory and not stat.S_ISDIR(status.st_mode):
+        raise NotADirectoryError(path)
+    # resolve не нормализует регистр на всех файловых системах.
+    return status.st_dev, status.st_ino
+
+
+def resolve_page_dir(root, entry, *, path_allowed=None, follow_symlinks=True):
+    """Разрешает компоненты пути, не переходя по ссылкам за границу."""
+    relative = Path(entry)
+    if relative.is_absolute():
+        return None
+    pending = deque(relative.parts)
+    path = root
+    links = 0
+    while pending:
+        part = pending.popleft()
+        if part == "..":
+            if path == root:
+                return None
+            path = path.parent
+            continue
+        path /= part
+        if path_allowed is not None and not path_allowed(path, directory=True):
+            return None
+        try:
+            mode = path.lstat().st_mode
+        except FileNotFoundError:
+            continue
+        if stat.S_ISDIR(mode):
+            continue
+        if not stat.S_ISLNK(mode):
+            raise NotADirectoryError(path)
+        if not follow_symlinks or links == 40:
+            return None
+        links += 1
+        target = path.readlink()
+        if target.is_absolute():
+            if not is_within(target, root):
+                return None
+            target = target.relative_to(root)
+            path = root
+        else:
+            path = path.parent
+        pending.extendleft(reversed(target.parts))
+    return path
+
+
+def _check_repo_page_dirs(root, alias, entries):
+    errors, seen = [], {}
+    for entry in entries:
+        try:
+            path = resolve_page_dir(root, entry)
+            if path is not None:
+                identity = _path_identity(path, directory=True)
+        except NotADirectoryError:
+            errors.append((CONFIG_NAME, tr("checker.config.repo_page_dir_not_directory") % (
+                alias, _describe(entry))))
+            continue
+        except (OSError, RuntimeError, ValueError):
+            path = None
+        if path is None:
+            errors.append((CONFIG_NAME, tr("checker.config.repo_page_dir_outside_root") % (
+                alias, _describe(entry))))
+            continue
+        if identity in seen:
+            errors.append((CONFIG_NAME, tr("checker.config.repo_duplicate_page_dir") % (
+                alias, _describe(seen[identity]), _describe(entry))))
+        else:
+            seen[identity] = entry
+    return errors
 
 
 # @trace docs/ru/codes.md#c1
 def _check_repo_roots(root, repos):
     """Физические корни уникальны; отсутствие соседа не ошибка настроек."""
-    def identity(directory):
-        try:
-            status = directory.stat()
-        except OSError:
-            return directory
-        # resolve не нормализует регистр на всех файловых системах.
-        return status.st_dev, status.st_ino
-
     errors = []
     try:
         own_root = root.resolve()
     except (OSError, RuntimeError, ValueError) as error:
         return [(CONFIG_NAME, tr("checker.config.repos_root_unresolved") % error)]
-    own_identity = identity(own_root)
+    own_identity = _path_identity(own_root)
     seen = {}
     for alias, item in repos.items():
         try:
@@ -408,13 +510,14 @@ def _check_repo_roots(root, repos):
             errors.append((CONFIG_NAME, tr("checker.config.repo_path_unresolved") % (
                 alias, error)))
             continue
-        physical = identity(directory)
+        physical = _path_identity(directory)
         if physical == own_identity:
             errors.append((CONFIG_NAME, tr("checker.config.repo_self_reference") % alias))
         elif physical in seen:
             errors.append((CONFIG_NAME, tr("checker.config.repo_duplicate_root") % (
                 seen[physical], alias)))
         seen[physical] = alias
+        errors.extend(_check_repo_page_dirs(directory, alias, item.get("page_dirs", ())))
     return errors
 
 
