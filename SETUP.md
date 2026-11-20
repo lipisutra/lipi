@@ -43,6 +43,12 @@ The V1 message identifies the required major version from the lock file.
 
 ## Initialize a project <a id="init"></a>
 
+Run `lipi init` in the directory that contains the project's source code and
+documentation. In a Git repository, add untracked data directories such as
+`exports/` to `.gitignore` to keep them out of Lipi's scans. For data already
+tracked by Git, or for a project without Git, list the data directories in
+[`skip_dirs`](docs/en/settings.md#skip-dirs) in `lipi.json`.
+
 `lipi init` applies the installed lipi version. The presence of
 `.agents/lipi/lipi.lock` distinguishes a repeat application from a
 first setup. With no lock, setup is new even if `lipi.json` exists.
@@ -52,8 +58,7 @@ first setup. With no lock, setup is new even if `lipi.json` exists.
    Defaults are package, `docs/`, `workflow/`, and enforcement off.
 2. English is the default. For Russian terminal output and project starter
    files, run `lipi lang ru` before the first `lipi init`. The managed rules
-   and GitHub Actions workflow use English. Run `lipi init` from the project
-   root.
+   and GitHub Actions workflow use English.
 
    Choose one form and run it once. Preview it first with `--dry-run`,
    for example `lipi init --type app --dry-run`, then `lipi init --type app`.
@@ -74,7 +79,8 @@ first setup. With no lock, setup is new even if `lipi.json` exists.
 3. First setup preserves existing files. Without `lipi.json`, it
    creates settings and missing scaffolds. With `lipi.json`, it
    keeps settings and scaffolds and creates missing lipi files.
-   It keeps an existing baseline or creates one from current errors.
+   It keeps an existing baseline or creates one from current errors in the
+   working tree. A dry run reports the planned action without calculating it.
 4. A repeat run replaces or restores lipi-managed files and reports
    overwritten edits by comparison with the lock. Check for
    `Will replace your edits in` messages in the dry run. Project

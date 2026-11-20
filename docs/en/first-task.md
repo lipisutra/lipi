@@ -6,7 +6,9 @@ One documented contract, its implementation, and a test are enough to begin.
 
 ## Find the contract <a id="find"></a>
 
-From the project root, point Lipi at the existing documentation directory.
+Start in the directory that contains the project's code and documentation.
+Keep generated data such as `exports/` out of scans with `.gitignore` if it is
+untracked, or with [`skip_dirs`](settings.md#skip-dirs) for tracked data or projects without Git.
 For a package that keeps its documentation in `docs/`, preview the setup,
 then apply it using the same options.
 

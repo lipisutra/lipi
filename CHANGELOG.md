@@ -1,5 +1,18 @@
 # lipi releases
 
+## 1.2.1 — 2026-11-20
+
+- First-time setup calculates the baseline directly in the project. It no longer
+  copies the project into a temporary directory. A dry run previews baseline
+  creation without calculating it.
+- The setup guide explains when to exclude data directories with `.gitignore`
+  or `skip_dirs`.
+
+### Upgrading your project
+
+1. Upgrade Lipi with `pipx upgrade lipi`.
+2. The rules and templates are unchanged. You can skip `lipi init`.
+
 ## 1.2.0 — 2026-11-20
 
 - `lipi check` now reports which managed files `lipi init` would add, update,

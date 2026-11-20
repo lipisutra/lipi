@@ -472,8 +472,6 @@
   "layout_migration.ambiguous_merge_path": "Ambiguous document path in a merge: %s",
   "layout_migration.ambiguous_number": "Ambiguous document number %s-%s",
   "layout_migration.archive_excluded": "The archive in history/ is unchanged.",
-  "layout_migration.baseline_failed": "Could not create the baseline",
-  "layout_migration.baseline_projection": "Cannot prepare the Git projection for the baseline: %s",
   "layout_migration.changed_file": "File changed during migration planning: %s",
   "layout_migration.closed_notice": "%s: Closed date %s (%s)",
   "layout_migration.closed_range": "Closed date %s is outside the range %s to %s (%s)",

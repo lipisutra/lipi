@@ -124,6 +124,82 @@ def main(argv=None):
         return _check(args, fmt, new_args, baseline_args, ap)
 
 
+def check_project_content(pr, rep, *, deployment_cfg, write_index=False, announce_index=False):
+    """Common documentation, workflow, deployment and trace checks."""
+    root, cfg = pr.root, pr.cfg
+    # @trace docs/ru/codes.md#v1
+    # V1: версия установленного lipi против версии развёртывания (ADR-010).
+    # Источник версии развёртывания — lock-файл.
+    lock_path = root / LOCK_NAME
+    data = _read_json(lock_path) if lock_path.is_file() else None
+    if lock_path.is_file():
+        deployed = data.get("lipi") if isinstance(data, dict) else None
+        mismatch = version_mismatch(__version__, deployed)
+        if mismatch is not None:
+            level, message = mismatch
+            # уровень V1 — по правилу совместимости, не из таблицы (см. CODE_LEVELS)
+            rep.finding("V1", LOCK_NAME, 0, message, subject=LOCK_NAME, level=level)
+
+    # @trace docs/ru/codes.md#v2,docs/ru/codes.md#v3
+    if isinstance(data, dict):
+        v2 = check_lipi_link(root)
+        if v2 is not None:
+            rep.finding("V2", v2[0], 0, v2[1], subject=v2[0])
+        for name, msg, level in check_lipi_files(root, cfg):
+            # уровень V3 — по правилу (enforce), не из таблицы (см. CODE_LEVELS)
+            rep.finding("V3", name, 0, msg, subject=name, level=level)
+        # @trace docs/ru/codes.md#v4
+        if cfg["codes"].get("V4") != "off":
+            for name, message in check_rule_updates(root, deployment_cfg, data, __version__):
+                rep.finding("V4", name, 0, message, subject=name)
+    # @trace docs/ru/codes.md#t1,docs/ru/codes.md#d6
+    pages, anchor_ids, covers, reachable = check_docs(pr, rep)
+    # @trace docs/ru/codes.md#l1,docs/ru/codes.md#l2,docs/ru/codes.md#l3
+    edition_pages = check_edition_docs(pr, rep)
+    check_edition_links(pr, rep, edition_pages)
+    docs, others = scan_workflow(pr, rep)
+    latest_date = latest_closed_date()
+    # @trace docs/ru/codes.md#w7
+    index_files = {}
+    if pr.wf is not None and not pr.target_skip_dirs.excludes(pr.wf, directory=True, base=pr.wf):
+        try:
+            previous = read_index_files(pr)
+            index_files = build_project_index(pr, docs, previous=previous, latest_date=latest_date)
+            index_plan = plan_index(pr, index_files, previous=previous)
+            if write_index:
+                apply_index(pr, index_plan)
+                others = sorted(set(others) | set(index_files))
+                if announce_index:
+                    for path in index_plan.changes:
+                        print(tr("checker.runner.index_rebuilt") % pr.rel(path), file=sys.stderr)
+            else:
+                for path in index_plan.changes:
+                    rep.finding("W7", pr.rel(path), 0,
+                                tr("checker.runner.stale_index"))
+        except IndexHeaderError:
+            pass  # W3/W4 ниже; неполный комплект не записываем.
+        except IndexErrorBase as error:
+            rep.finding("W7", pr.rel(error.path), 0, error.message)
+        except OSError as error:
+            rep.finding("W7", pr.rel(pr.wf / INDEX), 0,
+                        tr("checker.runner.index_write_failed") % error)
+    mp_refs = check_workflow(pr, rep, docs, others, latest_date=latest_date)
+
+    # правила исполнителя: ссылки
+    rules = [root / "AGENTS.md", *walk_md_agents(pr)]
+    if not is_within(pr.file_path(root / "README.md"), pr.docs):
+        rules.append(root / "README.md")          # корневой README: только ссылки
+    for p in rules:
+        if pr.file_path(p) is not None and p.is_file():
+            page = pr.page(p)
+            if page is not None:
+                check_links(pr, rep, page, "W6")
+
+    # @trace docs/ru/codes.md#t1
+    tags, tag_lines = scan_code(pr, rep)
+    return pages, anchor_ids, covers, reachable, docs, index_files, mp_refs, rules, tags, tag_lines
+
+
 def _check(args, fmt, new_args, baseline_args, ap):
     root = Path(args.root).resolve()
     try:
@@ -161,80 +237,13 @@ def _check(args, fmt, new_args, baseline_args, ap):
         print(tr("checker.runner.no_project_directories"), file=sys.stderr)
         return 2
 
-    rep = Report(level_of_project(pr.cfg))
-    # @trace docs/ru/codes.md#v1
-    # V1: версия установленного lipi против версии развёртывания (ADR-010).
-    # Источник версии развёртывания — lock-файл.
-    lock_path = root / LOCK_NAME
-    data = _read_json(lock_path) if lock_path.is_file() else None
-    if lock_path.is_file():
-        deployed = data.get("lipi") if isinstance(data, dict) else None
-        mismatch = version_mismatch(__version__, deployed)
-        if mismatch is not None:
-            level, message = mismatch
-            # уровень V1 — по правилу совместимости, не из таблицы (см. CODE_LEVELS)
-            rep.finding("V1", LOCK_NAME, 0, message, subject=LOCK_NAME, level=level)
-
-    # @trace docs/ru/codes.md#v2,docs/ru/codes.md#v3
-    if isinstance(data, dict):
-        v2 = check_lipi_link(root)
-        if v2 is not None:
-            rep.finding("V2", v2[0], 0, v2[1], subject=v2[0])
-        for name, msg, level in check_lipi_files(root, cfg):
-            # уровень V3 — по правилу (enforce), не из таблицы (см. CODE_LEVELS)
-            rep.finding("V3", name, 0, msg, subject=name, level=level)
-        # @trace docs/ru/codes.md#v4
-        if cfg["codes"].get("V4") != "off":
-            deployment_cfg = None if args.config else cfg
-            for name, message in check_rule_updates(root, deployment_cfg, data, __version__):
-                rep.finding("V4", name, 0, message, subject=name)
-    # @trace docs/ru/codes.md#t1,docs/ru/codes.md#d6
-    pages, anchor_ids, covers, reachable = check_docs(pr, rep)
-    # @trace docs/ru/codes.md#l1,docs/ru/codes.md#l2,docs/ru/codes.md#l3
-    edition_pages = check_edition_docs(pr, rep)
-    check_edition_links(pr, rep, edition_pages)
-    docs, others = scan_workflow(pr, rep)
-    latest_date = latest_closed_date()
-    # @trace docs/ru/codes.md#w7
-    index_files = {}
-    if pr.wf is not None and not pr.target_skip_dirs.excludes(pr.wf, directory=True, base=pr.wf):
-        try:
-            previous = read_index_files(pr)
-            index_files = build_project_index(pr, docs, previous=previous, latest_date=latest_date)
-            index_plan = plan_index(pr, index_files, previous=previous)
-            writable = (args.write_index or (fmt != "github" and not args.staged
-                        and not args.diff and not os.environ.get("CI")))
-            if writable:
-                apply_index(pr, index_plan)
-                others = sorted(set(others) | set(index_files))
-                if index_plan.changes and fmt == "text" and not args.write_index:
-                    for path in index_plan.changes:
-                        print(tr("checker.runner.index_rebuilt") % pr.rel(path), file=sys.stderr)
-            else:
-                for path in index_plan.changes:
-                    rep.finding("W7", pr.rel(path), 0,
-                                tr("checker.runner.stale_index"))
-        except IndexHeaderError:
-            pass  # W3/W4 ниже; неполный комплект не записываем.
-        except IndexErrorBase as error:
-            rep.finding("W7", pr.rel(error.path), 0, error.message)
-        except OSError as error:
-            rep.finding("W7", pr.rel(pr.wf / INDEX), 0,
-                        tr("checker.runner.index_write_failed") % error)
-    mp_refs = check_workflow(pr, rep, docs, others, latest_date=latest_date)
-
-    # правила исполнителя: ссылки
-    rules = [root / "AGENTS.md", *walk_md_agents(pr)]
-    if not is_within(pr.file_path(root / "README.md"), pr.docs):
-        rules.append(root / "README.md")          # корневой README: только ссылки
-    for p in rules:
-        if pr.file_path(p) is not None and p.is_file():
-            page = pr.page(p)
-            if page is not None:
-                check_links(pr, rep, page, "W6")
-
-    # @trace docs/ru/codes.md#t1
-    tags, tag_lines = scan_code(pr, rep)
+    rep = Report(level_of_project(cfg))
+    write_index = args.write_index or (fmt != "github" and not args.staged
+                                       and not args.diff and not os.environ.get("CI"))
+    (pages, anchor_ids, covers, reachable, docs, index_files,
+     mp_refs, rules, tags, tag_lines) = check_project_content(
+        pr, rep, deployment_cfg=None if args.config else cfg, write_index=write_index,
+        announce_index=fmt == "text" and not args.write_index)
     # @trace docs/ru/codes.md#p1
     # P1: команды проекта из ключа checks (ADR-008). Запускаются и при
     # `baseline`, чтобы ошибка проверки попадала в линию как обычная.

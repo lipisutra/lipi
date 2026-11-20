@@ -1891,14 +1891,6 @@
     "source_sha256": "438622b8247e4213653c5c1063e8e8715d81c815adfd34944e5321bedd0c8eaa",
     "text": "history/ исключён: архив не изменён."
   },
-  "layout_migration.baseline_failed": {
-    "source_sha256": "5dbdcacea306b022421c73a0a19f4bd7906a4ac7f917df2f8a14b8abcd3613d8",
-    "text": "базовая линия не создана"
-  },
-  "layout_migration.baseline_projection": {
-    "source_sha256": "31dfd1a99ac7ce7c60655ce294c1e5decc4dee105181a00040de279562cf202f",
-    "text": "не удалось подготовить Git-проекцию baseline: %s"
-  },
   "layout_migration.changed_file": {
     "source_sha256": "74655688a3cec61e466dcde53a4e1a6b7d7dc313fe7ab7ced61dd31963c5bc71",
     "text": "файл изменился при подготовке перевода: %s"

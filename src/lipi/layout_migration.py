@@ -337,160 +337,32 @@ def prepare_layout(root, cfg, updates, *, hook=None, external_creates=()):
     return plan
 
 
-def initial_baseline(plan, *, run_checks=True):
-    """Первый долг определяется на временной проекции, до записи в проект.
-
-    Первая базовая линия создаётся при подключении. Существующая сохраняется.
-    """
-    from copy import deepcopy
-    import json
-    import stat
-    import tempfile
-    import shutil
+def initial_baseline(root):
+    """Calculate the first baseline against the files and Git index just installed."""
     from .checker.commands import run_project_checks
-    from .checker.conventions import BASE_NAME
-    from .checker.model import Project, is_within, list_project_files
+    from .checker.config import load_config, validate_config
+    from .checker.model import Project
     from .checker.report import Report, level_of_project
-    from .checker.state import baseline_counts
-    from .init import run_check
-    root = plan.root
-    if (root / BASE_NAME).exists():
-        return
-    # Команды зависят от среды проекта: ignored-зависимостей, Git и cwd.
-    # Проекция нужна для собственных проверок lipi, а не для повторения среды.
-    checks = Report(level_of_project(plan.config))
-    if run_checks:
-        run_project_checks(Project(root, plan.config), checks, False)
-    with tempfile.TemporaryDirectory(prefix='lipi-init-baseline-') as directory:
-        top = _git(root, 'rev-parse', '--show-toplevel', missing=True)
-        top = Path(os.fsdecode(top).strip()).resolve() if top else None
-        catalogs = {(root / plan.config[key]).resolve()
-                    for key in ('docs', 'description') if plan.config.get(key)}
-        catalogs.update((root / value).resolve() for value in
-                        plan.config.get('languages', {}).get('editions', {}).values())
-        external = sorted(path for path in catalogs if not is_within(path, root))
-        origin = Path(os.path.commonpath([root, top or root, *external]))
-        projection = Path(directory).resolve() / 'tree'
+    from .checker.runner import check_project_content
+    from .checker.state import baseline_counts, baseline_text
 
-        def projected_path(path):
-            return projection / path.relative_to(origin)
-
-        def write_projected(path, data, mode=None):
-            from .move import _no_symlinks
-            _no_symlinks(path.parent, projection)
-            path.parent.mkdir(parents=True, exist_ok=True)
-            if path.is_symlink():
-                path.unlink()
-            path.write_bytes(data)
-            if mode is not None:
-                path.chmod(mode)
-
-        projected = projected_path(root)
-        if top is not None:
-            clone_root = projected_path(top)
-            clone_root.parent.mkdir(parents=True, exist_ok=True)
-            clone = subprocess.run(['git', 'clone', '--quiet', '--shared', '--no-checkout', '--', str(top), str(clone_root)],
-                                   capture_output=True)
-            if clone.returncode:
-                raise ValueError(tr('layout_migration.baseline_projection') %
-                                 clone.stderr.decode('utf-8', 'replace'))
-        projected.mkdir(parents=True, exist_ok=True)
-        # Копируются только настроенные каталоги, не общий родитель и не соседи.
-        for catalog in external:
-            if any(catalog != parent and is_within(catalog, parent) for parent in external):
-                continue
-            if catalog.is_dir():
-                shutil.copytree(catalog, projected_path(catalog), dirs_exist_ok=True,
-                                symlinks=True, ignore=lambda folder, names: [name for name in names
-                                if name == '.git' or Path(folder) / name in (root, Path(directory).resolve())])
-        names = list_project_files(root)
-        if names is None:
-            names = (path for path in root.rglob('*') if path.is_file()
-                     and not any(part in ('.git', '__pycache__', '.venv', 'node_modules')
-                                 for part in path.relative_to(root).parts))
-        updates = {change.path: change for change in plan.changes}
-        for path in names:
-            if path.is_symlink():
-                from .move import _no_symlinks
-                target = projected_path(path)
-                _no_symlinks(target.parent, projection)
-                target.parent.mkdir(parents=True, exist_ok=True)
-                target.symlink_to(os.readlink(path))
-                continue
-            if not path.is_file():
-                projected_path(path).unlink(missing_ok=True)
-                continue
-            change = updates.get(path)
-            data = change.after if change is not None else path.read_bytes()
-            if data is not None:
-                target = projected_path(plan.moves.get(path, path))
-                write_projected(target, data,
-                                change.mode if change is not None and change.mode is not None
-                                else stat.S_IMODE(path.stat().st_mode))
-            if path in plan.moves:
-                (projected / path.relative_to(root)).unlink(missing_ok=True)
-        for change in plan.changes:
-            if change.after is not None:
-                target = projected_path(plan.moves.get(change.path, change.path))
-                write_projected(target, change.after, change.mode if change.mode is not None else
-                                stat.S_IMODE(change.path.stat().st_mode) if change.path.exists() else 0o644)
-            else:
-                projected_path(change.path).unlink(missing_ok=True)
-        if plan.index is not None:
-            # Сохранить подготовленные изменения: clone по умолчанию знает
-            # только HEAD, а первая базовая линия проверяет рабочее дерево.
-            index_name = _git(projected, 'rev-parse', '--git-path', 'index').decode().strip()
-            destination_index = Path(index_name)
-            if not destination_index.is_absolute():
-                destination_index = projected / destination_index
-            destination_index.write_bytes(plan.index_before)
-            for old, new in plan.moves.items():
-                _git(projected, 'update-index', '--force-remove', '--', old.relative_to(root).as_posix())
-                _git(projected, 'add', '--', new.relative_to(root).as_posix())
-        projected_cfg = deepcopy(plan.config)
-        projected_cfg['checks'] = []
-        for key in ('docs', 'description', 'workflow'):
-            value = projected_cfg.get(key)
-            if value:
-                actual = (root / value).resolve()
-                projected_cfg[key] = (actual.relative_to(root).as_posix() if is_within(actual, root)
-                                      else str(projected_path(actual)))
-        for language, value in projected_cfg.get('languages', {}).get('editions', {}).items():
-            actual = (root / value).resolve()
-            if not is_within(actual, root):
-                projected_cfg['languages']['editions'][language] = str(projected_path(actual))
-        for connection in projected_cfg.get('repos', {}).values():
-            actual = (root / connection['path']).resolve()
-            # repos.path по своему договору относителен; цель остаётся реальной.
-            connection['path'] = os.path.relpath(actual, projected)
-        write_projected(projected / 'lipi.json',
-                        (json.dumps(projected_cfg, ensure_ascii=False) + '\n').encode('utf-8'))
-        if any((projected / projected_cfg[key]).is_dir()
-               for key in ('docs', 'workflow') if projected_cfg.get(key)):
-            code, output = run_check(projected, '--format', 'github', 'baseline')
-            if code:
-                raise ValueError(output.strip() or tr('layout_migration.baseline_failed'))
-            data = (projected / BASE_NAME).read_bytes()
-        else:
-            data = (json.dumps({'schema': 1, 'entries': []}, sort_keys=True, indent=2) + '\n').encode()
-        baseline = json.loads(data)
-        for entry in baseline['entries']:
-            if entry['file']:
-                actual = (projected / entry['file']).resolve()
-                if is_within(actual, projection):
-                    actual = origin / actual.relative_to(projection)
-                entry['file'] = os.path.relpath(actual, root).replace(os.sep, '/')
-        baseline['entries'].extend(baseline_counts(checks))
-        baseline['entries'].sort(key=lambda entry: (entry['code'], entry['file'], entry['subject']))
-        data = (json.dumps(baseline, ensure_ascii=False, sort_keys=True, indent=2) + '\n').encode('utf-8')
-    changes = {change.path: change for change in plan.changes}
-    _put(changes, root / BASE_NAME, data, expected_before=None)
-    plan.changes = list(changes.values())
+    cfg = load_config(root, None)
+    errors = validate_config(root, cfg)
+    if errors:
+        raise ValueError("\n".join("%s: %s" % item for item in errors))
+    project = Project(root, cfg)
+    report = Report(level_of_project(cfg))
+    if project.docs is not None or project.wf is not None:
+        check_project_content(project, report, deployment_cfg=cfg)
+    run_project_checks(project, report, False)
+    return baseline_text(baseline_counts(report)).encode("utf-8")
 
 
-def apply_layout(plan):
+def apply_layout(plan, *, create_baseline=False):
+    from .checker.conventions import BASE_NAME
     from contextlib import nullcontext
     from .review import registry_lock
     from .move_transaction import apply_transaction
     with registry_lock(plan.root) if plan.reviews.before is not None else nullcontext():
-        apply_transaction(plan)
+        final_file = (plan.root / BASE_NAME, initial_baseline) if create_baseline else None
+        apply_transaction(plan, final_file=final_file)

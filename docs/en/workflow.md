@@ -166,6 +166,6 @@ The project scaffold can use year directories without Git. Documents
 already organized by year stay in place. Check the `lipi check` findings
 for any header corrections.
 
-When a baseline is being created for the first time, the dry run shows
-its file. Project commands that measure debt run only when the plan is
-applied.
+A first setup that moves documents calculates the baseline at their new paths,
+after the files and Git index have been updated. If this last step fails, the
+moves roll back too. The dry run lists the baseline without running checks.

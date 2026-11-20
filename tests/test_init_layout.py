@@ -18,6 +18,7 @@ from tests.support import localized
 sys.path.insert(0, str(support.LIPI / 'src'))
 from lipi import init, layout_migration, layout_state, move_transaction
 from lipi.checker.config import load_config
+from lipi.checker.conventions import MAX_CODE_FILE
 from lipi.checker.model import Project
 from lipi.checker.reviews import REVIEWS_NAME, ReviewContext, load_reviews, serialize_reviews
 from lipi.checker.workflow_index import FIXED, MARKER, refresh_index
@@ -639,6 +640,54 @@ class InitLayoutTests(unittest.TestCase):
         self.assertIn(localized('Update the installed lipi', 'новее установленного'), output)
         self.assertEqual(self.snapshot(), before)
 
+    def test_first_init_leaves_unrelated_data_unopened(self):
+        (self.root / support.LOCK_REL).unlink()
+        data = self.root / 'data/records.dat'
+        data.parent.mkdir()
+        # Just above the checker's existing text scan limit; no large fixture.
+        with data.open('wb') as stream:
+            stream.truncate(MAX_CODE_FILE + 1)
+        excluded = self.write('archive/old.dat', 'old records')
+        self.cfg['skip_dirs'] = ['archive']
+        self.write('lipi.json', json.dumps(self.cfg))
+        original_open = Path.open
+
+        def guard(path, *args, **kwargs):
+            self.assertNotIn(path, (data, excluded), "init opened unrelated data")
+            return original_open(path, *args, **kwargs)
+
+        with patch.object(Path, 'open', guard):
+            for dry_run in (True, False):
+                code, output = self.run_init(dry_run=dry_run)
+                self.assertEqual(code, 0, output)
+
+    def test_first_baseline_write_failure_restores_migration_and_index(self):
+        (self.root / support.LOCK_REL).unlink()
+        self.document()
+        self.write('docs/README.md', '# Guide\n\n[Missing](missing.md)\n')
+        self.git_start()
+        self.write('unrelated.txt', 'staged')
+        self.git('add', 'unrelated.txt')
+        self.write('unrelated.txt', 'in worktree')
+        before = self.snapshot()
+        write = move_transaction._write
+        baseline = self.root / support.BASE_REL
+        for error in (OSError, KeyboardInterrupt):
+            with self.subTest(error=error.__name__):
+                recorded = []
+
+                def interrupt(path, data, mode):
+                    write(path, data, mode)
+                    if path == baseline and data is not None:
+                        recorded.extend(json.loads(data)['entries'])
+                        raise error('baseline write')
+
+                with patch.object(move_transaction, '_write', interrupt):
+                    code, output = self.run_init()
+                self.assertEqual(code, 2, output)
+                self.assertIn('missing.md', [item['subject'] for item in recorded])
+                self.assertEqual(self.snapshot(), before)
+
     def test_initial_baseline_runs_checks_in_real_worktree_with_ignored_dependencies(self):
         (self.root / '.agents/lipi/lipi.lock').unlink()
         script = self.write('check.sh', '#!/bin/sh\n'
@@ -689,7 +738,8 @@ class InitLayoutTests(unittest.TestCase):
         self.cfg['checks'] = [{'name': 'record', 'run': [sys.executable, 'record.py']}]
         self.write('lipi.json', json.dumps(self.cfg))
         before = self.snapshot()
-        code, output = self.run_init(dry_run=True)
+        with patch.object(layout_migration, 'initial_baseline', side_effect=AssertionError('dry-run calculated baseline')):
+            code, output = self.run_init(dry_run=True)
         self.assertEqual(code, 0, output)
         self.assertIn(localized('run when the plan is applied', 'будут выполнены только при применении'), output)
         self.assertEqual(self.snapshot(), before)

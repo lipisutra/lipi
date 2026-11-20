@@ -84,14 +84,17 @@ def read_baseline(root):
     return entries
 
 
+def baseline_text(entries):
+    data = {"schema": 1,
+            "entries": sorted(entries, key=lambda e: (e["code"], e["file"], e["subject"]))}
+    return json.dumps(data, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+
+
 def write_baseline(root, entries):
     """Записывает линию: сортированные ключи и записи (ADR-006, ADR-003)."""
     path = root / BASE_NAME
     path.parent.mkdir(parents=True, exist_ok=True)
-    data = {"schema": 1,
-            "entries": sorted(entries, key=lambda e: (e["code"], e["file"], e["subject"]))}
-    path.write_text(json.dumps(data, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
-                    encoding="utf-8")
+    path.write_text(baseline_text(entries), encoding="utf-8")
 
 
 def baseline_counts(rep):

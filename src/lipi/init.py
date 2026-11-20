@@ -13,7 +13,6 @@ import os
 import re
 import shlex
 import stat
-import subprocess
 import sys
 from argparse import SUPPRESS
 from pathlib import Path
@@ -445,15 +444,6 @@ def add_ci(root, templates=None, dry_run=False):
     return 0
 
 
-def run_check(root, *args, script=None):
-    """Запускает чекер пакета в корне проекта: (код, вывод)."""
-    script = Path(script) if script else HERE / "check.py"
-    proc = subprocess.run(
-        [sys.executable, "-B", str(script), "--root", str(root)] + list(args),
-        stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    return proc.returncode, proc.stdout.decode("utf-8", "replace")
-
-
 # каталоги типов рабочих документов (ADR-004)
 TYPE_DIRS = ("plan", "issue", "discussion", "adr", "audit")
 # файлы каркаса в корне каталога рабочих материалов и архив
@@ -636,7 +626,8 @@ def initialize(root, *, kind=None, docs=None, workflow=None, enforce=None,
         directories = [wf / name for name in TYPE_DIRS]
         if not index.exists():
             extra_files.append(index)
-    if not repeat and not baseline.exists():
+    create_baseline = not repeat and not baseline.exists()
+    if create_baseline:
         extra_files.append(baseline)
     if hook_action in ("created", "updated"):
         extra_files.append(root / HOOK_REL)
@@ -651,7 +642,7 @@ def initialize(root, *, kind=None, docs=None, workflow=None, enforce=None,
     # Повторное применение и частичный каркас переводятся одним планом,
     # включая правила, lock, указатели, состояние и управляемый hook.
     try:
-        from lipi.layout_migration import prepare_layout, apply_layout, initial_baseline
+        from lipi.layout_migration import prepare_layout, apply_layout
         hook_change = None
         if hook_action in ("created", "updated"):
             hook_path = root / HOOK_REL
@@ -669,10 +660,8 @@ def initialize(root, *, kind=None, docs=None, workflow=None, enforce=None,
                                 changes, hook=hook_change,
                                 external_creates=external_seeds)
         layout.directories = [wf / name for name in TYPE_DIRS] if not cfg_exists and not foreign_wf else []
-        if not repeat and not baseline.exists():
-            if dry_run and layout.config.get('checks'):
-                print(tr('init.baseline_checks_on_apply'))
-            initial_baseline(layout, run_checks=not dry_run)
+        if create_baseline and dry_run and layout.config.get('checks'):
+            print(tr('init.baseline_checks_on_apply'))
         from lipi.move_transaction import _validate
         _validate(layout)
         from lipi.move import print_plan
@@ -682,7 +671,7 @@ def initialize(root, *, kind=None, docs=None, workflow=None, enforce=None,
                 key = 'init.change_plan' if dry_run else 'init.changing'
                 print(tr(key) % rel_name(root, layout.moves.get(change.path, change.path)))
         if not dry_run:
-            apply_layout(layout)
+            apply_layout(layout, create_baseline=create_baseline)
     except (ValueError, OSError) as exc:
         print(str(exc), file=sys.stderr)
         return 2
@@ -691,11 +680,8 @@ def initialize(root, *, kind=None, docs=None, workflow=None, enforce=None,
         show_replaced(name, dry_run)
     if not repeat:
         if dry_run:
-            baseline_change = next((change for change in layout.changes if change.path == baseline), None)
-            if baseline_change is None:
-                print(tr('init.baseline_keep_plan') % BASE_NAME)
-            elif baseline_change.before is None:
-                print(tr('init.baseline_create_plan') % BASE_NAME)
+            key = 'init.baseline_create_plan' if create_baseline else 'init.baseline_keep_plan'
+            print(tr(key) % BASE_NAME)
         else:
             print(tr('init.baseline') % BASE_NAME)
     agents = root / "AGENTS.md"

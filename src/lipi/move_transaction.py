@@ -151,7 +151,7 @@ def _validate(plan, *, project_files_only=False):
     return before
 
 
-def apply_transaction(plan, *, project_files_only=False):
+def apply_transaction(plan, *, project_files_only=False, final_file=None):
     """Применить MovePlan; None в before/after означает создание/удаление.
 
     mode задаёт конечные права; без него сохраняются прежние, новые — 0644.
@@ -225,6 +225,19 @@ def apply_transaction(plan, *, project_files_only=False):
             installing = True  # До replace: оно могло успеть до KeyboardInterrupt.
             os.replace(lock, plan.index)
             own_lock = False
+        if final_file is not None:
+            # First init needs the finished worktree and index to calculate the baseline.
+            path, contents = final_file
+            try:
+                data = contents(plan.root)
+            except Exception as error:
+                raise MoveError(str(error)) from error
+            _file_scope(plan, path)
+            if os.path.lexists(path):
+                raise MoveError(tr('move.file.changed_during') % path)
+            _parents(path, created)
+            written.append((path, (None, None), (data, 0o644)))
+            _write(path, data, 0o644)
     except (OSError, ValueError, KeyboardInterrupt) as error:
         failures = []
 
@@ -250,7 +263,13 @@ def apply_transaction(plan, *, project_files_only=False):
                 current = _state(path)
                 if current == previous:
                     return
-                if current != after:
+                # Windows chmod only controls read-only; stat synthesizes other bits.
+                data, mode = current
+                expected_data, expected_mode = after
+                if os.name == 'nt' and mode is not None and expected_mode is not None:
+                    mode &= stat.S_IWRITE
+                    expected_mode &= stat.S_IWRITE
+                if data != expected_data or mode != expected_mode:
                     raise MoveError(tr('move.rollback.file') % path)
                 _write(path, *previous)
             restore(restore_file)
