@@ -6,7 +6,7 @@ import re
 
 from lipi.i18n import tr
 from .config import BASE_ENTRY_KEYS, _describe, _is_nonneg_int, _read_json
-from .conventions import BASE_NAME, LOCK_NAME, RE_LIPI_LINK, LIPI_README
+from .conventions import BASE_NAME, CONFIG_NAME, LOCK_NAME, RE_LIPI_LINK, LIPI_README
 from .model import read_text
 
 
@@ -170,6 +170,48 @@ def sha256_file(path):
         return hashlib.sha256(path.read_bytes()).hexdigest()
     except OSError:
         return None
+
+
+# @trace docs/ru/codes.md#v4
+def check_rule_updates(root, cfg, lock, installed):
+    """Compare the deployed manifest with the one a repeat init would write."""
+    from lipi.init import deployment_files, parse_lock, project_state
+
+    if not (root / CONFIG_NAME).is_file():
+        return
+    try:
+        if cfg is None:
+            # A check-only --config can set severity. Plain init always reads lipi.json.
+            cfg, _, deployed, previous, _ = project_state(root)
+        else:
+            deployed, previous, _ = parse_lock(lock)
+        if not previous or version_mismatch(installed, deployed) is not None:
+            return
+        kind = "app" if cfg.get("description") else "package"
+        _, expected, _ = deployment_files(root, kind, cfg.get("docs", "docs"),
+                                          cfg.get("workflow", "workflow"),
+                                          cfg.get("enforce", False), previous)
+    except (ValueError, OSError, RuntimeError):
+        # An invalid lock or unresolvable deployment path has no applicable init plan.
+        return
+    for name in sorted(previous.keys() | expected.keys()):
+        if previous.get(name) == expected.get(name):
+            continue
+        if name not in expected:
+            message = tr("checker.state.rule_retired") % installed
+        else:
+            path = root / name
+            actual = sha256_file(path) if path.is_file() else None
+            if actual == expected[name]:
+                message = tr("checker.state.rule_record") % installed
+            else:
+                key = "checker.state.rule_updated" if name in previous else "checker.state.rule_added"
+                message = tr(key) % installed
+                if actual is not None and actual != previous.get(name):
+                    message += " " + tr("checker.state.preserve_edits")
+                else:
+                    message += " " + tr("checker.state.apply_rule")
+        yield name, message
 
 
 # @trace docs/ru/codes.md#v3

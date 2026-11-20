@@ -995,6 +995,10 @@
     "source_sha256": "b85f89898d0fd17ffc8b89d16716a129183592c50a4aad250f203fc27e9b0c0e",
     "text": "lipi.lock не является читаемым файлом"
   },
+  "checker.state.apply_rule": {
+    "source_sha256": "8464f56d75732d40ebf17914cfe9b895d0d2ee516bc400c67a6becea1987b775",
+    "text": "Выполните lipi init, чтобы применить правило."
+  },
   "checker.state.enforce_mismatch": {
     "source_sha256": "148e0cd8c2371cb1d6cb3911b321141089052124ad475e303f7d7ecdc9dc0b79",
     "text": "правила lipi отрисованы с enforce: %s, а в lipi.json — %s; запустите lipi init"
@@ -1014,6 +1018,26 @@
   "checker.state.missing_lock_fingerprints": {
     "source_sha256": "9c8c7b79f524f548e840137224e9b7a3df6603442a980ce86447166a92a61f0b",
     "text": "в lock-файле нет отпечатков файлов lipi — выполните lipi init"
+  },
+  "checker.state.preserve_edits": {
+    "source_sha256": "74de6bff8c3916d75bed29683229d6bd173b480dd79a660b9e6c022e513bdb28",
+    "text": "Посмотрите lipi init --dry-run и сохраните нужные локальные правки перед применением."
+  },
+  "checker.state.rule_added": {
+    "source_sha256": "73f3f3448b4fab72c1c8e57ad8ec2f67fcd27c3f9bde4b355ec05c8b08635b91",
+    "text": "Lipi %s возьмёт этот файл под управление."
+  },
+  "checker.state.rule_record": {
+    "source_sha256": "0dfffd17c7a02245bf4226725e1746a63fee6675616c9bd641e4fcca6f363acc",
+    "text": "Файл уже совпадает с шаблоном Lipi %s. При lipi init обновится только запись в lock."
+  },
+  "checker.state.rule_retired": {
+    "source_sha256": "639354dab2ca21b077da3d927a2487dc128c0688d0cd06dca9fefcba5c77d824",
+    "text": "Lipi %s больше не поставляет этот файл. При lipi init запись будет удалена из lock, а существующий файл останется на диске."
+  },
+  "checker.state.rule_updated": {
+    "source_sha256": "9e07aa93be9835ffc5f70b1afcf058c9a5adbdbdd3321156ca0caedae3dbc5bd",
+    "text": "Lipi %s обновит этот управляемый файл."
   },
   "checker.state.upgrade_lipi": {
     "source_sha256": "be10d2a9c0963a4591a8d9bce436271c25eaa668c0c96d2f8813ec16ca5d22fb",

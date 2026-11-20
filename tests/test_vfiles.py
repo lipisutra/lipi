@@ -224,6 +224,175 @@ class TestLipiGate(support.Case):
         self.assertTrue(support.found(out, "V3"), out)
 
 
+# @trace docs/ru/codes.md#v4
+class TestV4(support.Case):
+    seed_project = False
+
+    def test_equal_version_matches_repeat_init(self):
+        root = self.project()
+        # Model an editable install: change the package templates under the
+        # running command while keeping its version and project lock intact.
+        package = root.parent / "editable" / "lipi"
+        shutil.copytree(support.SRC, package)
+        templates = package / "locale/en/templates"
+        common = templates / "lipi/common"
+        with (common / "README.md").open("a", encoding="utf-8") as stream:
+            stream.write("\nUpdated managed rule.\n")
+        support.w(common / "added.md", "# Added rule\n")
+        (common / "workflow.md").unlink()
+        support.w(templates / "seed/common/AGENTS.md", "# New starter\n")
+        support.w(common / "ci/github.yml", "name: changed\n")
+
+        def cli(*args):
+            return support.run(support.PY + [str(package / "cli.py"), *args], cwd=root)
+
+        def findings():
+            status, output = cli("check", "--format", "json")
+            self.assertEqual(status, 0, output)
+            return {item["file"]: item["message"] for item in json.loads(output)["warnings"]
+                    if item["code"] == "V4"}
+
+        before = (root / support.LOCK_REL).read_bytes()
+        retired = ".agents/lipi/workflow.md"
+        kept = (root / retired).read_bytes()
+        warnings = findings()
+        self.assertEqual(set(warnings), {LIPI_README, ".agents/lipi/added.md", retired})
+        self.assertIn("removes its lock entry", warnings[retired])
+        self.assertIn("keeps the file", warnings[retired])
+        self.assertTrue(all(support.VERSION in msg for msg in warnings.values()))
+        status, output = cli("init", "--dry-run")
+        self.assertEqual(status, 0, output)
+        for name in warnings:
+            self.assertIn(name, output)
+        self.assertEqual((root / support.LOCK_REL).read_bytes(), before)
+        status, output = cli("init")
+        self.assertEqual(status, 0, output)
+        self.assertEqual(findings(), {})
+        self.assertEqual((root / retired).read_bytes(), kept)
+        self.assertNotIn(retired, json.loads((root / support.LOCK_REL).read_text())["files"])
+        self.assertFalse((root / support.CI_REL).exists())
+
+    def test_old_deployment_and_local_edits(self):
+        root = self.project()
+        lockfile = root / support.LOCK_REL
+        lock = json.loads(lockfile.read_text())
+        lock["lipi"] = "1.0.0"
+        lock["files"][LIPI_README] = hashlib.sha256(b"old package rules").hexdigest()
+        support.w(lockfile, json.dumps(lock))
+        support.w(root / LIPI_README, "local edits")
+        status, data = support.check_json(root)
+        self.assertEqual(status, 1, data)
+        self.assertIn(("V3", LIPI_README), {(i["code"], i["file"]) for i in data["errors"]})
+        warning, = [i for i in data["warnings"] if i["code"] == "V4"]
+        self.assertEqual(warning["file"], LIPI_README)
+        self.assertIn("lipi init --dry-run", warning["message"])
+        self.assertIn("save any local edits", warning["message"])
+
+    def test_current_file_with_old_lock_only_updates_lock(self):
+        root = self.project()
+        target = root / LIPI_README
+        original_mtime = target.stat().st_mtime_ns
+        lockfile = root / support.LOCK_REL
+        lock = json.loads(lockfile.read_text())
+        lock["files"][LIPI_README] = hashlib.sha256(b"old rules").hexdigest()
+        support.w(lockfile, json.dumps(lock))
+
+        status, data = support.check_json(root)
+        self.assertEqual(status, 1, data)
+        self.assertIn(("V3", LIPI_README), {(i["code"], i["file"]) for i in data["errors"]})
+        warning, = [i for i in data["warnings"] if i["code"] == "V4"]
+        self.assertEqual(warning["file"], LIPI_README)
+        self.assertIn("only its lock entry", warning["message"])
+        self.assertNotIn("save any local edits", warning["message"])
+
+        status, output = support.init(root)
+        self.assertEqual(status, 0, output)
+        self.assertEqual(target.stat().st_mtime_ns, original_mtime)
+        status, data = support.check_json(root)
+        self.assertEqual(status, 0, data)
+        self.assertFalse(any(i["code"] == "V4" for i in data["warnings"]))
+
+    def test_alternate_config_sets_level_but_uses_init_manifest(self):
+        root = self.project()
+        target = ".agents/lipi/documentation.md"
+        lockfile = root / support.LOCK_REL
+        lock = json.loads(lockfile.read_text())
+        support.w(root / target, "old rules\n")
+        lock["files"][target] = sha256_path(root / target)
+        support.w(lockfile, json.dumps(lock))
+        alternate = root.parent / "check-settings.json"
+        cfg = json.loads((root / "lipi.json").read_text())
+        cfg.update(enforce=True, codes={"V4": "error"})
+        support.w(alternate, json.dumps(cfg))
+
+        status, data = support.check_json(root, "--config", str(alternate))
+        self.assertEqual(status, 1, data)
+        self.assertEqual([i["file"] for i in data["errors"] if i["code"] == "V4"], [target])
+        self.assertFalse(any(i["code"] == "V4" for i in data["warnings"]))
+
+        status, output = support.init(root)
+        self.assertEqual(status, 0, output)
+        status, data = support.check_json(root, "--config", str(alternate))
+        self.assertEqual(status, 0, data)
+        self.assertFalse(any(i["code"] == "V4" for i in data["warnings"]))
+
+    def test_git_workflow_symlink_loop_skips_v4(self):
+        root = self.project()
+        support.git_init(root)
+        support.set_config(root, workflow=None)
+        status, output = support.check(root)
+        self.assertEqual(status, 0, output)
+        self.assertTrue(support.found(output, "V4"), output)
+
+        workflow = root / "workflow"
+        shutil.rmtree(workflow)
+        workflow.symlink_to("workflow", target_is_directory=True)
+        status, output = support.check(root)
+        self.assertEqual(status, 0, output)
+        self.assertFalse(support.found(output, "V4"), output)
+
+    def test_ci_ownership_and_codes(self):
+        root = self.project()
+        status, output = support.init(root, "--ci", "github")
+        self.assertEqual(status, 0, output)
+        lockfile = root / support.LOCK_REL
+        lock = json.loads(lockfile.read_text())
+        self.assertFalse(lock["enforce"])
+        support.w(root / support.CI_REL, "name: old\n")
+        lock["files"][support.CI_REL] = sha256_path(root / support.CI_REL)
+        support.w(lockfile, json.dumps(lock))
+        for level, key, expected_status in (("warning", "warnings", 0), ("error", "errors", 1),
+                                             ("off", "warnings", 0)):
+            with self.subTest(level=level):
+                support.set_config(root, codes={"V4": level})
+                status, data = support.check_json(root)
+                self.assertEqual(status, expected_status, data)
+                self.assertEqual([i["file"] for i in data[key] if i["code"] == "V4"],
+                                 [] if level == "off" else [support.CI_REL])
+
+    def test_version_and_valid_lock_boundaries(self):
+        root = self.project()
+        lockfile = root / support.LOCK_REL
+        lock = json.loads(lockfile.read_text())
+        # Deploy a different generation while keeping the working file clean.
+        support.w(root / LIPI_README, "old rules")
+        lock["files"][LIPI_README] = sha256_path(root / LIPI_README)
+        major = int(support.VERSION.split(".")[0])
+        for version in (f"{major}.999.0", f"{major - 1}.0.0", f"{major + 1}.0.0"):
+            with self.subTest(version=version):
+                lock["lipi"] = version
+                support.w(lockfile, json.dumps(lock))
+                _, data = support.check_json(root)
+                codes = {i["code"] for i in data["warnings"] + data["errors"]}
+                self.assertIn("V1", codes)
+                self.assertNotIn("V4", codes)
+        lock["lipi"] = support.VERSION
+        for files in ({}, {LIPI_README: "invalid digest"}):
+            support.w(lockfile, json.dumps(dict(lock, files=files)))
+            _, data = support.check_json(root)
+            self.assertFalse(any(i["code"] == "V4" for i in data["warnings"] + data["errors"]))
+
+
 class TestInitLink(unittest.TestCase):
     """init: AGENTS.md проекта сохраняется, новая заготовка содержит ссылку."""
 

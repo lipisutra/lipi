@@ -183,9 +183,9 @@ pre-commit — по ключу `enforce` (при `true` хук lipi должен
 
 ## Применить правила установленного lipi <a id="update"></a>
 
-Программу обновляет установщик: `pipx upgrade lipi`. Затем раздел
-«Upgrading your project» в [CHANGELOG](../../CHANGELOG.md) говорит, нужен ли
-`lipi init`. Команда применяет файлы из установленного пакета, без сети.
+Обновите программу через `pipx upgrade lipi`. Шаги выпуска — в [CHANGELOG](../../CHANGELOG.md).
+`lipi check` называет файлы для обновления ([V4](codes.md#v4)).
+`lipi init` применяет установленные правила без сети.
 
 ```bash
 lipi init [папка]          # развернуть или применить правила установленного lipi

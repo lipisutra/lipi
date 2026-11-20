@@ -19,15 +19,6 @@ from argparse import SUPPRESS
 from pathlib import Path
 from urllib.parse import unquote
 
-# На Windows stdout по умолчанию в кодировке консоли (cp1252), и русские
-# сообщения роняли бы печать. Скрипты lipi всегда печатают в UTF-8.
-for _stream in (sys.stdout, sys.stderr):
-    if hasattr(_stream, "reconfigure"):
-        try:
-            _stream.reconfigure(encoding="utf-8", errors="replace")
-        except (OSError, ValueError):
-            pass
-
 HERE = Path(__file__).resolve().parent
 SRC = HERE.parent
 # файлы lipi: правила и lock-файл живут в одном каталоге проекта
@@ -43,8 +34,15 @@ HOOK_REL = ".git/hooks/pre-commit"
 RE_HOOK_MARK = re.compile(r"(?m)^# lipi[ \t]*\r?$")
 RE_LINK = re.compile(r"\[([^\]]+)\]\(\s*<?([^)>\s]+)>?(?:\s+\"[^\"]*\")?\s*\)")
 RE_SCHEME = re.compile(r"^[a-zA-Z][a-zA-Z0-9+.-]*:")
-sys.dont_write_bytecode = True
-sys.path.insert(0, str(SRC))
+if __name__ == "__main__":
+    sys.dont_write_bytecode = True
+    sys.path.insert(0, str(SRC))
+    for _stream in (sys.stdout, sys.stderr):
+        if hasattr(_stream, "reconfigure"):
+            try:
+                _stream.reconfigure(encoding="utf-8", errors="replace")
+            except (OSError, ValueError):
+                pass
 from lipi import __version__ as VERSION  # noqa: E402
 from lipi.checker.conventions import BASE_NAME  # noqa: E402
 from lipi.checker.config import validate_config  # noqa: E402
@@ -146,13 +144,21 @@ def render(root, kind, docs_name, wf_name, templates=None, enforce=False, *, lan
     копируются на выбранном языке. У приложения к documentation.md добавляется
     раздел про справку.
     """
-    docs, wf = (root / docs_name).resolve(), (root / wf_name).resolve()
+    managed, seeds, description = _render(root, kind, docs_name, wf_name,
+                                          (root / wf_name).resolve(), templates, enforce,
+                                          language=language, include_seeds=True)
+    return {**seeds, **managed}, description
+
+
+def _render(root, kind, docs_name, wf_name, wf, templates, enforce, *, language=None,
+            include_seeds=False):
+    docs = (root / docs_name).resolve()
     lipi_dir = (root / LIPI_DIR).resolve()
     ci_dst = root.joinpath(*CI_REL.split("/"))
     descr_name = (docs_name + "/development") if kind == "app" else None
     today = datetime.date.today().isoformat()
     if language is None:
-        language = current_language()
+        language = current_language() if include_seeds else "en"
 
     def canonical(relative):
         if templates is not None:
@@ -165,9 +171,12 @@ def render(root, kind, docs_name, wf_name, templates=None, enforce=False, *, lan
                      docs_name, wf_name, descr_name, today)
         return _fill_strictness(text, dst, ci_dst, enforce)
 
-    files = {}
+    managed, seeds = {}, {}
+    groups = [("lipi", managed)]
+    if include_seeds:
+        groups.append(("seed", seeds))
     for layer in ("common", kind):
-        for group in ("lipi", "seed"):
+        for group, files in groups:
             directory = Path(group, layer)
             base = canonical(directory)
             if not base.is_dir():
@@ -187,10 +196,45 @@ def render(root, kind, docs_name, wf_name, templates=None, enforce=False, *, lan
     extra = Path("lipi", kind, ".agents-documentation-extra.md")
     default_extra = canonical(extra)
     doc_rules = lipi_dir / "documentation.md"
-    if default_extra.is_file() and doc_rules in files:
-        files[doc_rules] = (files[doc_rules].rstrip("\n") + "\n"
-                            + render_file(extra, default_extra, doc_rules))
-    return files, descr_name
+    if default_extra.is_file() and doc_rules in managed:
+        managed[doc_rules] = (managed[doc_rules].rstrip("\n") + "\n"
+                              + render_file(extra, default_extra, doc_rules))
+    return managed, seeds, descr_name
+
+
+def _workflow_destination(root, workflow):
+    wf = Path(os.path.abspath(root / (workflow or "workflow")))
+    if has_symlink(wf, root) and git_worktree_root(root) is not None:
+        raise ValueError(tr('init.workflow_symlink') % wf)
+    try:
+        wf = wf.resolve()
+    except RuntimeError as exc:
+        raise ValueError(str(exc)) from exc
+    if workflow is not None and not wf.is_relative_to(root):
+        raise ValueError(tr('init.external_workflow'))
+    return wf
+
+
+def deployment_files(root, kind, docs, workflow, enforce, old_files, *,
+                     ci=None, templates=None, include_seeds=False, foreign_workflow=False,
+                     workflow_path=None):
+    """Render the files init can write and the exact fingerprint map for the lock."""
+    wf_name = workflow or "workflow"
+    wf = _workflow_destination(root, workflow) if workflow_path is None else workflow_path
+    managed, seeds, description = _render(root, kind, docs or ".", wf_name, wf,
+                                          templates, enforce, include_seeds=include_seeds)
+    files = {**seeds, **managed}
+    if workflow is None or foreign_workflow:
+        files = drop_foreign_workflow(files, wf)
+    ci_owned = ci == "github" or CI_REL in old_files
+    expected = {}
+    for path in managed.keys() & files.keys():
+        name = rel_name(root, path)
+        if is_lipi_rel(name) and (name != CI_REL or ci_owned):
+            expected[name] = template_digest(files[path])
+        else:
+            del files[path]
+    return files, expected, description
 
 
 def sha256_hex(path):
@@ -207,6 +251,10 @@ def read_lock(root):
         data = json.loads(path.read_text(encoding="utf-8"))
     except (ValueError, OSError) as exc:
         raise ValueError(tr('init.lock_json') % LOCK_REL) from exc
+    return parse_lock(data)
+
+
+def parse_lock(data):
     if not isinstance(data, dict):
         raise ValueError(tr('init.lock_object') % LOCK_REL)
     version, files = data.get("lipi"), data.get("files")
@@ -533,43 +581,33 @@ def initialize(root, *, kind=None, docs=None, workflow=None, enforce=None,
             raise ValueError(tr('init.invalid_type_or_ci'))
         docs_name = docs or "."
         wf_name = workflow or "workflow"
-        wf = Path(os.path.abspath(root / wf_name))
-        if git_worktree_root(root) is not None and has_symlink(wf, root):
-            raise ValueError(tr('init.workflow_symlink') % wf)
-        wf = wf.resolve()
-        if workflow is not None and not wf.is_relative_to(root):
-            raise ValueError(tr('init.external_workflow'))
+        wf = _workflow_destination(root, workflow)
         foreign_wf = (workflow is None if cfg_exists else bool(foreign_workflow_paths(root, wf)))
-        files, descr_name = render(root, kind, docs_name, wf_name,
-                                  templates=templates, enforce=enforce)
-        if foreign_wf:
-            files = drop_foreign_workflow(files, wf)
+        files, expected, descr_name = deployment_files(
+            root, kind, docs, workflow, enforce, old_files, ci=ci, templates=templates,
+            include_seeds=not cfg_exists, foreign_workflow=foreign_wf, workflow_path=wf)
     except (ValueError, OSError) as exc:
         print(str(exc), file=sys.stderr)
         return 2
 
     repeat = old is not None
-    ci_owned = ci == "github" or CI_REL in old_files
-    managed = {p: text for p, text in files.items()
-               if is_lipi_rel(rel_name(root, p))
-               and (rel_name(root, p) != CI_REL or ci_owned)}
     changes, replaced = [], []
-    for path, text in sorted(managed.items()):
-        name = rel_name(root, path)
+    for name, digest in sorted(expected.items()):
+        path = root / name
         exists = path.exists()
         if exists and not repeat:
             print(tr('init.existing_file') % name)
             continue
-        if path.is_file() and sha256_hex(path) == template_digest(text):
+        if path.is_file() and sha256_hex(path) == digest:
             print(tr('init.matching_template') % name)
             continue
         if path.is_file() and name in old_files and sha256_hex(path) != old_files[name]:
             replaced.append(name)
-        changes.append((path, text))
+        changes.append((path, files[path]))
 
     if not cfg_exists:
         changes.extend((p, text) for p, text in sorted(files.items())
-                       if not is_lipi_rel(rel_name(root, p)) and not p.exists())
+                       if rel_name(root, p) not in expected and not p.exists())
         new_cfg = {"docs": docs_name, "workflow": None if foreign_wf else wf_name,
                    "enforce": enforce}
         if descr_name:
@@ -580,8 +618,6 @@ def initialize(root, *, kind=None, docs=None, workflow=None, enforce=None,
             return 2
         changes.append((root / "lipi.json",
                         json.dumps(new_cfg, ensure_ascii=False, indent=2) + "\n"))
-    expected = {rel_name(root, path): template_digest(text)
-                for path, text in managed.items()}
     removed = sorted(set(old_files) - set(expected))
     if removed:
         print(tr('init.removed_templates'))

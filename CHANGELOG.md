@@ -1,8 +1,21 @@
 # lipi releases
 
-## Unreleased
+## 1.2.0 — Unreleased
 
-- To switch an existing pipx installation from the default branch or an exact tag to 1.x updates, run `pipx install --force git+https://github.com/lipisutra/lipi@v1` once.
+- `lipi check` now reports which managed files `lipi init` would add, update,
+  or stop managing. After upgrading Lipi, projects with older rules can see
+  these V4 warnings both locally and in CI.
+
+### Upgrading your project
+
+1. Upgrade Lipi with `pipx upgrade lipi`.
+2. The rules and templates are unchanged. You can skip `lipi init`.
+
+If V4 reports unapplied changes from earlier releases, preview them with
+`lipi init --dry-run`. Upgrade all checkers before configuring V4 in
+`codes`: Lipi 1.1.x rejects that key with C1 (exit code 2).
+
+To switch an existing pipx installation from the default branch or an exact tag to 1.x updates, run `pipx install --force git+https://github.com/lipisutra/lipi@v1` once.
 
 ## 1.1.1 — 2026-11-20
 

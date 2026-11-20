@@ -194,7 +194,8 @@ to add the rules link. A new scaffold includes the link.
 `.agents/lipi/` contains lipi's English task, documentation, and workflow
 rules and the lock file with their fingerprints. Report friction with these
 rules as an issue to lipi. V3 detects rule and CI template fingerprint
-mismatches. V2 and V3 require a lock file. An empty fingerprint list
+mismatches. [V4](codes.md#v4) flags updates from the installed templates.
+V2 and V3 require a lock file. An empty fingerprint list
 raises V3 and requires `lipi init`. The installed command contains and
 runs the checker (ADR-010).
 

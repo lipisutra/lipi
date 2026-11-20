@@ -181,9 +181,9 @@ only reads files. In a folder without setup, it suggests `lipi init`.
 
 ## Apply the installed rules <a id="update"></a>
 
-Update the program with `pipx upgrade lipi`, then check the upgrade instructions in
-[CHANGELOG](../../CHANGELOG.md) to see whether to run `lipi init`. Init applies
-files from the installed package locally.
+Update the program with `pipx upgrade lipi`. See [CHANGELOG](../../CHANGELOG.md) for upgrade steps.
+In a configured project, `lipi check` lists managed files due for an update under [V4](codes.md#v4).
+`lipi init` applies files from the installed package locally.
 
 ```bash
 lipi init [directory]      # Initialize or apply installed rules

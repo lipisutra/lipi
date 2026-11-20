@@ -68,6 +68,17 @@ needs a [matching installation](../../SETUP.md#install) or the rules applied
 according to the [release history](../../CHANGELOG.md). V3 checks rule and
 CI template fingerprints.
 
+[V4](codes.md#v4) compares the lock with the managed files the installed
+templates would produce for this project. It runs with a nonempty valid
+lock when the installed version is equal to or newer than the deployed
+version in the same major series. Each finding names one added, updated,
+or retired file (`file` in JSON). CI is included when recorded in the
+lock. Project-owned starter files are excluded. V4 uses the deployment
+settings in `lipi.json` even when `check --config` selects other check settings.
+If local edits are at risk, preview `lipi init --dry-run` and save them
+before applying. For a file already matching the installed template, only its
+lock entry changes. For a retired file, init drops the entry and keeps the file on disk.
+
 Audit checks stale work items, document size, entry points without
 trace markers, staleness, statuses lagging behind commits, and baseline
 size. An accepted decision linking to an open discussion raises A7,

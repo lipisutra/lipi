@@ -212,6 +212,25 @@ class InitTest(unittest.TestCase):
         code, out = support.check(self.root)
         self.assertEqual(code, 0, out)
 
+    def test_seed_paths_inside_managed_directory_stay_project_owned(self):
+        docs = support.LIPI_DIR
+        workflow = docs + "/work"
+        code, out = support.init(self.root, "--docs", docs, "--workflow", workflow)
+        self.assertEqual(code, 0, out)
+        self.assertEqual(set(self.lock()["files"]), set(LIPI_FILES))
+        rules = self.root / docs / "README.md"
+        self.assertTrue(rules.read_text(encoding="utf-8").startswith("# lipi rules\n"))
+        for name in ("README.md", "masterplan.md"):
+            self.assertTrue((self.root / workflow / name).is_file())
+        masterplan = self.root / workflow / "masterplan.md"
+        original = masterplan.read_bytes()
+        masterplan.write_bytes(original + b"\nProject notes.\n")
+        lock = self.lock()
+        code, out = support.init(self.root)
+        self.assertEqual(code, 0, out)
+        self.assertEqual(self.lock(), lock)
+        self.assertEqual(masterplan.read_bytes(), original + b"\nProject notes.\n")
+
     def test_external_workflow_refuses_before_any_writes(self):
         for existing in (False, True):
             with self.subTest(existing=existing):

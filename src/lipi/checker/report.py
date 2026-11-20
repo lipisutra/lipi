@@ -20,7 +20,7 @@ CODE_LEVELS = {
     "W5": "error", "W6": "error", "W7": "error", "W8": "error",
     "W9": "warning", "W10": "error", "W11": "warning",
     "T1": "error", "T2": "warning", "T3": "warning", "T4": "warning",
-    "V1": "error", "V2": "error", "V3": "error",
+    "V1": "error", "V2": "error", "V3": "error", "V4": "warning",
     "A1": "warning", "A2": "warning", "A3": "warning",
     "A4": "warning", "A5": "warning", "A6": "warning",
     "A7": "warning", "A8": "warning",

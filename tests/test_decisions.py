@@ -102,8 +102,12 @@ class DecisionContracts(support.Case):
         self.assertEqual(len(nodes), 1, nodes)
         self.assertEqual(self.slice(root, "ADR-1")["target"]["target"], "ADR-001")
 
+    # @trace docs/ru/codes.md#v4
     def test_explicit_directory_replaces_default_and_works_without_workflow(self):
         root = self.configured(workflow=None)
+        self.assertIn("V4", {item["code"] for item in self.findings(root)})
+        status, output = support.init(root)
+        self.assertEqual(status, 0, output)
         self.decision(root)
         self.decision(root, "adr-001-ignored.md", directory="workflow/adr")
         support.w(root / "src/order.py", "# %s ADR-1\nvalue = 1\n" % support.TAG)

@@ -16,7 +16,8 @@ from .docs import check_docs, check_edition_docs, check_edition_links, check_lin
 from .model import Project, is_within, walk_md_agents
 from .report import FORMATS, Report, finding_item, json_output, level_of_project, print_gh
 from .reviews import REVIEWS_NAME, ReviewError
-from .state import apply_baseline, check_lipi_files, check_lipi_link, version_mismatch
+from .state import (apply_baseline, check_lipi_files, check_lipi_link,
+                    check_rule_updates, version_mismatch)
 from .structure import build_stale, build_structure
 from .trace import check_drift, git_changed, scan_code
 from .workflow import check_workflow, scan_workflow
@@ -182,6 +183,11 @@ def _check(args, fmt, new_args, baseline_args, ap):
         for name, msg, level in check_lipi_files(root, cfg):
             # уровень V3 — по правилу (enforce), не из таблицы (см. CODE_LEVELS)
             rep.finding("V3", name, 0, msg, subject=name, level=level)
+        # @trace docs/ru/codes.md#v4
+        if cfg["codes"].get("V4") != "off":
+            deployment_cfg = None if args.config else cfg
+            for name, message in check_rule_updates(root, deployment_cfg, data, __version__):
+                rep.finding("V4", name, 0, message, subject=name)
     # @trace docs/ru/codes.md#t1,docs/ru/codes.md#d6
     pages, anchor_ids, covers, reachable = check_docs(pr, rep)
     # @trace docs/ru/codes.md#l1,docs/ru/codes.md#l2,docs/ru/codes.md#l3
