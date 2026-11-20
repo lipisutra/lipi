@@ -138,25 +138,41 @@ When several linked targets share an applicable decision, the decision appears o
 
 ## Code changes <a id="diff"></a>
 
-In this `lipi slice --staged` example, one declaration marked with `docs/pricing.md#threshold` and one unmarked region changed. Inspect the other locations and tests to decide whether they also need an edit. A4 is disabled for this example.
+In this `lipi slice --staged` example, one declaration marked with
+`docs/pricing.md#rounding` and `docs/pricing.md#threshold` and one unmarked
+region changed. A4 is disabled for this example.
 
 ```text
 --staged — check related locations
-1 decision · 1 concept · 1 code location (1 layer) · 1 test location
+1 decision · 2 concepts · 1 code location (1 layer) · 1 test location
 check related locations, decisions, and tests
 changes without trace markers: 1 location
 
 Rules and decisions to follow
   ADR-018 accepted — Discounts use the total before shipping (link)
 Concepts
+  docs/pricing.md#rounding — Rounding (2 code locations)
   docs/pricing.md#threshold — Discount threshold (2 code locations)
 Code locations
-  src/api/orders.py:88  def post_order(request):  [api]
+  src/api/orders.py:88  def post_order(request):  [api] — via #rounding, #threshold
 Test locations
-  tests/test_discount.py:8  def test_threshold_boundary():
+  tests/test_discount.py:8  def test_threshold_boundary(): — via #threshold
 ```
 
-In JSON, the target has `kind: "diff"` and `target: "--staged"`. The diff details are `{"mode": "staged", "base": null, "files": 1, "unmarked": 1}`. The [diff contract](slice-diff.md) uses the ordinary selection rules and budget.
+The JSON fragment shows the target, both location blocks, and `checks.diff`.
+See the [diff contract](slice-diff.md) for the full response.
+
+```json
+{
+ "target": {"kind": "diff", "target": "--staged", "title": "check related locations", "found": "exact"},
+ "blocks": [
+  {"kind": "code", "omitted": 0, "hint": [], "items": [
+    {"path": "src/api/orders.py", "line": 88, "symbol": "def post_order(request):", "layer": "api", "via": "docs/pricing.md#rounding", "matched_targets": ["docs/pricing.md#rounding", "docs/pricing.md#threshold"]}]},
+  {"kind": "tests", "omitted": 0, "hint": [], "items": [
+    {"path": "tests/test_discount.py", "line": 8, "symbol": "def test_threshold_boundary():", "layer": "tests", "matched_targets": ["docs/pricing.md#threshold"]}]}],
+ "checks": {"diff": {"mode": "staged", "base": null, "files": 1, "unmarked": 1}}
+}
+```
 
 **Empty slice.** `lipi slice docs/pricing.md#refunds` returns 0:
 

@@ -1,6 +1,7 @@
 """Общий отбор содержимого среза и его текстовое представление."""
 import copy
 import re
+from collections import Counter
 
 from .checker.model import mask_code
 from .i18n import plural_form, tr
@@ -142,7 +143,22 @@ def _summary(summary):
     return " · ".join(parts)
 
 
-def _item_text(kind, item):
+# @trace docs/ru/slice-diff.md#response
+def _diff_target_labels(blocks):
+    from .repo_index import qualify
+    targets = {qualify(item.get("repo"), item["target"])
+               for block in blocks if block["kind"] == "concepts" for item in block["items"]}
+    if len(targets) < 2:
+        return {}
+    anchors = Counter(target.partition("#")[2] for target in targets)
+    labels = {}
+    for target in targets:
+        anchor = target.partition("#")[2]
+        labels[target] = "#" + anchor if anchor and anchors[anchor] == 1 else target
+    return labels
+
+
+def _item_text(kind, item, labels):
     if item.get("repo"):
         item = dict(item)
         for key in ("path", "layer"):
@@ -164,6 +180,8 @@ def _item_text(kind, item):
         text = "%s:%s  %s" % (item["path"], item["line"], item["symbol"])
         if kind != "tests":
             text += "  [%s]" % item["layer"]
+        if labels:
+            text += tr("slice.render.via") % ", ".join(labels[target] for target in item["matched_targets"])
         return text
     text = item["target"]
     if kind == "obey" and item.get("status"):
@@ -179,8 +197,8 @@ def _item_text(kind, item):
 
 
 # @trace docs/ru/slice.md#json
-def render_text(response, *, target_path=None):
-    """Печатает уже отобранные элементы, не меняя их состава."""
+def render_text(response, *, target_path=None, selected_blocks=None):
+    """Renders selected blocks using the full diff to disambiguate target labels."""
     if "error" in response:
         key = "slice.render.ambiguous" if response["error"] == "ambiguous" else "slice.render.not_found"
         candidates = tr("slice.render.candidates") if response.get("candidates") else ""
@@ -217,8 +235,10 @@ def render_text(response, *, target_path=None):
     from .repo_output import render_repository_status
     lines.extend(render_repository_status(response))
     lines.extend(note["text"] for note in response.get("notes", []))
+    labels = _diff_target_labels(response["blocks"]) if target["kind"] == "diff" else {}
     first_block = True
-    for block in response["blocks"]:
+    blocks = response["blocks"] if selected_blocks is None else selected_blocks
+    for block in blocks:
         if not block["items"] and not block["omitted"]:
             continue
         kind = block["kind"]
@@ -227,7 +247,7 @@ def render_text(response, *, target_path=None):
             first_block = False
         lines.append(tr("slice.block." + kind))
         for item in block["items"]:
-            content = item["text"].splitlines() if kind == "excerpt" else [_item_text(kind, item)]
+            content = item["text"].splitlines() if kind == "excerpt" else [_item_text(kind, item, labels)]
             lines.extend("  " + line for line in content)
         if block["omitted"]:
             hints = ", ".join(block["hint"])

@@ -5,6 +5,9 @@
 - `lipi check` now reports which managed files `lipi init` would add, update,
   or stop managing. After upgrading Lipi, projects with older rules can see
   these V4 warnings both locally and in CI.
+- `lipi slice --diff` and `lipi slice --staged` label related locations when
+  multiple targets are affected. JSON location items include all matching
+  targets in `matched_targets` with the existing `via` values preserved.
 
 ### Upgrading your project
 

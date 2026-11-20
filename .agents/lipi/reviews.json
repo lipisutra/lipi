@@ -1,5 +1,101 @@
 {
   "algorithm": "sha256-lines-v1",
-  "entries": [],
+  "entries": [
+    {
+      "head": "f6d2756903aefdcd53947ecac06e70c1274e98cd",
+      "id": "17d2357c9229b94fda9cbaf58e91c6db5d36c96f85f7ac2c0aee06fc0cc4ff1e",
+      "reason": "The work-slice test still exercises the documented obey, code, targets order and checks that only the work ID contributes code while shared obligations retain their linked origins.",
+      "relation": "trace",
+      "reviewed_at": "2026-11-20T14:19:28Z",
+      "reviewer": "diff_labels_review",
+      "source": {
+        "kind": "trace",
+        "path": "tests/test_slice_work.py",
+        "sha256": "8017dd010f8ec299b8680d92dd0b3e5b33c8deff4ec09947d6ab65ec9d927752"
+      },
+      "target": {
+        "anchor": "blocks",
+        "kind": "anchor",
+        "path": "docs/ru/slice.md",
+        "sha256": "7c507c69ed03303a8538b520e30ba348f71dfc20c8a5ab1999d4402f4fa44f27"
+      }
+    },
+    {
+      "head": "f6d2756903aefdcd53947ecac06e70c1274e98cd",
+      "id": "2feb57a3f8c56cb55cd282e1d4584071b365620e9d8952f1f3a2d3b8aa9d23de",
+      "reason": "The ordinary work-slice test checks that code still uses the plan ID as its via string and the obey block keeps its list of origins. The new matched_targets field applies to diff slices.",
+      "relation": "trace",
+      "reviewed_at": "2026-11-20T14:20:05Z",
+      "reviewer": "diff_labels_review",
+      "source": {
+        "kind": "trace",
+        "path": "tests/test_slice_work.py",
+        "sha256": "8017dd010f8ec299b8680d92dd0b3e5b33c8deff4ec09947d6ab65ec9d927752"
+      },
+      "target": {
+        "anchor": "json",
+        "kind": "anchor",
+        "path": "docs/ru/slice.md",
+        "sha256": "43aa368ce2c06689cf41b267ba6b01393927287a8c9e11354d440ae12d6fb42a"
+      }
+    },
+    {
+      "head": "f6d2756903aefdcd53947ecac06e70c1274e98cd",
+      "id": "989ac4c53fbcc5ba1041fc0ca032849f1304f6557d59df99b521fb504bb0a4c3",
+      "reason": "CLI still returns the slice result code after rendering. Invalid arguments, configuration failures and Git diff errors still return 2.",
+      "relation": "trace",
+      "reviewed_at": "2026-11-20T14:19:22Z",
+      "reviewer": "diff_labels_review",
+      "source": {
+        "kind": "trace",
+        "path": "src/lipi/slice.py",
+        "sha256": "cd3c670ab4b6d02a126f5ca49a1ab9513733649a4043b640e0f12c99c1880f17"
+      },
+      "target": {
+        "anchor": "exit",
+        "kind": "anchor",
+        "path": "docs/ru/slice.md",
+        "sha256": "41273a7927a53b808b03bb21bf75f07266745a4416ad04e7a4632928dd5c9386"
+      }
+    },
+    {
+      "head": "f6d2756903aefdcd53947ecac06e70c1274e98cd",
+      "id": "d9b2d8fc89c9930eec3dbe3382da89d51364fd367b4b1469970b8ac1febd3b13",
+      "reason": "The work-slice fixture still counts one shared decision and two distinct rules once each, even when an obligation has two origins. The target count is still three.",
+      "relation": "trace",
+      "reviewed_at": "2026-11-20T14:19:33Z",
+      "reviewer": "diff_labels_review",
+      "source": {
+        "kind": "trace",
+        "path": "tests/test_slice_work.py",
+        "sha256": "8017dd010f8ec299b8680d92dd0b3e5b33c8deff4ec09947d6ab65ec9d927752"
+      },
+      "target": {
+        "anchor": "summary",
+        "kind": "anchor",
+        "path": "docs/ru/slice.md",
+        "sha256": "a6bd6bf59e018e233218a8bcf6f55307da9d3bf652733ea84c71abaf75b85103"
+      }
+    },
+    {
+      "head": "f6d2756903aefdcd53947ecac06e70c1274e98cd",
+      "id": "f6885c6b90f1ec975d6a2a6c73e8976e0584c50556d45014625317c4e65e235c",
+      "reason": "The text renderer reads full diff targets to label selected lines. JSON still serializes the selected schema 1 response, where matched_targets is additive and existing via values retain their meaning.",
+      "relation": "trace",
+      "reviewed_at": "2026-11-20T14:19:39Z",
+      "reviewer": "diff_labels_review",
+      "source": {
+        "kind": "trace",
+        "path": "src/lipi/slice_output.py",
+        "sha256": "56308fbc9cca529381412e92012f9633c98446948896c3c74833e1a8543d0404"
+      },
+      "target": {
+        "anchor": "json",
+        "kind": "anchor",
+        "path": "docs/ru/slice.md",
+        "sha256": "43aa368ce2c06689cf41b267ba6b01393927287a8c9e11354d440ae12d6fb42a"
+      }
+    }
+  ],
   "schema": 1
 }

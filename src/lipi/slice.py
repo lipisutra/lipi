@@ -138,12 +138,12 @@ def main(argv=None):
         except ReviewError as error:
             _config_errors([(REVIEWS_NAME, str(error))], args.format)
             return 2
-    response = select_response(response, cfg["slice_budget"], args.full, args.only)
+    selected = select_response(response, cfg["slice_budget"], args.full, args.only)
     if args.format == 'json':
-        print(json.dumps(response, ensure_ascii=False))
+        print(json.dumps(selected, ensure_ascii=False))
     else:
         target_path = _external_title_path(project, response.get('target', {}), cwd)
-        print(render_text(response, target_path=target_path))
+        print(render_text(response, target_path=target_path, selected_blocks=selected.get('blocks')))
     return code
 
 

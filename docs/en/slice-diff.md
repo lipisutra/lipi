@@ -20,6 +20,14 @@ On each side of the diff, a trace group covers the lines up to the next group or
 
 The blocks appear in this order: `signals`, `obey`, `concepts`, `entry`, `code`, `tests`, `context`. Concepts include every resolved target of an affected marker, including pages and work item IDs, with its title and code location count. As in an ordinary slice, these targets supply the applicable accepted decisions, instructions, refinements, and related documents. The code and test location blocks list other places marked for the affected targets, excluding the changed declarations. A shared concept, decision, or location appears once across all changed files. With `repos`, the diff remains local. The [repository connection rules](slice.md#repos) govern external targets and consumers.
 
+When `--diff` or `--staged` affects multiple distinct targets, each location
+in `entry`, `code`, and `tests` ends with `via` and its matching targets,
+separated by commas. A single-target diff uses the ordinary location format.
+Lipi uses `#anchor` if it identifies one distinct target across the entire
+diff before filtering and truncation. When targets share an anchor, Lipi
+uses the full `path#anchor` or `repo::path#anchor`. A target without an
+anchor always uses its full address.
+
 Two notes accompany the summary: a prompt to review related locations, and a count of unmarked changes. An unmarked location is a continuous run of changed lines with no resolved target. For each diff hunk, lipi counts runs on both sides and takes the larger count, so a replacement counts once. An unresolved target does not establish a link.
 
 The summary covers the complete slice before truncation; `checks.diff.unmarked` counts all unmarked runs. A4 and T3 appear as ordinary signals. The presence of a link in the diff alone does not trigger a warning. The staleness check uses current linked locations and the usual [limits](slice.md#staleness). `--only`, `--layer`, `--depth`, `--full`, and the line budget apply as usual. Diff slices have no excerpt. An empty diff or one without trace markers returns 0. Missing Git, an invalid base, or a diff read error returns 2.
@@ -28,7 +36,14 @@ A valid [review mark](review.md) suppresses A4 for its pair and keeps the pair i
 
 ## JSON <a id="json"></a>
 
-The schema version is 1. The target has `kind: "diff"` and a `target` value of `--diff BASE` or `--staged`. Other fields and block items follow the ordinary slice schema, including `repo` and source metadata when connections are configured.
+The schema version is 1. The target has `kind: "diff"` and a `target` value of `--diff BASE` or `--staged`. The [ordinary slice schema](slice-output.md#json) supplies the common fields, including `repo` and source metadata when connections are configured.
+
+Each `entry`, `code`, and `tests` item has `matched_targets` with all distinct
+targets shared by its markers and the diff, even if there is only one. The
+list contains canonical addresses, including connection prefixes for
+external targets, in lexicographic order by full address. The existing
+`via` string in `entry` and `code` is `matched_targets[0]`. In `tests`,
+`matched_targets` is the only field that lists the matches.
 
 ```json
 {"checks": {"diff": {"mode": "diff", "base": "HEAD", "files": 2, "unmarked": 1}}}

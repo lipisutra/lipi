@@ -131,6 +131,8 @@ Each block contains `kind`, `items`, `omitted` (the omitted count), and
 | Concept | `target`, `title`, `code_count` (code locations across the project) |
 | Excerpt | `text`, `lines`, `cut` |
 
+In [diff slices](slice-diff.md#json), `matched_targets` lists every matching target for each code and test location, including entry points.
+
 For `Refines` links, `relation` is `link` and the target is the canonical
 decision ID, such as `ADR-001` for `0001-….md`.
 

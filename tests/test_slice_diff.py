@@ -18,7 +18,7 @@ class SliceDiffContract(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory(prefix="lipi-slice-diff-")
         self.addCleanup(self.tmp.cleanup)
-        self.root = Path(self.tmp.name)
+        self.root = Path(self.tmp.name) / "project"
         self.write("lipi.json", "{}\n")
         self.write("docs/pricing.md", '# Prices\n\n## Threshold <a id="threshold"></a>\n\n'
                    'Threshold rule.\n\n## Rounding <a id="rounding"></a>\n\nRounding rule.\n')
@@ -38,6 +38,11 @@ class SliceDiffContract(unittest.TestCase):
     def change(self, path):
         support.sub(self.root / path, "return 0", "return 1")
 
+    def stage_change(self, path):
+        self.change(path)
+        code, out = support.git(self.root, "add", "--", path)
+        self.assertEqual(code, 0, out)
+
     def run_slice(self, *args, expected=0, env=None):
         code, out = support.run(support.PY + [str(support.CLI), "slice", "--format", "json", *args],
                                 cwd=str(self.root), env=env)
@@ -49,6 +54,15 @@ class SliceDiffContract(unittest.TestCase):
 
     def items(self, result, kind):
         return next((block["items"] for block in result["blocks"] if block["kind"] == kind), [])
+
+    def assert_place_labels(self, args, expected):
+        code, text = support.cli(self.root, "slice", *args)
+        self.assertEqual(code, 0, text)
+        via = support.localized(" — via ", " — через ")
+        for path, label in expected.items():
+            rows = [line.strip() for line in text.splitlines() if line.lstrip().startswith(path + ":")]
+            self.assertEqual(len(rows), 1, text)
+            self.assertEqual(rows[0].partition(via)[2], label, rows[0])
 
     def test_shared_concepts_collect_related_places_obey_and_context_once(self):
         rule = ".agents/architecture.md#money"
@@ -102,25 +116,136 @@ class SliceDiffContract(unittest.TestCase):
     def test_via_matches_published_1_1_0_with_two_targets(self):
         self.write("docs/api.md", '# API\n\n## Read <a id="read-record"></a>\n\n'
                    '## Summary <a id="summary"></a>\n')
-        targets = ("docs/api.md#summary", "docs/api.md#read-record")
+        read_record, summary = "docs/api.md#read-record", "docs/api.md#summary"
+        targets = (summary, read_record)
         support.set_config(self.root, entry=["def route"])
         self.mark("src/provider.py", targets)
         self.mark("src/reader.py", targets)
+        self.mark("src/read_only.py", (read_record, TARGET))
         self.mark("src/router.py", targets, "def route():")
         self.mark("tests/test_reader.py", targets, "def test_read():")
+        self.mark("tests/test_summary.py", (summary, summary), "def test_summary():")
         self.baseline()
-        self.change("src/provider.py")
-        code, out = support.git(self.root, "add", "src/provider.py")
-        self.assertEqual(code, 0, out)
+        self.stage_change("src/provider.py")
+
+        expected = {
+            "entry": {"src/router.py": [read_record, summary]},
+            "code": {"src/reader.py": [read_record, summary], "src/read_only.py": [read_record]},
+            "tests": {"tests/test_reader.py": [read_record, summary], "tests/test_summary.py": [summary]},
+        }
+        for args in (("--diff", "HEAD"), ("--staged",)):
+            with self.subTest(args=args):
+                result = self.run_slice(*args)
+                self.assertEqual(result["schema"], 1)
+                for kind, by_path in expected.items():
+                    items = self.items(result, kind)
+                    self.assertEqual(len(items), len(by_path))
+                    self.assertEqual({item["path"]: item["matched_targets"] for item in items}, by_path)
+                    for item in items:
+                        if kind == "tests":
+                            self.assertNotIn("via", item)
+                        else:
+                            self.assertEqual(item["via"], "docs/api.md#read-record")
+                self.assert_place_labels(args, {
+                    "src/router.py": "#read-record, #summary",
+                    "src/reader.py": "#read-record, #summary",
+                    "src/read_only.py": "#read-record",
+                    "tests/test_reader.py": "#read-record, #summary",
+                    "tests/test_summary.py": "#summary",
+                })
+
+    def test_one_diff_target_has_json_matches_without_text_labels(self):
+        support.set_config(self.root, entry=["def route"])
+        self.mark("src/provider.py")
+        self.mark("src/router.py", (OTHER, TARGET), "def route():")
+        self.mark("src/reader.py", (OTHER, TARGET))
+        self.mark("tests/test_reader.py", (OTHER, TARGET), "def test_read():")
+        self.baseline()
+        self.stage_change("src/provider.py")
 
         for args in (("--diff", "HEAD"), ("--staged",)):
             with self.subTest(args=args):
                 result = self.run_slice(*args)
-                for kind in ("entry", "code"):
+                for kind in ("entry", "code", "tests"):
                     item, = self.items(result, kind)
-                    self.assertEqual(item["via"], "docs/api.md#read-record")
+                    self.assertEqual(item["matched_targets"], [TARGET])
+                    if kind == "tests":
+                        self.assertNotIn("via", item)
+                    else:
+                        self.assertEqual(item["via"], TARGET)
+                self.assert_place_labels(args, {
+                    "src/router.py": "", "src/reader.py": "", "tests/test_reader.py": "",
+                })
+
+        for query, via in ((TARGET, TARGET), ("docs/pricing.md", OTHER), ("src/provider.py", TARGET)):
+            with self.subTest(query=query):
+                result = self.run_slice(query)
+                places = {item["path"]: item for kind in ("entry", "code", "tests")
+                          for item in self.items(result, kind)}
+                for path in ("src/router.py", "src/reader.py"):
+                    self.assertEqual(places[path]["via"], via)
+                self.assertNotIn("via", places["tests/test_reader.py"])
+                self.assertTrue(all("matched_targets" not in item for item in places.values()))
+                self.assert_place_labels((query,), {
+                    "src/router.py": "", "src/reader.py": "", "tests/test_reader.py": "",
+                })
+
+    def test_anchor_collisions_use_full_addresses_before_filters_and_budget(self):
+        neighbor = self.root.parent / "neighbor"
+        support.w(neighbor / "lipi.json", "{}\n")
+        support.w(neighbor / "docs/pricing.md", '# Neighbor prices\n\n'
+                  '## Rounding <a id="rounding"></a>\n')
+        support.git_init(neighbor)
+        code, out = support.commit(neighbor)
+        self.assertEqual(code, 0, out)
+        self.write("docs/checkout.md", '# Checkout\n\n## Threshold <a id="threshold"></a>\n')
+        checkout = "docs/checkout.md#threshold"
+        external = "neighbor::docs/pricing.md#rounding"
+        support.set_config(self.root, repos={"neighbor": {"path": "../neighbor", "read": ["docs"]}},
+                           layers={"src/a_visible.py": "domain", "src/b_local.py": "client"}, slice_budget=4)
+        self.mark("src/provider.py", (TARGET, OTHER, checkout, external))
+        self.mark("src/a_visible.py", (OTHER,))
+        self.mark("src/b_local.py", (TARGET, checkout))
+        self.mark("tests/test_neighbor.py", (external, OTHER))
+        self.baseline()
+        self.stage_change("src/provider.py")
+
+        for args in (("--diff", "HEAD"), ("--staged",)):
+            with self.subTest(args=args):
+                filtered = (*args, "--only", "code,tests")
+                result = self.run_slice(*filtered)
+                local, both = self.items(result, "code")
+                self.assertEqual((local["path"], local["via"], local["matched_targets"]),
+                                 ("src/a_visible.py", OTHER, [OTHER]))
+                self.assertEqual((both["path"], both["via"], both["matched_targets"]),
+                                 ("src/b_local.py", checkout, [checkout, TARGET]))
                 test_item, = self.items(result, "tests")
-                self.assertNotIn("via", test_item)
+                self.assertEqual(test_item["matched_targets"], [OTHER, external])
+                self.assert_place_labels(filtered, {
+                    "src/a_visible.py": OTHER,
+                    "src/b_local.py": checkout + ", " + TARGET,
+                    "tests/test_neighbor.py": OTHER + ", " + external,
+                })
+                self.assert_place_labels((*args, "--only", "code", "--layer", "domain"), {
+                    "src/a_visible.py": OTHER,
+                })
+                limited = self.run_slice(*args)
+                self.assertTrue(limited["incomplete"])
+                self.assertEqual([item["path"] for item in self.items(limited, "code")], ["src/a_visible.py"])
+                self.assertFalse(any(item["repo"] for item in self.items(limited, "concepts")))
+                self.assert_place_labels(args, {"src/a_visible.py": OTHER})
+
+    def test_labels_use_address_for_target_without_anchor(self):
+        self.write("workflow/adr/adr-001-prices.md", "# Prices\n\n- Status: accepted\n")
+        self.mark("src/provider.py", (TARGET, "ADR-001"))
+        self.mark("src/reader.py", (TARGET, "adr-1"))
+        self.baseline()
+        self.change("src/provider.py")
+
+        args = ("--diff", "HEAD")
+        item, = self.items(self.run_slice(*args), "code")
+        self.assertEqual(item["matched_targets"], ["ADR-001", TARGET])
+        self.assert_place_labels(args, {"src/reader.py": "ADR-001, #threshold"})
 
     def test_changes_prompt_review_without_asserting_related_code_is_wrong(self):
         self.mark("src/changed.py")

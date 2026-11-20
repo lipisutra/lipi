@@ -493,7 +493,8 @@ def _build_slice(index, target, depth, layers, diff=None):
             blocks['concepts'].append({'target': item, 'title': index.nodes[item]['title'],
                                        'code_count': index.count(item)})
     for place in places:
-        via = sorted(set(place['targets']) & seeds)[0]
+        matched_targets = sorted(place['targets'].keys() & seeds)
+        via = matched_targets[0]
         item = {key: place[key] for key in ('path', 'line', 'symbol', 'layer')}
         if connected:
             item['repo'] = place.get('repo')
@@ -509,6 +510,8 @@ def _build_slice(index, target, depth, layers, diff=None):
             destination = 'code'
         if destination != 'tests':
             item['via'] = via
+        if kind == 'diff':
+            item['matched_targets'] = matched_targets
         blocks[destination].append(item)
     if 'targets' in blocks:
         for item in sorted(index.outgoing.get(aid, ()), key=document_order):

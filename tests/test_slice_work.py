@@ -61,11 +61,17 @@ class WorkSliceContract(unittest.TestCase):
                          ["ADR-001", ".agents/custom.md#rule", "AGENTS.md#rule"])
         self.assertEqual([item["via"] for item in obey], [[first, second], [first, second], [first]])
         self.assertEqual([item["relation"] for item in obey], ["link", "mark", "link"])
-        self.assertEqual([item["path"] for item in self.items(result, "code")], ["src/plan.py"])
+        place, = self.items(result, "code")
+        self.assertEqual((place["path"], place["via"]), ("src/plan.py", "PLN-001"))
+        self.assertNotIn("matched_targets", place)
         self.assertEqual(result["summary"]["decisions"], 1)
         self.assertEqual(result["summary"]["rules"], 2)
         self.assertEqual(result["summary"]["targets"], 3)
         self.assertEqual([block["kind"] for block in result["blocks"]], ["obey", "code", "targets"])
+        code, text = support.cli(self.root, "slice", "PLN-001", "--only", "code")
+        self.assertEqual(code, 0, text)
+        self.assertIn("src/plan.py:", text)
+        self.assertNotIn(support.localized(" — via ", " — через "), text)
 
     # @trace docs/ru/slice.md#blocks
     def test_goal_without_obligations_keeps_old_empty_and_target_behavior(self):

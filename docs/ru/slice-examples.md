@@ -122,29 +122,41 @@ ISS-007 — Порог не учитывает возвраты (open)
 
 ## Изменения кода <a id="diff"></a>
 
-`lipi slice --staged`: изменилось одно объявление под меткой
-`docs/pricing.md#threshold` и один участок без меток. Другие места и тесты
-нужно просмотреть; срез не объявляет их неверными. Здесь A4 выключен:
+В примере `lipi slice --staged` изменилось одно объявление с метками
+`docs/pricing.md#rounding` и `docs/pricing.md#threshold`, а также один
+участок без меток. Здесь A4 выключен.
 
 ```text
 --staged — проверьте связанные места
-1 решение · 1 понятие · 1 место в коде (1 слой) · 1 место в тестах
+1 решение · 2 понятия · 1 место в коде (1 слой) · 1 место в тестах
 проверьте связанные места, решения и тесты
 изменения без меток: 1 место
 
 Соблюдать
   ADR-018 accepted — Скидка считается от суммы без доставки (link)
 Понятия
+  docs/pricing.md#rounding — Округление (2 места в коде)
   docs/pricing.md#threshold — Порог скидки (2 места в коде)
 Места в коде
-  src/api/orders.py:88  def post_order(request)  [api]
+  src/api/orders.py:88  def post_order(request):  [api] — через #rounding, #threshold
 Места в тестах
-  tests/test_discount.py:8  def test_threshold_boundary():
+  tests/test_discount.py:8  def test_threshold_boundary(): — через #threshold
 ```
 
-У `target` в JSON: `{"kind": "diff", "target": "--staged", "title": "check related locations"}`;
-у `checks.diff`: `{"mode": "staged", "base": null, "files": 1, "unmarked": 1}`.
-Отбор элементов и предел — общие, см. [договор диффа](slice-diff.md).
+Во фрагменте JSON показаны цель, оба блока мест и `checks.diff`.
+Полный ответ описан в [договоре диффа](slice-diff.md).
+
+```json
+{
+ "target": {"kind": "diff", "target": "--staged", "title": "check related locations", "found": "exact"},
+ "blocks": [
+  {"kind": "code", "omitted": 0, "hint": [], "items": [
+    {"path": "src/api/orders.py", "line": 88, "symbol": "def post_order(request):", "layer": "api", "via": "docs/pricing.md#rounding", "matched_targets": ["docs/pricing.md#rounding", "docs/pricing.md#threshold"]}]},
+  {"kind": "tests", "omitted": 0, "hint": [], "items": [
+    {"path": "tests/test_discount.py", "line": 8, "symbol": "def test_threshold_boundary():", "layer": "tests", "matched_targets": ["docs/pricing.md#threshold"]}]}],
+ "checks": {"diff": {"mode": "staged", "base": null, "files": 1, "unmarked": 1}}
+}
+```
 
 **Пустой срез.** `lipi slice docs/pricing.md#refunds` — код возврата 0:
 

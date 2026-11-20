@@ -2,7 +2,9 @@
 
 - Created: 2026-11-20
 - Updated: 2026-11-20
-- Status: in progress
+- Status: closed
+- Closed: 2026-11-20
+- Result: На проекте с правилами 1.1.0 проверка V4 указала те же два файла, что и `lipi init --dry-run`. После `lipi init` предупреждения исчезли. Результат подтверждён независимой проверкой.
 - Kind: request
 
 ## Observation
