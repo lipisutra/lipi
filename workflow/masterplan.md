@@ -4,9 +4,11 @@
 
 ## Сейчас
 
+- [ISS-022](issue/2026/iss-022-v4-soobschaet-kakie-upravlyaemye-pravila-obnovit.md) — подсказка V4 о правилах, которые обновит `lipi init`.
+
 ## Дальше
 
-- [ISS-022](issue/2026/iss-022-v4-soobschaet-kakie-upravlyaemye-pravila-obnovit.md) — подсказка V4 о правилах, которые обновит `lipi init`.
+- [ISS-021](issue/2026/iss-021-pokazyvat-u-kazhdogo-mesta-v-sreze.md) — цели меток у каждого места в срезе по диффу.
 
 ## Позже
 
