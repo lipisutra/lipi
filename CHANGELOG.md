@@ -1,5 +1,15 @@
 # lipi releases
 
+## 1.1.1 — 2026-11-20
+
+- Agent instructions explain when to follow a suggested repository search
+  and how to trace a shared contract to the same anchor across components.
+
+### Upgrading your project
+
+1. Upgrade Lipi with `pipx upgrade lipi`.
+2. The rules and templates have changed. Run `lipi init`.
+
 ## 1.1.0 — 2026-11-20
 
 - A connection can extend its `docs` scope with `page_dirs`. Trace markers,
@@ -8,10 +18,10 @@
   connected repositories. JSON clients receive the commands in `suggestions`.
   A title match in a neighbor includes an openable path in text output.
 
-### Проекту при обновлении
+### Upgrading your project
 
-1. Обновите программу: `pipx upgrade lipi`.
-2. Правила и шаблоны не изменились — `lipi init` не нужен.
+1. Upgrade Lipi with `pipx upgrade lipi`.
+2. The rules and templates are unchanged. You can skip `lipi init`.
 
 Update Lipi before adding `page_dirs` to `lipi.json`. Version 1.0.1 reports C1
 for this key.
@@ -24,10 +34,10 @@ for this key.
 - The plans shown by `lipi init` and `lipi mv` mention an archive only when it exists.
 - `lipi new pln` omits a leading `Plan:` or `План:` from the generated filename.
 
-### Проекту при обновлении
+### Upgrading your project
 
-1. Обновите программу: `pipx upgrade lipi`.
-2. Правила и шаблоны не изменились — `lipi init` не нужен.
+1. Upgrade Lipi with `pipx upgrade lipi`.
+2. The rules and templates are unchanged. You can skip `lipi init`.
 
 ## 1.0.0 — First release
 

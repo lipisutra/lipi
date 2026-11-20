@@ -30,7 +30,9 @@ rules in [Workflow documents](workflow.md).
 - Start with `lipi slice` for a concept, source file, or work item ID. Read
   the relevant files, make the change, verify it, and report the result.
   Try `lipi slice docs/en/api.md#requests`, `lipi slice src/api.py`, or
-  `lipi slice ISS-001`. If the slice is empty, look for related files yourself.
+  `lipi slice ISS-001`. If a slice finds no target, try a suggested repository
+  search when it fits the task. If a relevant location is still missing,
+  search the code directly.
 - After editing code, review its links with `lipi slice --diff HEAD` or
   `lipi slice --staged`. The slice lists things to check.
 - Create a plan, audit, or discussion when the user asks for one. You can

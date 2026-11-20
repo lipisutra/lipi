@@ -75,17 +75,17 @@ Commit or publish when the user authorizes it.
 
 Bump the version on the first task in a release that changes behavior. Include the entry in `CHANGELOG.md` in the same commit. The `vX.Y.Z` tag identifies the release commit containing that entry. See [ADR-001](../workflow/adr/adr-001-net-naslediya-sovmestimost-s-prezhnimi-versiyami.md).
 
-1. After the first release, include the required upgrade section in each entry. The release test expects the heading `Проекту при обновлении` and two numbered steps, each on its own line. The first upgrades the program and the second says whether to run `lipi init`. Follow this format:
+1. After the first release, include the required upgrade section in each entry. The release test expects the heading `Upgrading your project` and two numbered steps, each on its own line. The first upgrades the program and the second says whether to run `lipi init`. Follow this format:
 
    ```text
-   1. Обновите программу: `pipx upgrade lipi`.
-   2. Правила и шаблоны не изменились — `lipi init` не нужен.
+   1. Upgrade Lipi with `pipx upgrade lipi`.
+   2. The rules and templates are unchanged. You can skip `lipi init`.
    ```
 
    When rules or templates changed, use the exact line below.
 
    ```text
-   2. Правила и шаблоны изменились — выполните `lipi init`.
+   2. The rules and templates have changed. Run `lipi init`.
    ```
 
    To install a specific release, use `pipx install --force git+https://github.com/lipisutra/lipi@vX.Y.Z` with that entry's tag. Put further project-specific steps after the first two.

@@ -57,18 +57,18 @@ def check_upgrade_instructions(text):
         if release == FIRST_RELEASE:
             continue
         section = re.search(
-            r"^### Проекту при обновлении(?: на " + re.escape(release)
+            r"^### Upgrading your project(?: for " + re.escape(release)
             + r")?\s*\n(.*?)(?=^### |\Z)", body, re.M | re.S)
-        assert section, "%s: нет раздела «Проекту при обновлении»" % release
+        assert section, "%s: нет раздела «Upgrading your project»" % release
         lines = [line.strip() for line in section.group(1).splitlines() if line.strip()]
         commands = ("pipx upgrade lipi",
                     "pipx install --force git+https://github.com/lipisutra/lipi@v" + release)
         assert lines and lines[0] in (
-            "1. Обновите программу: `%s`." % command for command in commands
+            "1. Upgrade Lipi with `%s`." % command for command in commands
         ), "%s: первый шаг должен обновлять установленную программу" % release
         assert len(lines) > 1 and lines[1] in (
-            "2. Правила и шаблоны не изменились — `lipi init` не нужен.",
-            "2. Правила и шаблоны изменились — выполните `lipi init`.",
+            "2. The rules and templates are unchanged. You can skip `lipi init`.",
+            "2. The rules and templates have changed. Run `lipi init`.",
         ), "%s: второй шаг должен согласовать изменения правил и шаблонов с lipi init" % release
 
 
@@ -135,12 +135,12 @@ class TestVersionConsistency(unittest.TestCase):
 class TestUpgradeInstructions(unittest.TestCase):
     """Установка программы предшествует решению об обновлении файлов проекта."""
 
-    INSTALL = "1. Обновите программу: `pipx upgrade lipi`."
-    UNCHANGED = "2. Правила и шаблоны не изменились — `lipi init` не нужен."
-    CHANGED = "2. Правила и шаблоны изменились — выполните `lipi init`."
+    INSTALL = "1. Upgrade Lipi with `pipx upgrade lipi`."
+    UNCHANGED = "2. The rules and templates are unchanged. You can skip `lipi init`."
+    CHANGED = "2. The rules and templates have changed. Run `lipi init`."
 
     def entry(self, steps, release="1.1.0"):
-        return ("## %s — 2026-01-01\n\n### Проекту при обновлении на %s\n\n%s\n"
+        return ("## %s — 2026-01-01\n\n### Upgrading your project for %s\n\n%s\n"
                 % (release, release, "\n".join(steps)))
 
     def test_changelog_upgrade_instructions(self):
@@ -149,7 +149,7 @@ class TestUpgradeInstructions(unittest.TestCase):
     def test_supported_install_commands_and_decisions(self):
         for release in ("1.1.0", "1.10.0"):
             for command in (self.INSTALL,
-                            "1. Обновите программу: `pipx install --force "
+                            "1. Upgrade Lipi with `pipx install --force "
                             "git+https://github.com/lipisutra/lipi@v%s`." % release):
                 for decision in (self.UNCHANGED, self.CHANGED):
                     with self.subTest(release=release, command=command, decision=decision):
@@ -157,21 +157,31 @@ class TestUpgradeInstructions(unittest.TestCase):
 
     def test_missing_install_or_update_first_fails(self):
         for steps in ((self.UNCHANGED,),
-                      ("1. Выполните `lipi init`.", self.INSTALL, self.CHANGED),
+                      ("1. Run `lipi init`.", self.INSTALL, self.CHANGED),
                       (self.INSTALL.replace("pipx upgrade lipi", "pipx install --force "
                        "git+https://github.com/lipisutra/lipi@v1.0.0"), self.UNCHANGED)):
             with self.subTest(steps=steps), self.assertRaisesRegex(AssertionError, "первый шаг"):
                 check_upgrade_instructions(self.entry(steps))
 
     def test_missing_or_contradictory_decision_fails(self):
-        for decision in ("", "2. Выполните `lipi init`.",
-                         self.UNCHANGED.replace("не изменились", "изменились"),
-                         self.CHANGED.replace("изменились", "не изменились")):
+        for decision in ("", "2. Run `lipi init`.",
+                         self.UNCHANGED.replace("are unchanged", "have changed"),
+                         self.CHANGED.replace("have changed", "are unchanged")):
             with self.subTest(decision=decision), self.assertRaisesRegex(AssertionError, "второй шаг"):
                 check_upgrade_instructions(self.entry((self.INSTALL, decision)))
 
+    def test_upgrade_section_requires_english_heading_and_steps(self):
+        valid = self.entry((self.INSTALL, self.CHANGED))
+        for expected, old in (
+            ("Upgrading your project", "Проекту при обновлении"),
+            (self.INSTALL, "1. Обновите программу: `pipx upgrade lipi`."),
+            (self.CHANGED, "2. Правила и шаблоны изменились — выполните `lipi init`."),
+        ):
+            with self.subTest(old=old), self.assertRaises(AssertionError):
+                check_upgrade_instructions(valid.replace(expected, old))
+
     def test_only_first_release_may_omit_upgrade_instructions(self):
-        first = "## 1.0.0 — первый выпуск\n\nОписание выпуска.\n"
+        first = "## 1.0.0 — First release\n\nRelease notes.\n"
         valid = self.entry((self.INSTALL, self.UNCHANGED), "1.2.0")
         check_upgrade_instructions(first)
         check_upgrade_instructions(valid + first)
@@ -179,7 +189,7 @@ class TestUpgradeInstructions(unittest.TestCase):
             with self.subTest(release=release), self.assertRaises(AssertionError):
                 check_upgrade_instructions(valid + self.entry((), release) + first)
         with self.assertRaisesRegex(AssertionError, "нет раздела"):
-            check_upgrade_instructions("## 1.0.1 — 2026-01-01\nОписание выпуска.\n")
+            check_upgrade_instructions("## 1.0.1 — 2026-01-01\nRelease notes.\n")
 
 
 class TestNoTemplateHistory(unittest.TestCase):

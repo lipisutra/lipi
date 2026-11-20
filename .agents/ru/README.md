@@ -130,16 +130,16 @@ lipi index
 Выпуск — тег `vX.Y.Z` на коммите с этой записью:
 
 1. У каждого выпуска после первого запись в `CHANGELOG.md` содержит
-   раздел «Проекту при обновлении». Он начинается с двух пунктов, каждый
+   раздел «Upgrading your project». Он начинается с двух пунктов, каждый
    на одной строке:
 
    ```text
-   1. Обновите программу: `pipx upgrade lipi`.
-   2. Правила и шаблоны не изменились — `lipi init` не нужен.
+   1. Upgrade Lipi with `pipx upgrade lipi`.
+   2. The rules and templates are unchanged. You can skip `lipi init`.
    ```
 
    Если правила или шаблоны изменились, второй пункт формулируется как
-   «2. Правила и шаблоны изменились — выполните `lipi init`.» Для установки
+   «2. The rules and templates have changed. Run `lipi init`.» Для установки
    точной версии можно указать команду
    `pipx install --force git+https://github.com/lipisutra/lipi@vX.Y.Z` с тегом
    этой записи. Остальные действия проекта идут после этих двух пунктов.

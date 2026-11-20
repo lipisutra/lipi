@@ -64,7 +64,11 @@ its heading row. T2, A4, and slice excerpts use these same lines. Neighboring
 text outside the region does not update it.
 
 Put a trace on the relevant entry point or the test that verifies the
-documented behavior. T2 reminds you to reread the target section when
+documented behavior. When marking a contract shared across components, use
+the same specific anchor where the behavior is produced, where it is
+consumed, and in the test that checks it, as applicable.
+
+T2 reminds you to reread the target section when
 changing code. A4 does so when Git history shows that the code is newer
 than the section. This applies to sections outside the documentation too.
 T2 and A4 skip targets by document ID. For A4, uncommitted changes to both
