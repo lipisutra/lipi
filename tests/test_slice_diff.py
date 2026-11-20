@@ -99,6 +99,29 @@ class SliceDiffContract(unittest.TestCase):
                 if kind != "tests":
                     self.assertIn("via", item)
 
+    def test_via_matches_published_1_1_0_with_two_targets(self):
+        self.write("docs/api.md", '# API\n\n## Read <a id="read-record"></a>\n\n'
+                   '## Summary <a id="summary"></a>\n')
+        targets = ("docs/api.md#summary", "docs/api.md#read-record")
+        support.set_config(self.root, entry=["def route"])
+        self.mark("src/provider.py", targets)
+        self.mark("src/reader.py", targets)
+        self.mark("src/router.py", targets, "def route():")
+        self.mark("tests/test_reader.py", targets, "def test_read():")
+        self.baseline()
+        self.change("src/provider.py")
+        code, out = support.git(self.root, "add", "src/provider.py")
+        self.assertEqual(code, 0, out)
+
+        for args in (("--diff", "HEAD"), ("--staged",)):
+            with self.subTest(args=args):
+                result = self.run_slice(*args)
+                for kind in ("entry", "code"):
+                    item, = self.items(result, kind)
+                    self.assertEqual(item["via"], "docs/api.md#read-record")
+                test_item, = self.items(result, "tests")
+                self.assertNotIn("via", test_item)
+
     def test_changes_prompt_review_without_asserting_related_code_is_wrong(self):
         self.mark("src/changed.py")
         self.mark("src/consumer.py")

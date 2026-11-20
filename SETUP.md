@@ -16,9 +16,12 @@ and images under `share/lipi/`, preserving their repository paths.
 Install the `lipi` command once per machine with [pipx](https://pipx.pypa.io/).
 
 ```bash
-pipx install git+https://github.com/lipisutra/lipi   # Install
-pipx upgrade lipi                                  # Upgrade
+pipx install git+https://github.com/lipisutra/lipi@v1   # Install the latest 1.x release
+pipx upgrade lipi                                      # Upgrade within 1.x
 ```
+
+To switch an existing pipx installation from the default branch or an exact tag
+to 1.x updates, run `pipx install --force git+https://github.com/lipisutra/lipi@v1` once.
 
 lipi requires Python 3.9 or later. To develop lipi, run
 `pipx install --editable .` from the cloned repository. The installed

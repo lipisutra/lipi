@@ -1,5 +1,9 @@
 # lipi releases
 
+## Unreleased
+
+- To switch an existing pipx installation from the default branch or an exact tag to 1.x updates, run `pipx install --force git+https://github.com/lipisutra/lipi@v1` once.
+
 ## 1.1.1 — 2026-11-20
 
 - Agent instructions explain when to follow a suggested repository search

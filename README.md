@@ -33,11 +33,11 @@ for release history and upgrade steps.
 Install once per machine with [pipx](https://pipx.pypa.io/).
 
 ```bash
-pipx install git+https://github.com/lipisutra/lipi
+pipx install git+https://github.com/lipisutra/lipi@v1
 ```
 
 lipi requires Python 3.9 or later. pipx uses it to create the environment.
-To upgrade to the latest version, run:
+To upgrade to the latest 1.x release, run:
 
 ```bash
 pipx upgrade lipi
