@@ -13,6 +13,7 @@ Read this documentation [in Russian](../ru/README.md).
 
 | Page | Contents |
 | --- | --- |
+| [Try one task](first-task.md) | Find an existing operation, connect a consumer, and check the right test |
 | [commands.md](commands.md) | Check, audit, update, and move commands, plus CI |
 | [workflow.md](workflow.md) | Workflow index files, the closure log, and regeneration |
 | [move.md](move.md) | Move a page, directory, or list of files and update references |
@@ -29,4 +30,5 @@ Read this documentation [in Russian](../ru/README.md).
 | [SETUP.md](../../SETUP.md) | Agent guide for initializing a new or existing project |
 | [rules.md](rules.md) | Rules and their rationale |
 | [CHANGELOG.md](../../CHANGELOG.md) | Release history and upgrade steps |
-| [.agents/README.md](https://github.com/lipisutra/lipi/blob/v1.0.0/.agents/README.md) | Agent instructions for changing lipi itself |
+| [Source files](source-files.md) | Command entry points and checker modules for contributors |
+| [Contributor instructions](../../.agents/README.md) | How to change Lipi itself |

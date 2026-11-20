@@ -1,6 +1,6 @@
 # lipi releases
 
-## 1.2.0 — Unreleased
+## 1.2.0 — 2026-11-20
 
 - `lipi check` now reports which managed files `lipi init` would add, update,
   or stop managing. After upgrading Lipi, projects with older rules can see
@@ -8,11 +8,15 @@
 - `lipi slice --diff` and `lipi slice --staged` label related locations when
   multiple targets are affected. JSON location items include all matching
   targets in `matched_targets` with the existing `via` values preserved.
+- The setup guide links to a walkthrough for existing projects. Managed
+  agent instructions explain when to read a linked assertion and run its test.
+- A symlink loop in a repository connection path now reports C1 on Python 3.13
+  and later, as it does on earlier supported versions.
 
 ### Upgrading your project
 
 1. Upgrade Lipi with `pipx upgrade lipi`.
-2. The rules and templates are unchanged. You can skip `lipi init`.
+2. The rules and templates have changed. Run `lipi init`.
 
 If V4 reports unapplied changes from earlier releases, preview them with
 `lipi init --dry-run`. Upgrade all checkers before configuring V4 in

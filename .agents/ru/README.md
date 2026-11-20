@@ -16,7 +16,7 @@
 | `src/lipi/locale/<язык>/templates/seed/` | заготовки проекта (`AGENTS.md`, `docs/`, `workflow/`), создаются только если их нет | исполнитель в проекте |
 | `src/lipi/cli.py` | команда `lipi` — точка входа пакета; вызывает остальные модули | — |
 | `src/lipi/check.py` | точка запуска чекера; в проекты не копируется (ADR-010) | — |
-| `src/lipi/checker/` | реализация чекера по ответственности; карта модулей — в README | — |
+| `src/lipi/checker/` | реализация чекера, см. [таблицу модулей](../../docs/ru/source-files.md#checker) | — |
 | `src/lipi/__init__.py` | единый источник версии правил, каркаса и чекера | — |
 | `src/lipi/init.py` | развёртывание и обновление проекта | — |
 | `src/lipi/collect.py` | сбор замечаний к lipi из проектов | — |
@@ -60,7 +60,7 @@ lipi ведётся по собственным правилам, без иск�
 Правило, шаблон и чекер описывают одно и то же с трёх сторон, поэтому
 меняются одним коммитом:
 
-1. Основание — замечание в [указателе](../../workflow/INDEX.md) или прямая
+1. Основание — замечание в [указателе](https://github.com/lipisutra/lipi/blob/master/workflow/INDEX.md) или прямая
    просьба. Трение из проектов сначала забирается: `python3 src/lipi/collect.py <проект>`.
 2. Правка `docs/{en,ru}/rules.md` (что и почему), шаблона в `src/lipi/locale/<язык>/templates/` (как это
    написано для исполнителя) и соответствующего модуля `src/lipi/checker/`
@@ -94,11 +94,11 @@ lipi ведётся по собственным правилам, без иск�
 
 К корневым страницам описания и справочникам в `docs/`
 ([оглавление](../../docs/ru/README.md)) применяются те же правила, что и в проектах:
-[locale/en/templates/lipi/common/documentation.md](../../src/lipi/locale/en/templates/lipi/common/documentation.md).
+[locale/en/templates/lipi/common/documentation.md](https://github.com/lipisutra/lipi/blob/master/src/lipi/locale/en/templates/lipi/common/documentation.md).
 
 ## Рабочие материалы <a id="workflow"></a>
 
-Правила — в [workflow/README.md](../../workflow/README.md). Замечание к lipi,
+Правила — в [workflow/README.md](https://github.com/lipisutra/lipi/blob/master/workflow/README.md). Замечание к lipi,
 найденное при работе здесь, создаётся так же, как в любом проекте:
 
 ```bash
@@ -115,7 +115,7 @@ lipi index
 ```
 
 Состав поставленного описания и `lipi guide` проверяет
-[`tests/check_package.py`](../../tests/check_package.py). После чистой установки pipx
+[`tests/check_package.py`](https://github.com/lipisutra/lipi/blob/master/tests/check_package.py). После чистой установки pipx
 запустите этот файл Python из установленного окружения, с `--source` на снимок
 той же ревизии. Запуск — вне репозитория и снимка, без `PYTHONPATH`;
 `--source` задаёт ожидаемые страницы и байты, а импорт идёт из установки.
@@ -126,7 +126,7 @@ lipi index
 
 Версия поднимается на первой задаче этапа, меняющей поведение: тогда же
 появляется запись в `CHANGELOG.md`
-([ADR-001](../../workflow/adr/adr-001-net-naslediya-sovmestimost-s-prezhnimi-versiyami.md)).
+([ADR-001](https://github.com/lipisutra/lipi/blob/master/workflow/adr/adr-001-net-naslediya-sovmestimost-s-prezhnimi-versiyami.md)).
 Выпуск — тег `vX.Y.Z` на коммите с этой записью:
 
 1. У каждого выпуска после первого запись в `CHANGELOG.md` содержит

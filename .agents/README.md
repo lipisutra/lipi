@@ -14,7 +14,7 @@ Use these instructions when changing lipi itself. To set up lipi in another proj
 | `src/lipi/locale/en/templates/lipi/` | Managed rules written to `.agents/lipi/` and the template for `.github/workflows/lipi.yml`, all in English |
 | `src/lipi/locale/<language>/templates/seed/` | Initial project files such as `AGENTS.md` and documentation and workflow pages |
 | `src/lipi/cli.py` | Entry point for the installed command |
-| `src/lipi/check.py`, `src/lipi/checker/` | Checker entry point and implementation. See the module table in the root README. |
+| `src/lipi/check.py`, `src/lipi/checker/` | Checker entry point and implementation. See the [checker module table](../docs/en/source-files.md#checker). |
 | `src/lipi/__init__.py` | Version shared by the checker, rules, and scaffolds |
 | `src/lipi/init.py` | Initial setup and updates to managed files |
 | `src/lipi/collect.py`, `src/lipi/migrate.py` | Collect feedback and convert existing workflow documents |
@@ -39,7 +39,7 @@ lipi follows its own project rules. From the clone, install it with `pipx instal
 
 Change a rule, its template, and its check in the same commit.
 
-1. Start with a request or an issue in the [workflow index](../workflow/INDEX.md). To collect feedback, run `python3 src/lipi/collect.py <project>` from this checkout.
+1. Start with a request or an issue in the [workflow index](https://github.com/lipisutra/lipi/blob/master/workflow/INDEX.md). To collect feedback, run `python3 src/lipi/collect.py <project>` from this checkout.
 2. Update `docs/{en,ru}/rules.md` for the rule and its rationale, the relevant template under `src/lipi/locale/` for the agent instructions, and the corresponding checker module under `src/lipi/checker/`.
 3. Cover a new check with a case in `tests/`.
 4. For a change in behavior, update `src/lipi/__init__.py` and `CHANGELOG.md` according to the [release procedure](#release).
@@ -52,11 +52,11 @@ To add an interface language, create a sibling of `src/lipi/locale/en/`. Each tr
 
 ## Documentation <a id="documentation"></a>
 
-The root documentation pages and the [reference](../docs/en/README.md) follow the same [documentation rules](../src/lipi/locale/en/templates/lipi/common/documentation.md) as other projects.
+The root documentation pages and the [reference](../docs/en/README.md) follow the same [documentation rules](https://github.com/lipisutra/lipi/blob/master/src/lipi/locale/en/templates/lipi/common/documentation.md) as other projects.
 
 ## Workflow documents <a id="workflow"></a>
 
-Follow the [workflow instructions](../workflow/README.md). Report friction encountered here with `lipi new iss "What got in the way" friction`.
+Follow the [workflow instructions](https://github.com/lipisutra/lipi/blob/master/workflow/README.md). Report friction encountered here with `lipi new iss "What got in the way" friction`.
 
 ## Checks <a id="checks"></a>
 
@@ -67,13 +67,13 @@ lipi audit
 lipi index
 ```
 
-After a clean pipx install, run [tests/check_package.py](../tests/check_package.py) with the installed environment's Python. Pass `--source` pointing to a snapshot of the same revision. Run outside the checkout and snapshot with `PYTHONPATH` unset. The test checks installed documentation and `lipi guide` against the snapshot and imports modules from the installation.
+After a clean pipx install, run [tests/check_package.py](https://github.com/lipisutra/lipi/blob/master/tests/check_package.py) with the installed environment's Python. Pass `--source` pointing to a snapshot of the same revision. Run outside the checkout and snapshot with `PYTHONPATH` unset. The test checks installed documentation and `lipi guide` against the snapshot and imports modules from the installation.
 
 Commit or publish when the user authorizes it.
 
 ## Release procedure <a id="release"></a>
 
-Bump the version on the first task in a release that changes behavior. Include the entry in `CHANGELOG.md` in the same commit. The `vX.Y.Z` tag identifies the release commit containing that entry. See [ADR-001](../workflow/adr/adr-001-net-naslediya-sovmestimost-s-prezhnimi-versiyami.md).
+Bump the version on the first task in a release that changes behavior. Include the entry in `CHANGELOG.md` in the same commit. The `vX.Y.Z` tag identifies the release commit containing that entry. See [ADR-001](https://github.com/lipisutra/lipi/blob/master/workflow/adr/adr-001-net-naslediya-sovmestimost-s-prezhnimi-versiyami.md).
 
 1. After the first release, include the required upgrade section in each entry. The release test expects the heading `Upgrading your project` and two numbered steps, each on its own line. The first upgrades the program and the second says whether to run `lipi init`. Follow this format:
 

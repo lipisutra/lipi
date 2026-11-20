@@ -30,6 +30,7 @@ from urllib.parse import unquote, urlsplit
 
 SOURCE = None
 EDITIONS = (Path("docs/en"), Path("docs/ru"))
+CONTRIBUTOR_GUIDES = (Path(".agents/README.md"), Path(".agents/ru/README.md"))
 ASSETS = Path("docs/assets")
 LOGO = ASSETS / "logo.png"
 
@@ -94,6 +95,7 @@ class InstalledPackage(unittest.TestCase):
         if any(cls.shared.is_relative_to(root) for root in (cls.source, checkout)):
             raise AssertionError("share/lipi должен находиться вне исходников")
         cls.expected = {Path(name) for name in ("README.md", "SETUP.md", "CHANGELOG.md")}
+        cls.expected.update(CONTRIBUTOR_GUIDES)
         cls.expected.update(path.relative_to(cls.source)
                             for path in (cls.source / "docs").rglob("*.md"))
         for edition in EDITIONS:
@@ -176,6 +178,9 @@ class InstalledPackage(unittest.TestCase):
 
         entry_links = {(Path(page), edition / "README.md")
                        for page in ("README.md", "SETUP.md") for edition in EDITIONS}
+        entry_links.add((Path("README.md"), CONTRIBUTOR_GUIDES[0]))
+        entry_links.update((edition / "README.md", guide)
+                           for edition, guide in zip(EDITIONS, CONTRIBUTOR_GUIDES))
         edition_checks = dict.fromkeys(EDITIONS, 0)
         page_names = {relative.name for relative in self.expected}
         checked = external = outside = 0
@@ -231,7 +236,7 @@ class InstalledPackage(unittest.TestCase):
                             edition_checks[edition] += 1
                     checked += 1
         self.assertTrue(logo_in_readme, "README.md не ссылается на %s как на изображение" % LOGO)
-        self.assertFalse(entry_links, "Нет ссылок из корневых страниц на оглавления: %s" % entry_links)
+        self.assertFalse(entry_links, "Отсутствуют ссылки между точками входа: %s" % entry_links)
         for edition, count in edition_checks.items():
             self.assertGreater(count, 0, "Нет ссылок между страницами из %s" % edition)
         print("\nСсылки и изображения: проверено %d (из docs/en: %d, из docs/ru: %d); "

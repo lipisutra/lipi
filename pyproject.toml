@@ -29,6 +29,8 @@ version = {attr = "lipi.__version__"}
 # Полное описание сохраняет пути репозитория и относительные ссылки.
 # `lipi guide` читает корневой SETUP.md из share/lipi.
 "share/lipi" = ["README.md", "SETUP.md", "CHANGELOG.md"]
+"share/lipi/.agents" = [".agents/README.md"]
+"share/lipi/.agents/ru" = [".agents/ru/README.md"]
 "share/lipi/docs/en" = ["docs/en/*.md"]
 "share/lipi/docs/ru" = ["docs/ru/*.md"]
 "share/lipi/docs/assets" = ["docs/assets/logo.png"]

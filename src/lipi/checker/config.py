@@ -1,5 +1,6 @@
 """Настройки проекта и схемы файлов состояния."""
 import difflib
+import errno
 import json
 import os
 import re
@@ -493,19 +494,30 @@ def _check_repo_page_dirs(root, alias, entries):
     return errors
 
 
+def _resolve_repo_root(path):
+    try:
+        return path.resolve(strict=True)
+    except OSError as error:
+        # Non-strict resolution can hide a symlink loop on Python 3.13+.
+        # On Windows ERROR_CANT_RESOLVE_FILENAME has winerror 1921.
+        if error.errno == errno.ELOOP or getattr(error, "winerror", None) == 1921:
+            raise
+        return path.resolve()
+
+
 # @trace docs/ru/codes.md#c1
 def _check_repo_roots(root, repos):
     """Физические корни уникальны; отсутствие соседа не ошибка настроек."""
     errors = []
     try:
-        own_root = root.resolve()
+        own_root = _resolve_repo_root(root)
     except (OSError, RuntimeError, ValueError) as error:
         return [(CONFIG_NAME, tr("checker.config.repos_root_unresolved") % error)]
     own_identity = _path_identity(own_root)
     seen = {}
     for alias, item in repos.items():
         try:
-            directory = (own_root / item["path"]).resolve()
+            directory = _resolve_repo_root(own_root / item["path"])
         except (OSError, RuntimeError, ValueError) as error:
             errors.append((CONFIG_NAME, tr("checker.config.repo_path_unresolved") % (
                 alias, error)))

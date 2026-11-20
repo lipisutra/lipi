@@ -35,6 +35,8 @@ rules in [Workflow documents](workflow.md).
   search the code directly.
 - After editing code, review its links with `lipi slice --diff HEAD` or
   `lipi slice --staged`. The slice lists things to check.
+  If your conclusion depends on a linked test, read its assertion and run
+  the test before reporting the behavior as verified.
 - Create a plan, audit, or discussion when the user asks for one. You can
   complete a task without creating a workflow document.
 - Update documentation about changed behavior in the same commit.

@@ -216,6 +216,9 @@ issue, and `lipi collect` imports it alongside issues in
 
 ## Connect neighboring repositories <a id="repos"></a>
 
+For two example `lipi.json` files and commands to run from each clone, see
+the [two-repository walkthrough](docs/en/first-task.md#repos).
+
 Configure [`repos` connections](docs/en/settings.md#repos) for shared
 documentation or consumers in a neighboring directory. `docs` and
 `decisions` permit external targets. `code` and `tests` permit reverse
