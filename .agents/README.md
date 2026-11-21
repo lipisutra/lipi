@@ -65,7 +65,7 @@ Follow the [workflow instructions](https://github.com/lipisutra/lipi/blob/master
 - For wording changes in documentation or contributor instructions, run `lipi check` and `lipi audit`. If a test checks an edited example, run that test too.
 - For wording changes in managed templates, also apply them with `lipi init` and verify that a second `lipi init --dry-run` proposes no changes.
 - For behavior changes, run tests for the affected commands and their callers. Widen the run when shared code puts other commands at risk. Run `lipi index` when workflow headers change.
-- Run the full suite (`python3 -m unittest discover -s tests`) at agreed checkpoints and on the release candidate in both interface languages before tagging. Reuse a passing run on the same tree.
+- Run the full suite (`python3 -m unittest discover -s tests`) at agreed checkpoints and in both interface languages before tagging. For each language, reuse a passing run on the same tree. If only the release date, work item statuses or results, or the generated workflow index have changed since that run, it still counts. For those changes, run `lipi check`, `lipi audit`, and `python3 -m unittest tests.test_release`.
 
 After a clean pipx install, run [tests/check_package.py](https://github.com/lipisutra/lipi/blob/master/tests/check_package.py) with the installed environment's Python. Pass `--source` pointing to a snapshot of the same revision. Run outside the checkout and snapshot with `PYTHONPATH` unset. The test checks installed documentation and `lipi guide` against the snapshot and imports modules from the installation.
 
