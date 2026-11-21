@@ -190,6 +190,18 @@ apply within its [read scope](settings.md#repos), including pages in `page_dirs`
 A neighbor without `lipi.json` supports only exact `path.md#anchor` targets
 and supplies no backlinks.
 
+For an explicit Markdown address in a configured connection, a miss has exit
+code 1 and JSON error `not-found`. The `reason` field identifies the next step:
+
+| `reason` | What to check |
+| --- | --- |
+| `scope-not-enabled` | Enable the required scope (`docs` or `decisions`) in the connection’s `read`. |
+| `outside-scope` | Add the directory to `page_dirs` if it belongs in the documentation scope. Its contents are not inspected. |
+| `page-not-found` | Check the file path within the configured scope. |
+| `anchor-not-found` | Open the page and check the anchor name. |
+
+An unavailable repository yields a partial slice with `incomplete: true` and exit code 0.
+
 When a local free-text query returns `not-found`, lipi suggests a command
 for each available direct connection with `docs` in `read` and its own
 `lipi.json`, in `repos` order. For `lipi slice 'export report'`, one suggestion

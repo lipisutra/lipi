@@ -5,6 +5,7 @@
 ## Сейчас
 
 - [ISS-025](issue/2026/iss-025-lipi-check-bez-lipi-json-sozdaet.md): проверка проекта без настроек.
+- [ISS-026](issue/2026/iss-026-poyasnyat-kogda-yavnyy-put-k-stranice.md): причины промаха по адресу у соседа.
 
 ## Дальше
 

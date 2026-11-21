@@ -2991,6 +2991,10 @@
     "source_sha256": "81eee564e97f2572194faf5d5bf5efbf4a0e69115769c859f1432dee097de3b2",
     "text": "состояние дерева неизвестно"
   },
+  "repo.target.anchor_not_found": {
+    "source_sha256": "f6559d0840f06401063d11591caa6084d929e8e89327db06c2a89642bc4152ab",
+    "text": "На странице нет якоря #%s. Проверьте имя якоря."
+  },
   "repo.target.foreign_code": {
     "source_sha256": "4dade8bb1ccab207a0c4eacd447e881ed2d0e3916722960f24976de48dadeafa",
     "text": "внешние файлы кода не поддерживаются"
@@ -2998,6 +3002,18 @@
   "repo.target.no_config": {
     "source_sha256": "1d8441b9f4156a633c44dd9b61ae8bde8b074d2bc824fe8afab51d3d6bf58782",
     "text": "нет lipi.json: доступны только цели путь#якорь"
+  },
+  "repo.target.outside_scope": {
+    "source_sha256": "49ccee667411850c67b9f2f9088baa12af652bdf47ae2fc8b6ee583bd38faee9",
+    "text": "Каталог %s вне области описания. Чтобы включить его, добавьте его в repos.%s.page_dirs."
+  },
+  "repo.target.page_not_found": {
+    "source_sha256": "f227c8466b7a52f3696fb07b7d4d0639ad0bd241882c9503e847a485de9e6667",
+    "text": "Страница не найдена в настроенной области чтения. Проверьте путь к файлу."
+  },
+  "repo.target.scope_not_enabled": {
+    "source_sha256": "9bd00e7a01c79bffc5b835ece1413fd97e4ef2f85a98271935b29990c00113cb",
+    "text": "Для чтения этой страницы добавьте %s в repos.%s.read."
   },
   "repo.target.unavailable": {
     "source_sha256": "be3b4c7cafb9d4045f8d44f371e3faec6567830d311f87916e954b392392c348",

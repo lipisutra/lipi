@@ -182,6 +182,21 @@ class Source:
         pr = self.project
         return tuple(base for base in (pr.docs, pr.descr, *pr.editions.values()) if base is not None)
 
+    # @trace docs/ru/slice-output.md#repo-search
+    @cached_property
+    def declared_decisions(self):
+        workflow = self.cfg.get('workflow')
+        directory = self.cfg.get('decisions', Path(workflow) / 'adr' if workflow else None)
+        return self.project.lexical_path(directory) if directory else None
+
+    @cached_property
+    def declared_page_roots(self):
+        """Page directories named in settings, including ones that do not yet exist."""
+        paths = (self.cfg.get('docs'), self.cfg.get('description'),
+                 *self.cfg.get('languages', {}).get('editions', {}).values(),
+                 *self._page_dirs)
+        return tuple(self.project.lexical_path(path) for path in paths if path)
+
     @cached_property
     def page_dirs(self):
         roots = []
@@ -200,9 +215,8 @@ class Source:
     @cached_property
     def _archive_roots(self):
         workflow = self.cfg.get('workflow')
-        decisions = self.cfg.get('decisions', str(Path(workflow) / 'adr') if workflow else None)
-        bases = (self.project.wf, self.project.decisions,
-                 *(self.project.lexical_path(base) for base in (workflow, decisions) if base))
+        bases = (self.project.wf, self.project.decisions, self.declared_decisions,
+                 self.project.lexical_path(workflow) if workflow else None)
         return (self.root / HISTORY_DIR, *(base / HISTORY_DIR for base in bases if base))
 
     def is_archived(self, path):

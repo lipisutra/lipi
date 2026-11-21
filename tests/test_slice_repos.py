@@ -322,6 +322,72 @@ class RepositorySlices(support.Case):
         self.assertEqual({item['repo'] for item in result['candidates']}, {'core'})
         self.assertTrue(all('::' not in item['target'] for item in result['candidates']))
 
+    # @trace docs/ru/slice-output.md#repo-search
+    def test_explicit_page_address_explains_the_action_in_text_and_json(self):
+        self.decision(1)
+        support.w(self.neighbor / 'notes/export.md', '# Export\n')
+        cases = (
+            ('notes/export.md', ['docs'], 'outside-scope', 'repos.core.page_dirs'),
+            ('notes/absent.md#x', ['docs'], 'outside-scope', 'repos.core.page_dirs'),
+            ('docs/api.md#request', ['decisions'], 'scope-not-enabled', 'docs'),
+            ('decisions/adr-001-choice.md', ['docs'], 'scope-not-enabled', 'decisions'),
+            ('docs/missing.md', ['docs'], 'page-not-found', 'file path'),
+            ('docs/api.md#absent', ['docs'], 'anchor-not-found', '#absent'),
+        )
+        for address, read, reason, hint in cases:
+            with self.subTest(address=address):
+                support.set_config(self.root, repos={'core': {
+                    'path': '../' + self.neighbor.name, 'read': read}})
+                query = 'core::' + address
+                result = self.response(query, expected=1)
+                self.assertEqual((result['schema'], result['error'], result['reason']),
+                                 (1, 'not-found', reason))
+                self.assertIn(hint, result['message'])
+                if reason == 'scope-not-enabled':
+                    self.assertIn('repos.core.read', result['message'])
+                status, text = support.cli(self.root, 'slice', query)
+                self.assertEqual(status, 1)
+                self.assertIn(support.localized(hint, 'путь' if hint == 'file path' else hint), text)
+
+        support.set_config(self.root, repos={'core': {'path': '../' + self.neighbor.name,
+                                                     'read': ['docs'], 'page_dirs': ['notes', 'future']}})
+        self.assertEqual(self.response('core::notes/export.md')['target']['found'], 'exact')
+        self.assertEqual(self.response('core::future/export.md', expected=1)['reason'], 'page-not-found')
+
+    def test_configured_decision_directory_keeps_its_scope_through_an_internal_symlink(self):
+        self.decision(1)
+        directory = self.neighbor / 'decisions'
+        directory.rename(self.neighbor / 'policies')
+        try:
+            directory.symlink_to('policies', target_is_directory=True)
+        except OSError as error:
+            self.skipTest(str(error))
+        page = 'decisions/adr-001-choice.md'
+        support.w(self.neighbor / page, '# Choice\n\n## Rule <a id="rule"></a>\n')
+        for read in (['docs', 'decisions'], ['docs']):
+            support.set_config(self.root, repos={'core': {'path': '../' + self.neighbor.name,
+                                                         'read': read}})
+            for suffix in ('', '#rule'):
+                with self.subTest(read=read, suffix=suffix):
+                    query = 'core::' + page + suffix
+                    if 'decisions' in read:
+                        self.assertEqual(self.response(query)['target']['found'], 'exact')
+                    else:
+                        result = self.response(query, expected=1)
+                        self.assertEqual(result['reason'], 'scope-not-enabled')
+                        self.assertIn('decisions', result['message'])
+
+    def test_outside_scope_does_not_probe_the_requested_file(self):
+        from lipi.repo_index import RepoIndex
+        pr = Project(self.root, load_config(self.root, None))
+        index = RepoIndex(pr)
+        source = index.sources.get('core')
+        with patch.object(source, 'resolve_path', side_effect=AssertionError('out-of-scope probe')), \
+                patch.object(source.project, 'file_path', side_effect=AssertionError('out-of-scope probe')):
+            for suffix in ('', '#row'):
+                _, error = index.resolve('core::notes/private.md' + suffix)
+                self.assertEqual(error['reason'], 'outside-scope')
+
     def test_external_not_found_explains_work_ids_bare_names_and_denied_decisions(self):
         self.decision(1)
         for query in ('core::ADR-999', 'core::absent', 'core::ISS-001', 'core::ADR-001'):

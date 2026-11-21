@@ -1,12 +1,13 @@
 """Общий индекс прямых подключений для среза и карты."""
 
 import re
+from pathlib import Path
 from urllib.parse import unquote
 
 from .i18n import tr
 from .checker.config import is_configured_test_file
 from .checker.conventions import CODE_EXT, K_REFINES, K_STATUS, RE_LINK
-from .checker.model import anchor_region, mask_code
+from .checker.model import anchor_region, is_within, mask_code
 from .checker.targets import (
     _decision_targets, _external_path_kind, normalize_work_id, resolve_mark,
 )
@@ -102,6 +103,41 @@ class _NeighborIndex(SliceIndex):
                     or _external_path_kind(source, safe) not in source.read):
                 continue
             self.add_page(safe, work_by_path.get(safe))
+
+    # @trace docs/ru/slice-output.md#repo-search
+    def page_address_error(self, relative, anchor):
+        """Explain an explicit address using the connection's scope, then its page index."""
+        source = self.source
+        path = self.pr.lexical_path(relative)
+        excluded = {'message': tr('repo.target.unavailable')}
+        if relative.is_absolute() or not source._path_allowed(path):
+            return excluded
+        if is_within(path, source.declared_decisions):
+            kind = 'decisions'
+        else:
+            kind = _external_path_kind(source, path)
+        if kind is None:
+            if path.name == 'AGENTS.md' or is_within(path, source.root / '.agents'):
+                return excluded
+            if any(is_within(path, base) for base in source.declared_page_roots):
+                kind = 'docs'
+        if kind == 'work':
+            return excluded
+        scope = kind or 'docs'
+        if scope not in source.read:
+            return {'reason': 'scope-not-enabled',
+                    'message': tr('repo.target.scope_not_enabled') % (scope, source.name)}
+        if kind is None:
+            directory = self.pr.rel(path.parent)
+            return {'reason': 'outside-scope',
+                    'message': tr('repo.target.outside_scope') % (directory, source.name)}
+        page_id = self.page_ids.get(source.resolve_path(path))
+        if page_id is None:
+            return {'reason': 'page-not-found', 'message': tr('repo.target.page_not_found')}
+        if anchor and unquote(anchor) not in self.nodes[page_id]['page'].anchors:
+            return {'reason': 'anchor-not-found',
+                    'message': tr('repo.target.anchor_not_found') % unquote(anchor)}
+        return None
 
     def _walk_error(self, error):
         self.source.mark_unavailable(tr('repo.directory.unreadable') % error)
@@ -352,6 +388,13 @@ class RepoIndex:
         index = self._neighbors[repo]
         if not source.has_config and '#' not in local:
             return None, dict(error, message=tr('repo.target.no_config'))
+        # @trace docs/ru/slice-output.md#repo-search
+        page, _, anchor = local.partition('#')
+        relative = Path(unquote(page))
+        if source.has_config and relative.suffix.lower() == '.md':
+            problem = index.page_address_error(relative, anchor)
+            if problem:
+                return None, dict(error, **problem)
         if '#' in local or WORK_ID.fullmatch(local):
             aid = self.mark(query)
             if source.state == 'unavailable':

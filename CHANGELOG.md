@@ -5,6 +5,9 @@
 - Without a settings file, `lipi check` and `lipi audit` can check existing
   documentation and leave an unrelated `workflow/` directory untouched.
   Run `lipi init` to configure the project.
+- For an explicit Markdown address in a connected repository, `lipi slice`
+  explains which read setting, file path, or anchor to check. JSON includes
+  the cause in `reason` (schema 1).
 
 ### Upgrading your project
 

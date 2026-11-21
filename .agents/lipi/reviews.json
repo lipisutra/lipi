@@ -40,22 +40,22 @@
       }
     },
     {
-      "head": "29d230059421580e936a1e13886dfce398eff479",
-      "id": "4f2b0dd524943ba0277a084de53f556639d83db66db01ab9837c537b2c69a77a",
-      "reason": "Вынесенный is_configured_test_file по-прежнему применяет имя слоя tests и маски имён из настроек соседа. Проверка исходного и разрешённого пути допускает тестовые места при read: tests и обычные места при read: code, что соответствует описанию охвата карты.",
+      "head": "3d228a7424de60cecbcd2da7ddf8899eaf8db9d5",
+      "id": "54e8d116476eec4a60bda035d635d88c039600854d6e4d8cd176bffe48af765b",
+      "reason": "run_project_checks запускается позже, а T1 по-прежнему делегируется scan_code. Ветка без настроек отключает каталог работ и управляет запуском проверки, сохраняя правила поиска меток, разрешения доступных целей и уровни T1.",
       "relation": "trace",
-      "reviewed_at": "2026-11-21T10:07:49Z",
-      "reviewer": "audit_z4",
+      "reviewed_at": "2026-11-21T11:46:10Z",
+      "reviewer": "verify_025",
       "source": {
         "kind": "trace",
-        "path": "src/lipi/repo_index.py",
-        "sha256": "f55b89bd412f838d5d7fb484a4f1d926dd71e898da2b3ffcb89d0f5b0b99b1b8"
+        "path": "src/lipi/checker/runner.py",
+        "sha256": "7390df3dd206a20f55b7cf6fe484a93b20d7c6570ce15003bbc6fd015797d1d6"
       },
       "target": {
-        "anchor": "repos",
+        "anchor": "t1",
         "kind": "anchor",
-        "path": "docs/ru/map.md",
-        "sha256": "3a26d4f6cf1358ac7413233dda40adf0bfe8c29810c3f172c151a991055ad62d"
+        "path": "docs/ru/codes.md",
+        "sha256": "c167de352c222e9bfe02c42a09a57d06c004c63bdec4dfadc85ae2196273d7c7"
       }
     },
     {
@@ -116,6 +116,25 @@
       }
     },
     {
+      "head": "3d228a7424de60cecbcd2da7ddf8899eaf8db9d5",
+      "id": "818be86cdd893c85ff0134ad25c58cb6126c16c5d1b49f040f68922a9bea82a3",
+      "reason": "Пустой lipi.json подключает workflow для теста предела Closed. Отдельный сценарий W11 по-прежнему проверяет расхождение с годом из Created и требует предупреждение с командой lipi mv для переноса целого контейнера AUD.",
+      "relation": "trace",
+      "reviewed_at": "2026-11-21T11:49:46Z",
+      "reviewer": "verify_025",
+      "source": {
+        "kind": "trace",
+        "path": "tests/test_workflow_layout.py",
+        "sha256": "53a7f3c87401e2cdcd79ccfbac32885bf902a2d01bc93121dfb88fdbdcdd40f5"
+      },
+      "target": {
+        "anchor": "w11",
+        "kind": "anchor",
+        "path": "docs/ru/codes.md",
+        "sha256": "d1f0477b3757aebf6fb96145574661953e4021ad92db5a16d977ae61d4c94209"
+      }
+    },
+    {
       "head": "ecc9b1384f8377c9d05ba5443c9025d737c3d379",
       "id": "8ce3999fb2115e9f5a40d4e4028e88cfcbe8237c49ff58c970d97cb23fc38d8f",
       "reason": "D6 по-прежнему проверяет covers через тот же resolve_mark, что и T1. Из decision_id выделено распознавание пути для снимков Git, а нормализация ADR, исключения и разрешение внешних якорей с T4 для недоступных источников сохранены.",
@@ -154,41 +173,22 @@
       }
     },
     {
-      "head": "29d230059421580e936a1e13886dfce398eff479",
-      "id": "9f1c66d838838e04a701633821dcb515d1313ba7bbaad22db899839d5eb18a94",
-      "reason": "Подсказки для локального промаха сохраняют исходную фразу и строятся в порядке подключений только для доступных соседей с docs и lipi.json. Фильтрация и проверка ошибки происходят без поиска у соседа.",
+      "head": "3d228a7424de60cecbcd2da7ddf8899eaf8db9d5",
+      "id": "b5b0d87c05044109d99d0ef11ef0a89b638f7dcc187d2b9ba0beb75080e53d4e",
+      "reason": "Пустой lipi.json подключает workflow для теста предела Closed. Тесты W10 по-прежнему принимают раскладку типа по годам и плоские ADR и feedback, а за PLN без года и ADR в каталоге года требуют ошибку W10.",
       "relation": "trace",
-      "reviewed_at": "2026-11-21T10:07:54Z",
-      "reviewer": "summary_z4",
+      "reviewed_at": "2026-11-21T11:49:44Z",
+      "reviewer": "verify_025",
       "source": {
         "kind": "trace",
-        "path": "src/lipi/repo_slice.py",
-        "sha256": "5107526899892cd2a1e0100308b57b02d9a18e0e391da62cfa6cb124a089bb17"
+        "path": "tests/test_workflow_layout.py",
+        "sha256": "53a7f3c87401e2cdcd79ccfbac32885bf902a2d01bc93121dfb88fdbdcdd40f5"
       },
       "target": {
-        "anchor": "repo-search",
+        "anchor": "w10",
         "kind": "anchor",
-        "path": "docs/ru/slice-output.md",
-        "sha256": "0ef56884962479810aa1236cb07dc982d1adf220f4cdbf6f2ff88e1810a40e4f"
-      }
-    },
-    {
-      "head": "29d230059421580e936a1e13886dfce398eff479",
-      "id": "b51abebeface1eee1d58c2963162369c705af9879f93be70ee0817aab72ac377",
-      "reason": "Индекс копирует данные ролей только для сохранённых целей после исключения недоступных источников. Карта берёт места из by_target и группирует их по репозиторию, пути и строке, поэтому роли не добавляют строки или счётчики, а исключённый источник не даёт мест.",
-      "relation": "trace",
-      "reviewed_at": "2026-11-21T10:07:51Z",
-      "reviewer": "audit_z4",
-      "source": {
-        "kind": "trace",
-        "path": "src/lipi/repo_index.py",
-        "sha256": "9f3ea8b06749a871bf01a9d47c05da04299168aa6b2e281b4372b7525cf1aec0"
-      },
-      "target": {
-        "anchor": "repos",
-        "kind": "anchor",
-        "path": "docs/ru/map.md",
-        "sha256": "3a26d4f6cf1358ac7413233dda40adf0bfe8c29810c3f172c151a991055ad62d"
+        "path": "docs/ru/codes.md",
+        "sha256": "3dbc9187d84ca7404c6367a822b91137c0c4897b8e6404d7e725382211b9d111"
       }
     },
     {
@@ -208,6 +208,25 @@
         "kind": "anchor",
         "path": "docs/ru/slice.md",
         "sha256": "e49e86dc621dd0116edc88bbec7eb6fefcc0ee13b7773778e409b5fdb0dd1702"
+      }
+    },
+    {
+      "head": "3d228a7424de60cecbcd2da7ddf8899eaf8db9d5",
+      "id": "f98baf65e231b0cd3991fffe0f4de1ff10cbb1ec72082196f818c5313244496c",
+      "reason": "Карта по-прежнему добавляет внешние строки по прямым меткам своего кода и тестов, а обратные места — из прямых подключений с нужной областью чтения. Уточнение отказов для явно запрошенных страниц работает в разрешении цели среза. Правила построения строк, охват чтения и метаданные карты соответствуют описанию.",
+      "relation": "trace",
+      "reviewed_at": "2026-11-21T11:46:59Z",
+      "reviewer": "verify_026",
+      "source": {
+        "kind": "trace",
+        "path": "src/lipi/repo_index.py",
+        "sha256": "769a397939b8dff29903ca009784c08c19126ab1187650047222ba270acf9006"
+      },
+      "target": {
+        "anchor": "repos",
+        "kind": "anchor",
+        "path": "docs/ru/map.md",
+        "sha256": "3a26d4f6cf1358ac7413233dda40adf0bfe8c29810c3f172c151a991055ad62d"
       }
     }
   ],

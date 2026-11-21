@@ -227,7 +227,7 @@ Connection fields appear only with `repos`. They use the same metadata as the
   External code files, work items other than decisions, and agent instructions
   are unsupported.
 - An unknown connection or missing or disallowed target exits with
-  1 and returns `error: not-found` with the reason in `message`.
+  1 and returns `error: not-found` with a `message`. Explicit Markdown addresses can also return a [machine-readable reason](slice-output.md#repo-search).
   Ambiguity uses `ambiguous`. Refusals for a work item ID or search
   also give a reason. Candidates have `repo`. An invalid invocation
   or local C1 exits with 2.
