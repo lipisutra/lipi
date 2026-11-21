@@ -91,10 +91,13 @@ A shared marker explains the link. Open the code to establish which path
 actually calls the operation. A reader can accept a new optional field
 while the screen continues to show only the old fields. [Diff slices](slice-diff.md#response).
 
-For a test of revision selection, make revision B current, give A and B
-different labels, and request A. Assert that the returned label is A's.
-An assertion on an echoed request ID would also pass if the service returned
-B's content. Run the test if your conclusion depends on this behavior.
+**What would the user see if the promise holds, and what plausible mistake would make your test fail?**
+
+Give saved revision A the label “Spring” and current revision B the label
+“Summer”. Open A and check that the user sees “Spring” on screen. Run the
+service test that requests A and checks for “Spring” in the label field. If
+the service always reads the current revision, the test should fail on
+“Summer” even if the response echoes A's ID.
 
 If you later need to find Markdown pages outside a neighbor's documentation
 directory, add [`page_dirs`](settings.md#repos) to that connection and
