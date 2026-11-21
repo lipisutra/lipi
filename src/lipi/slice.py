@@ -143,7 +143,7 @@ def main(argv=None):
         print(json.dumps(selected, ensure_ascii=False))
     else:
         target_path = _external_title_path(project, response.get('target', {}), cwd)
-        print(render_text(response, target_path=target_path, selected_blocks=selected.get('blocks')))
+        print(render_text(response, target_path=target_path, selected_response=selected))
     return code
 
 

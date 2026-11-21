@@ -3403,6 +3403,70 @@
     "source_sha256": "b2f51b91daca0d74300ad883a01d1f98226a7ba9864e4acb5e687b0458915392",
     "text": "срез по изменениям: %s"
   },
+  "slice.diff.place.before": {
+    "source_sha256": "a2a74052d93282033498752e91a419ba4a563d11a28bfbabbf9ae546f64d7bdc",
+    "text": "до изменений"
+  },
+  "slice.diff.reason.code-change": {
+    "source_sha256": "a88f6a76960bd2722dff97c8b83593fdd5746eaaf15ed66d5a6a60b124b71dfb",
+    "text": "изменение кода"
+  },
+  "slice.diff.reason.contract-change": {
+    "source_sha256": "a3de4694e8012f3cedc5c62902d4d144f029284157b7c55aa407ccb306b7c9c5",
+    "text": "ссылка на изменённый раздел"
+  },
+  "slice.diff.reason.decision-number": {
+    "source_sha256": "bee9a5ac86f95fa8b9a2e2a71a30d51fc3eec4daa0d63333b4c9f9ce461413c2",
+    "text": "ссылка по номеру ADR"
+  },
+  "slice.diff.reason.link-added": {
+    "source_sha256": "3dfc27c53eaa846482c5e7e5401ed6412a7bd97fe2b8a037d7576acddfc3c8ed",
+    "text": "ссылка добавлена"
+  },
+  "slice.diff.reason.link-removed": {
+    "source_sha256": "2f82b3902c2f7132413447b5293c61464bf7decf69b66282278489485e5b2677",
+    "text": "ссылка убрана"
+  },
+  "slice.diff.reason.link-to-deleted": {
+    "source_sha256": "35bba4c7ec26fbe924498b0913e99f9f3caaad4b57c2d9d5da67bab507836e84",
+    "text": "ссылка на удалённую цель"
+  },
+  "slice.diff.reason.new-link-to-deleted": {
+    "source_sha256": "659a4afa52bbdcbfdc41fc519cd22d1c32e19e0f74563a0cd6ef325609553574",
+    "text": "новая ссылка на удалённую цель"
+  },
+  "slice.diff.section.after": {
+    "source_sha256": "7b68fe5510851da3d89100c569d3265e044d8656d95750c376b7a0972dea7330",
+    "text": "После"
+  },
+  "slice.diff.section.after.absent": {
+    "source_sha256": "e73ef9fa03db0187dc82b925d4da7f77658d512f24ab5e746e62bbfedf8d1d5a",
+    "text": "После: раздел отсутствует"
+  },
+  "slice.diff.section.before": {
+    "source_sha256": "9bb725005055412c75a8e8d1fb5a0780595174ac8bbe5a24f768647bd4e4debe",
+    "text": "До"
+  },
+  "slice.diff.section.before.absent": {
+    "source_sha256": "5530cfc4e5e448d40457f0e192a1be9bb920e81651c57498e8daa00ee23e60e3",
+    "text": "До: раздел отсутствует"
+  },
+  "slice.diff.section.lines-omitted": {
+    "source_sha256": "2af1b3561f23a55cd4c567b4696030ae90173a879c0247920501efc1409e4371",
+    "text": "Пропущено строк (до: %d, после: %d)"
+  },
+  "slice.diff.section.no-links": {
+    "source_sha256": "d13ab27af06dce590a22c381d807143593cc4bc262bff77f1aeeddf2f2d41a2c",
+    "text": "В просмотренных источниках связанных мест не найдено"
+  },
+  "slice.diff.sections": {
+    "source_sha256": "837b14540faff54ed92e03c66b1e37c9c41ec0863fc60ab7f487effd62b1a7c8",
+    "text": "Изменённые разделы"
+  },
+  "slice.diff.sections_omitted": {
+    "source_sha256": "f5b57ab4ce4b1dbc835c2957cca61be20a9f74fbd804219d25c78dec4c3e563c",
+    "text": "Пропущено изменённых разделов: %d"
+  },
   "slice.diff.title": {
     "source_sha256": "16a1ba9429b1e0af83358d3deaa44542b65f404a98ae5db2f1919da014c65d85",
     "text": "проверьте связанные места"
@@ -3456,32 +3520,32 @@
     "text": "lipi slice — срез карты проекта под одну задачу, без записи файлов."
   },
   "slice.help.diff": {
-    "source_sha256": "3ade1b5a3dd17f00e585978e218b190af5dc047412e6856b7ab9693686fc7e5c",
-    "text": "связи изменённого кода относительно ревизии Git"
+    "source_sha256": "511446d35915a3d8745e5b0ea3a42c530eb3ad71d87f42b74bf3248ee8f67455",
+    "text": "показать изменения кода и договоров относительно ревизии Git"
   },
   "slice.help.epilog": {
     "source_sha256": "48945a8e3df44665901547fe3086b9fd6180f48da4b84cac033eafbbfb54b2d2",
     "text": "Форма ответа и примеры — docs/ru/slice.md. Сигналы сохраняются при любом --only. Метки связывают перечисленные места в тестах с целями среза. Какое поведение проверяет тест, видно по его утверждениям."
   },
   "slice.help.full": {
-    "source_sha256": "1e3d4dbccf4acf74244efda201934bc978eca76f96ec58a755a0e3db951949fa",
-    "text": "полная выдержка вне предела остальных блоков"
+    "source_sha256": "a1e9e7d58a175fab88079c9ec519168fd212773bd0ee0e91326c98503ef5b98f",
+    "text": "показать полные выдержки и обе версии изменённых разделов вне предела остальных блоков"
   },
   "slice.help.layer": {
     "source_sha256": "ab7872ab4c991a2b552af1c8e482280013b32fd914e37f264f2d3b82b1345243",
     "text": "оставить места выбранного слоя; можно повторять"
   },
   "slice.help.only": {
-    "source_sha256": "d2e6ae500622d3941d0e5b09e3f9d02f7d4b669ef98e6141f718ad81c97bebff",
-    "text": "оставить выбранные блоки и сигналы"
+    "source_sha256": "8cbeb3f80882ad78ac643ce187a52819561cfbc1ea4f139baaa042fc5830cba4",
+    "text": "оставить выбранные блоки и сигналы. Изменённые разделы входят в excerpt"
   },
   "slice.help.query": {
     "source_sha256": "f50eb257109f5ee565ad3fec2cf3ec22a8d36e8c2f67c52c7dd5179809f8f51d",
     "text": "путь#якорь, страница, файл кода, номер работы или поиск"
   },
   "slice.help.staged": {
-    "source_sha256": "249efebdb29336b58a8a91c42447fa25ab5daa02609147027ed6148dd89986c1",
-    "text": "связи подготовленных к коммиту изменений"
+    "source_sha256": "ccaad7ca2310b1186432fba83d019395b8dd6758b5f85d5e2f923d867fc408f4",
+    "text": "показать изменения кода и договоров, подготовленные к коммиту"
   },
   "slice.help.target": {
     "source_sha256": "34a04005bcaf206eec990bd9637d9fdb6725e0a0c0d4aebf003f17f4c956eb5c",
@@ -3510,6 +3574,10 @@
   "slice.note.diff_review": {
     "source_sha256": "ccbed2f437501792d8a43f00a8d2b544806ab4b26897f7d749a79f0f84958c16",
     "text": "проверьте связанные места, решения и тесты"
+  },
+  "slice.note.diff_unanchored": {
+    "source_sha256": "30a5c6225aa02b0d942f2de938fcc9a31b24023c39840063179842703b335d11",
+    "text": "Изменённых участков вне областей якорей: %d"
   },
   "slice.note.diff_unmarked": {
     "source_sha256": "c5cf3dc1fc35f3b40b3bf04a97fdf909ab8c83219858abfa04b8cdb99826ae41",

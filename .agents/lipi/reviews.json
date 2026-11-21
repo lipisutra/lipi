@@ -21,6 +21,25 @@
       }
     },
     {
+      "head": "ecc9b1384f8377c9d05ba5443c9025d737c3d379",
+      "id": "2c50fa93345c1a28bfc7341c52f376fe4268a4424c4eb85d39b79561164ccf51",
+      "reason": "Сканирование @trace и разрешение целей для T1 сохранились. Правка выделила проверку имени главного файла ADR для чтения его из Git; в рабочем дереве остались прежние формы имени, проверка исключений и канонический номер без учёта ведущих нулей.",
+      "relation": "trace",
+      "reviewed_at": "2026-11-21T07:35:46Z",
+      "reviewer": "z3_budget",
+      "source": {
+        "kind": "trace",
+        "path": "src/lipi/checker/targets.py",
+        "sha256": "233b652164613064452318909302f3fd692f1cdda55dcd30c6e2c30cb3ccf404"
+      },
+      "target": {
+        "anchor": "t1",
+        "kind": "anchor",
+        "path": "docs/ru/codes.md",
+        "sha256": "d56c8f2098dd87bf1364f60be5512c5d5a5f940cbbbf366275a8df216f73d946"
+      }
+    },
+    {
       "head": "f6d2756903aefdcd53947ecac06e70c1274e98cd",
       "id": "2feb57a3f8c56cb55cd282e1d4584071b365620e9d8952f1f3a2d3b8aa9d23de",
       "reason": "The ordinary work-slice test checks that code still uses the plan ID as its via string and the obey block keeps its list of origins. The new matched_targets field applies to diff slices.",
@@ -40,6 +59,25 @@
       }
     },
     {
+      "head": "ecc9b1384f8377c9d05ba5443c9025d737c3d379",
+      "id": "8ce3999fb2115e9f5a40d4e4028e88cfcbe8237c49ff58c970d97cb23fc38d8f",
+      "reason": "D6 по-прежнему проверяет covers через тот же resolve_mark, что и T1. Из decision_id выделено распознавание пути для снимков Git, а нормализация ADR, исключения и разрешение внешних якорей с T4 для недоступных источников сохранены.",
+      "relation": "trace",
+      "reviewed_at": "2026-11-21T07:35:35Z",
+      "reviewer": "z3_budget",
+      "source": {
+        "kind": "trace",
+        "path": "src/lipi/checker/targets.py",
+        "sha256": "233b652164613064452318909302f3fd692f1cdda55dcd30c6e2c30cb3ccf404"
+      },
+      "target": {
+        "anchor": "d6",
+        "kind": "anchor",
+        "path": "docs/ru/codes.md",
+        "sha256": "07f7951d2c4c6e1896cf7648ccf6f58d478b5b0766f650741a09c53c9bf47036"
+      }
+    },
+    {
       "head": "f6d2756903aefdcd53947ecac06e70c1274e98cd",
       "id": "989ac4c53fbcc5ba1041fc0ca032849f1304f6557d59df99b521fb504bb0a4c3",
       "reason": "CLI still returns the slice result code after rendering. Invalid arguments, configuration failures and Git diff errors still return 2.",
@@ -56,6 +94,25 @@
         "kind": "anchor",
         "path": "docs/ru/slice.md",
         "sha256": "41273a7927a53b808b03bb21bf75f07266745a4416ad04e7a4632928dd5c9386"
+      }
+    },
+    {
+      "head": "ecc9b1384f8377c9d05ba5443c9025d737c3d379",
+      "id": "a4a44d8643cf9eb988a8b53d3a605650fa3211bb7f5271ed42c31c90bf75430d",
+      "reason": "В этой группе изменена только сборка диффа: она сохраняет исторические цели и отбрасывает цели недоступных соседей. При местном промахе подсказки по-прежнему идут в порядке repos для доступных подключений с docs в read и lipi.json, сохраняют фразу и формируются без поиска у соседа.",
+      "relation": "trace",
+      "reviewed_at": "2026-11-21T07:35:57Z",
+      "reviewer": "z3_budget",
+      "source": {
+        "kind": "trace",
+        "path": "src/lipi/repo_slice.py",
+        "sha256": "6797d71f3bc271b352780843146e131468d3bde976fb1eaac0e05e402c0efc5b"
+      },
+      "target": {
+        "anchor": "repo-search",
+        "kind": "anchor",
+        "path": "docs/ru/slice-output.md",
+        "sha256": "0ef56884962479810aa1236cb07dc982d1adf220f4cdbf6f2ff88e1810a40e4f"
       }
     },
     {

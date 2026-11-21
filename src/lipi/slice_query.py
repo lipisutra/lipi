@@ -362,19 +362,14 @@ def build_slice(pr, query, depth=1, layers=None):
 def build_diff_slice(pr, base=None, staged=False, depth=1, layers=None):
     """Связи изменённых мест; один индекс и общий ограниченный проход A4."""
     from .slice_diff import collect_diff
+    from .slice_diff_response import diff_target
 
     if pr.cfg.get('repos'):
         from .repo_slice import build_repo_diff_slice
         return build_repo_diff_slice(pr, base, staged, depth, layers)
     index = SliceIndex(pr)
     diff = collect_diff(index, base=base, staged=staged)
-    target = {'target': '--staged' if staged else '--diff %s' % base,
-              'title': tr('slice.diff.title'), 'kind': 'diff', 'found': 'exact'}
-    response, code = _build_slice(index, target, depth, layers, diff=diff)
-    response['checks']['diff'] = {'mode': 'staged' if staged else 'diff',
-                                 'base': None if staged else base,
-                                 'files': diff['files'], 'unmarked': diff['unmarked']}
-    return response, code
+    return _build_slice(index, diff_target(base), depth, layers, diff=diff)
 
 
 def _build_slice(index, target, depth, layers, diff=None):
@@ -383,8 +378,12 @@ def _build_slice(index, target, depth, layers, diff=None):
     kind, aid = target['kind'], target['target']
     own_work = target.get('_work_id', aid if kind in ('work', 'decision') else None)
     own_places = index.by_file.get(aid, []) if kind == 'code' else []
+    contract_targets = set()
     if kind == 'diff':
-        seeds = set(diff['seeds'])
+        seeds = diff['seeds'] & index.nodes.keys()
+        contract_targets = diff.get('sections', {}).keys() | diff.get('decisions', set())
+        seeds.update(target for target in contract_targets if target in index.nodes
+                     and diff['sections'].get(target, {}).get('after', True) is not None)
     elif kind == 'page':
         seeds = {aid, *index.anchors[target['page'].path]}
         if own_work:
@@ -394,25 +393,34 @@ def _build_slice(index, target, depth, layers, diff=None):
     else:
         seeds = {aid}
     concepts = {item for item in seeds if index.nodes.get(item, {}).get('kind') == 'section'}
-    if kind == 'code':
+    contract_counts = {}
+    document_diff = diff is not None and 'sections' in diff
+    if document_diff:
+        from .slice_diff_response import collect_contract_places
+        all_places, signal_places, contract_counts = collect_contract_places(index, diff)
+    elif kind == 'code':
         selected = {id(place): place for item in concepts for place in index.by_target.get(item, [])
                     if place.get('repo') is not None or place['path'] != aid}
         # Метки на работы самого файла дают сигналы, но не соседние места кода.
         signal_places = list(own_places) + list(selected.values())
+        all_places = list(selected.values())
     else:
-        selected = {id(place): place for item in seeds for place in index.by_target.get(item, [])}
+        marker_targets = diff['seeds'] if diff is not None else seeds
+        selected = {id(place): place for item in marker_targets for place in index.by_target.get(item, [])}
         if diff is not None:
             selected = {key: place for key, place in selected.items()
                         if place.get('repo') is not None
                         or (place['path'], place['line']) not in diff['changed']}
         signal_places = list(selected.values())
-    all_places = sorted(selected.values(), key=index.place_order)
+        all_places = list(selected.values())
+    all_places.sort(key=index.place_order)
     places = [place for place in all_places if not layers or
               ((place['repo'] + '::' if place.get('repo') else '') + place['layer']) in layers]
     blocks = {name: [] for name in ORDERS[kind]}
     notes = []
 
-    related = _related(index, seeds, own_places if kind == 'code' else all_places,
+    related_places = signal_places if document_diff else all_places
+    related = _related(index, seeds, own_places if kind == 'code' else related_places,
                        include_seeds=kind in ('code', 'diff'))
     own_signals = _status(index, own_work, own=True) if own_work else []
     signals = _link_status(index, target)
@@ -488,18 +496,31 @@ def _build_slice(index, target, depth, layers, diff=None):
         item.get('path', item['target']), item.get('line', 0), item['target']))
     blocks['signals'] = own_signals + signals
 
+    display_targets = diff['seeds'] | contract_targets if kind == 'diff' else seeds
     if 'concepts' in blocks:
-        for item in sorted(seeds if kind == 'diff' else concepts, key=document_order):
-            blocks['concepts'].append({'target': item, 'title': index.nodes[item]['title'],
-                                       'code_count': index.count(item)})
+        for item in sorted(display_targets if kind == 'diff' else concepts, key=document_order):
+            node = index.nodes.get(item)
+            title = node['title'] if node else item
+            if diff and item in diff.get('sections', {}):
+                from .slice_diff_response import snapshot_title
+                title = snapshot_title(item, diff['sections'][item])
+            blocks['concepts'].append({'target': item, 'title': title,
+                                       'code_count': (contract_counts.get(item, 0) if item in contract_targets
+                                                      else index.count(item))})
     for place in places:
-        matched_targets = sorted(place['targets'].keys() & seeds)
+        matched_targets = sorted(place['targets'].keys() & display_targets)
         via = matched_targets[0]
         item = {key: place[key] for key in ('path', 'line', 'symbol', 'layer')}
         if connected:
             item['repo'] = place.get('repo')
             item['_test'] = place['test']
         item['line'] = place['targets'][via]
+        if 'reasons' in place:
+            item['reasons'] = place['reasons']
+            if place.get('side') == 'before':
+                item['side'] = 'before'
+            elif place.get('links', {}).get(via) == 'removed':
+                item['line'] = place['line']
         if kind == 'work':
             destination = 'code'
         elif place['test']:
@@ -534,6 +555,9 @@ def _build_slice(index, target, depth, layers, diff=None):
         notes.extend([{'code': 'diff-review', 'text': tr('slice.note.diff_review')},
                       {'code': 'diff-unmarked',
                        'text': tr('slice.note.diff_unmarked') % count_text(count, 'diff_locations')}])
+        if diff.get('unanchored'):
+            notes.append({'code': 'diff-unanchored',
+                          'text': tr('slice.note.diff_unanchored') % diff['unanchored']})
     elif not (own_places if kind == 'code' else all_places):
         messages = {
             'section': ('no-marks', tr('slice.note.no_marks')),
@@ -587,9 +611,14 @@ def _build_slice(index, target, depth, layers, diff=None):
                            for name in ORDERS[kind] if blocks[name]],
                 'incomplete': state == 'partial',
                 'notes': notes, 'checks': {'staleness': staleness}}
+    if kind == 'diff':
+        from .slice_diff_response import diff_checks
+        response['checks']['diff'] = diff_checks(diff, target['_base'], all_places)
     if connected:
         cross_locations = {(place['repo'], place['path'], place['line']) for place in signal_places
                            if any(index.nodes[aid]['repo'] != place['repo']
                                   for aid in place['targets'])}
+        cross_locations.update((place['repo'], place['path'], place['line']) for place in all_places
+                               if place.get('repo') and place.get('links'))
         response['_cross_repo_locations'] = len(cross_locations)
     return response, 0

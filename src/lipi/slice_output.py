@@ -5,6 +5,7 @@ from collections import Counter
 
 from .checker.model import mask_code
 from .i18n import plural_form, tr
+from .slice_diff_budget import section_line_count, trim_sections
 
 
 BLOCK_KINDS = ("signals", "obey", "excerpt", "concepts", "entry", "code", "tests", "targets", "context")
@@ -51,10 +52,23 @@ def select_response(response, budget=60, full=False, only=None):
     blocks = [block for block in result["blocks"]
               if not wanted or block["kind"] == "signals" or block["kind"] in wanted]
     result["blocks"] = blocks
+    cap = max(1, budget // 3)
+    diff = result.get("checks", {}).get("diff", {})
+    diff_index = None
+    if wanted and "excerpt" not in wanted:
+        diff.pop("sections", None)
+        diff.pop("sections_omitted", None)
+    elif not full and diff.get("sections"):
+        diff_lines = section_line_count(diff["sections"])
+        diff_index = next((index for index, block in enumerate(blocks)
+                           if block["kind"] not in ("signals", "obey")), len(blocks))
+        # Все разделы вместе получают долю одной выдержки.
+        excerpt = {"kind": "excerpt", "items": []}
+        blocks = blocks[:diff_index] + [excerpt] + blocks[diff_index:]
+
     remaining = budget
     selected = [set() for _ in blocks]
     excerpts = {}
-    cap = max(1, budget // 3)
     for index, block in enumerate(blocks):
         if block["kind"] == "excerpt" and block["items"]:
             original = block["items"][0]["text"].splitlines()
@@ -76,7 +90,9 @@ def select_response(response, budget=60, full=False, only=None):
 
     # Затем доля каждого блока, включая info, но не полную выдержку.
     for index, block in enumerate(blocks):
-        if block["kind"] == "excerpt":
+        if index == diff_index:
+            take(index, range(min(cap, diff_lines)), 3)
+        elif block["kind"] == "excerpt":
             if index in excerpts:
                 lines = excerpts[index][1]
                 if full:
@@ -95,14 +111,23 @@ def select_response(response, budget=60, full=False, only=None):
             take(index, [n for n, item in enumerate(block["items"])
                          if item["level"] in ("error", "warning")], remaining)
     for index, block in enumerate(blocks):
-        if block["kind"] == "excerpt":
+        if index == diff_index:
+            take(index, range(min(cap, diff_lines)), remaining)
+        elif block["kind"] == "excerpt":
             if index in excerpts and not full:
                 take(index, range(len(excerpts[index][1])), remaining)
         else:
             take(index, range(len(block["items"])), remaining)
 
     incomplete = result['incomplete']
+    if diff_index is not None:
+        shown = len(selected[diff_index])
+        if shown < diff_lines:
+            trim_sections(diff, shown)
+            incomplete = True
     for index, block in enumerate(blocks):
+        if index == diff_index:
+            continue
         kind, items = block["kind"], block["items"]
         if index in excerpts:
             original, shortened = excerpts[index]
@@ -158,6 +183,65 @@ def _diff_target_labels(blocks):
     return labels
 
 
+def _diff_reason_text(reasons, labels):
+    by_target = {}
+    for reason in reasons:
+        target = reason["target"]
+        details = by_target.setdefault(target, [])
+        kind, link = reason["reason"], reason.get("link")
+        if kind in ("code-change", "decision-number"):
+            details.append(kind)
+        if link == "removed":
+            details.append("link-removed")
+        elif kind == "target-removed":
+            details.append("new-link-to-deleted" if link == "added" else "link-to-deleted")
+        elif link == "added":
+            details.append("link-added")
+        elif kind == "contract-change":
+            details.append(kind)
+
+    def detail(key):
+        return tr("slice.diff.reason." + key)
+
+    common_change = len(by_target) > 1 and all("code-change" in keys for keys in by_target.values())
+    parts = [detail("code-change")] if common_change else []
+    for target, keys in by_target.items():
+        keys = dict.fromkeys(keys)
+        if common_change:
+            del keys["code-change"]
+        label = labels.get(target, target)
+        if keys:
+            label += " (%s)" % ", ".join(detail(key) for key in keys)
+        parts.append(label)
+    return " — " + ", ".join(parts)
+
+
+def _diff_sections_text(diff):
+    sections = diff.get("sections", ())
+    omitted = diff.get("sections_omitted", 0)
+    if not sections and not omitted:
+        return []
+    lines = [tr("slice.diff.sections")]
+    for section in sections:
+        lines.append("  " + section["target"])
+        for side in ("before", "after"):
+            text = section[side]
+            key = "slice.diff.section." + side
+            lines.append("    " + tr(key + ".absent" if text is None else key))
+            if text:
+                lines.extend("      " + row for row in text.split("\n"))
+        if section.get("omitted"):
+            hidden = section["omitted"]
+            note = tr("slice.diff.section.lines-omitted") % (hidden["before"], hidden["after"])
+            lines.append("  " + tr("slice.render.show_more") % (note, "--full"))
+        if section.get("linked") is False:
+            lines.append("    " + tr("slice.diff.section.no-links"))
+    if omitted:
+        note = tr("slice.diff.sections_omitted") % omitted
+        lines.append(tr("slice.render.show_more") % (note, "--full"))
+    return lines
+
+
 def _item_text(kind, item, labels):
     if item.get("repo"):
         item = dict(item)
@@ -180,8 +264,13 @@ def _item_text(kind, item, labels):
         text = "%s:%s  %s" % (item["path"], item["line"], item["symbol"])
         if kind != "tests":
             text += "  [%s]" % item["layer"]
-        if labels:
-            text += tr("slice.render.via") % ", ".join(labels[target] for target in item["matched_targets"])
+        if item.get("side") == "before":
+            text += " [%s]" % tr("slice.diff.place.before")
+        if item.get("reasons"):
+            text += _diff_reason_text(item["reasons"], labels)
+        elif labels:
+            text += tr("slice.render.via") % ", ".join(labels.get(target, target)
+                                                       for target in item["matched_targets"])
         return text
     text = item["target"]
     if kind == "obey" and item.get("status"):
@@ -197,8 +286,8 @@ def _item_text(kind, item, labels):
 
 
 # @trace docs/ru/slice.md#json
-def render_text(response, *, target_path=None, selected_blocks=None):
-    """Renders selected blocks using the full diff to disambiguate target labels."""
+def render_text(response, *, target_path=None, selected_blocks=None, selected_response=None):
+    """Render selected items and sections using all concepts to disambiguate target labels."""
     if "error" in response:
         key = "slice.render.ambiguous" if response["error"] == "ambiguous" else "slice.render.not_found"
         candidates = tr("slice.render.candidates") if response.get("candidates") else ""
@@ -236,19 +325,18 @@ def render_text(response, *, target_path=None, selected_blocks=None):
     lines.extend(render_repository_status(response))
     lines.extend(note["text"] for note in response.get("notes", []))
     labels = _diff_target_labels(response["blocks"]) if target["kind"] == "diff" else {}
-    first_block = True
-    blocks = response["blocks"] if selected_blocks is None else selected_blocks
+    display = response if selected_response is None else selected_response
+    blocks = display["blocks"] if selected_blocks is None else selected_blocks
+    body = []
+    section_offset = 0
     for block in blocks:
         if not block["items"] and not block["omitted"]:
             continue
         kind = block["kind"]
-        if first_block:
-            lines.append("")
-            first_block = False
-        lines.append(tr("slice.block." + kind))
+        body.append(tr("slice.block." + kind))
         for item in block["items"]:
             content = item["text"].splitlines() if kind == "excerpt" else [_item_text(kind, item, labels)]
-            lines.extend("  " + line for line in content)
+            body.extend("  " + line for line in content)
         if block["omitted"]:
             hints = ", ".join(block["hint"])
             shown = sum(item["lines"] for item in block["items"]) if kind == "excerpt" else len(block["items"])
@@ -262,5 +350,10 @@ def render_text(response, *, target_path=None, selected_blocks=None):
                 hidden = tr("slice.render.signals_omitted") % (shown, total)
             else:
                 hidden = tr("slice.render.omitted") % (shown, total)
-            lines.append(tr("slice.render.show_more") % (hidden, hints))
+            body.append(tr("slice.render.show_more") % (hidden, hints))
+        if kind in ("signals", "obey"):
+            section_offset = len(body)
+    body[section_offset:section_offset] = _diff_sections_text(display.get("checks", {}).get("diff", {}))
+    if body:
+        lines.extend(["", *body])
     return "\n".join(lines)

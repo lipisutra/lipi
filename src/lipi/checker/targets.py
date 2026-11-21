@@ -53,23 +53,27 @@ def decision_id(pr, path):
     path = pr.file_path(path)
     if path is None:
         return None
-    if (not is_within(path, pr.decisions) or not path.is_file() or path.suffix.lower() != '.md'
+    if (not path.is_file()
             or (is_within(path, pr.root) and target_excluded(pr, path))):
         return None
-    for parent in path.parents:
-        if parent == pr.decisions:
-            break
+    return decision_path_id(pr.decisions, path)
+
+
+def decision_path_id(directory, path):
+    """Recognize the main Markdown file from its path in a decision catalog."""
+    if directory is None or path.suffix.lower() != '.md':
+        return None
+    parent = path.parent
+    if parent == directory:
+        match = RE_DECISION_NAME.fullmatch(path.stem)
+        return normalize_work_id('ADR-' + match[1]) if match else None
+    if parent.parent == directory:
         owner = RE_DECISION_NAME.fullmatch(parent.name)
         if owner:
             stem = ('adr-' if parent.name.lower().startswith('adr-') else '') + owner[1]
-            if (parent.parent != pr.decisions or path.parent != parent
-                    or path.name.lower() != stem.lower() + '-readme.md'):
-                return None
-            return normalize_work_id('ADR-' + owner[1])
-    if path.parent != pr.decisions:
-        return None
-    match = RE_DECISION_NAME.fullmatch(path.stem)
-    return normalize_work_id('ADR-' + match[1]) if match else None
+            if path.name.lower() == stem + '-readme.md':
+                return normalize_work_id('ADR-' + owner[1])
+    return None
 
 
 def work_targets(pr):

@@ -65,6 +65,14 @@ def document_order(target):
     return (1, 0, target)
 
 
+def declaration_line(rows, group):
+    if not group['standalone']:
+        return group['start']
+    return next((line for line in range(group['end'] + 1, group['region_end'] + 1)
+                 if rows[line - 1].strip() and not rows[line - 1].lstrip().startswith(
+                     ('#', '//', '/*', '*', '--', ';', '<!--'))), None)
+
+
 class SliceIndex:
     def __init__(self, pr, *, links=True):
         self.pr = pr
@@ -198,6 +206,19 @@ class SliceIndex:
     def _code_walk_error(self, error):
         pass
 
+    def code_place(self, path, rows, group):
+        line = declaration_line(rows, group)
+        declaration = rows[line - 1] if line is not None else ''
+        layer = self.layer(path)
+        name = Path(path).name
+        return {'path': path, 'line': group['start'], 'symbol': declaration.strip()[:80],
+                'layer': layer, 'targets': group['targets'],
+                'history_line': group['end'],
+                'end_line': group['end'], 'region_end': group['region_end'],
+                'test': layer == 'tests' or any(fnmatch.fnmatchcase(name, pattern)
+                    for pattern in self.pr.cfg.get('tests', DEFAULT_TESTS)),
+                'entry': any(pattern.search(declaration) for pattern in self.entry)}
+
     def _code(self):
         pr = self.pr
         skip_paths = {path for path in (pr.docs, pr.wf, pr.decisions)
@@ -207,7 +228,6 @@ class SliceIndex:
                 path_filter=lambda path: path.suffix.lower() != '.md'):
             if path.suffix.lower() == '.md' or not self._code_file_allowed(candidate, path):
                 continue
-            name = path.name
             try:
                 if path.stat().st_size > MAX_CODE_FILE:
                     continue
@@ -220,25 +240,10 @@ class SliceIndex:
             self.code_texts[rel] = text
             groups = trace_groups(rows, self.mark)
             self.boundaries[rel] = [group['start'] for group in groups]
-            for pos, group in enumerate(groups):
+            for group in groups:
                 if not group['targets']:
                     continue
-                if group['standalone']:
-                    stop = groups[pos + 1]['start'] - 1 if pos + 1 < len(groups) else len(rows)
-                    declaration = next((row for row in rows[group['end']:stop]
-                                        if row.strip() and not row.lstrip().startswith(
-                                            ('#', '//', '/*', '*', '--', ';', '<!--'))), '')
-                else:
-                    declaration = rows[group['start'] - 1]
-                symbol = declaration.strip()
-                layer = self.layer(rel)
-                place = {'path': rel, 'line': group['start'], 'symbol': symbol[:80],
-                         'layer': layer, 'targets': group['targets'],
-                         'history_line': group['end'],
-                         'end_line': group['end'], 'region_end': group['region_end'],
-                         'test': layer == 'tests' or any(fnmatch.fnmatchcase(name, pattern)
-                             for pattern in pr.cfg.get('tests', DEFAULT_TESTS)),
-                         'entry': any(pattern.search(declaration) for pattern in self.entry)}
+                place = self.code_place(rel, rows, group)
                 self.places.append(place)
                 self.by_file.setdefault(rel, []).append(place)
                 for aid in group['targets']:

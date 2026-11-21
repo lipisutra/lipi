@@ -55,8 +55,8 @@ def _build_stable(index, target, depth, layers, diff=None):
         before = {source.name for source in index.sources.all if source.state == 'unavailable'}
         if target.get('repo') in before:
             return _empty(target), 0
-        if diff is not None:
-            diff['seeds'].intersection_update(index.nodes)
+        if diff is not None and before:
+            diff['seeds'] = {aid for aid in diff['seeds'] if _split(aid)[0] not in before}
         try:
             response = _build_slice(index, target, depth, layers, diff=diff)
         except KeyError:
@@ -71,7 +71,7 @@ def _build_stable(index, target, depth, layers, diff=None):
 
 
 # @trace docs/ru/slice.md#repos
-def _finish(index, response):
+def _finish(index, response, *, contract_counts=()):
     """После всех чтений исключает недоступные источники до подсчёта и обрезки."""
     from .slice_query import SUMMARY
     index.prune_unavailable()
@@ -138,7 +138,7 @@ def _finish(index, response):
                 item.update(repo=source_repo, target_repo=item_repo, target=local_target)
             elif raw_target is not None:
                 item.update(repo=item_repo, target=local_target)
-                if 'code_count' in item:
+                if 'code_count' in item and raw_target not in contract_counts:
                     item['code_count'] = index.count(raw_target)
             else:
                 item['repo'] = source_repo
@@ -206,16 +206,13 @@ def build_repo_slice(pr, query, depth=1, layers=None):
 # @trace docs/ru/slice.md#repos,docs/ru/slice-diff.md#response
 def build_repo_diff_slice(pr, base=None, staged=False, depth=1, layers=None):
     from .repo_index import RepoIndex
+    from .slice_diff_response import diff_target
     from .slice_diff import collect_diff
     index = RepoIndex(pr)
     diff = collect_diff(index, base=base, staged=staged)
     index.prune_unavailable()
     index._review_explicit_decisions = {aid for aid in diff['seeds']
                                        if index.nodes.get(aid, {}).get('kind') == 'decision'}
-    target = {'target': '--staged' if staged else '--diff %s' % base,
-              'title': tr('slice.diff.title'), 'kind': 'diff', 'found': 'exact'}
-    response, code = _build_stable(index, target, depth, layers, diff=diff)
-    response['checks']['diff'] = {'mode': 'staged' if staged else 'diff',
-                                 'base': None if staged else base,
-                                 'files': diff['files'], 'unmarked': diff['unmarked']}
-    return _finish(index, response), code
+    response, code = _build_stable(index, diff_target(base), depth, layers, diff=diff)
+    return _finish(index, response, contract_counts=diff.get('sections', {}).keys()
+                   | diff.get('decisions', set())), code

@@ -1,5 +1,17 @@
 # lipi releases
 
+## 1.3.0 — Unreleased
+
+- `lipi slice --diff` and `--staged` show the old and new wording of changed
+  Markdown sections alongside linked code and tests, in text and JSON. They
+  distinguish changed markers from references still pointing at a deleted
+  anchor.
+
+### Upgrading your project
+
+1. Upgrade Lipi with `pipx upgrade lipi`.
+2. The rules and templates are unchanged. You can skip `lipi init`.
+
 ## 1.2.1 — 2026-11-20
 
 - First-time setup calculates the baseline directly in the project. It no longer

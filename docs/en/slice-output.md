@@ -36,9 +36,10 @@ code `staleness-partial` and under `checks.staleness`.
 
 `total` counts unique locations, meaning trace marker groups, with trace
 markers targeting the slice's sections. It includes tests. A file slice
-also counts locations in the file itself. A diff slice counts only the
-other related locations. A location with several trace markers counts
-as checked after all its links to the slice's sections have been checked.
+also counts locations in the file itself. A diff slice counts
+[related locations](slice-diff.md#response) with current, resolved links.
+A location with several trace markers counts as checked after all its links
+to the slice's sections have been checked.
 Unavailable history leaves a location unchecked. With A4 disabled, both
 `total` and `checked` are 0.
 
@@ -102,6 +103,9 @@ scope without a number. Local coverage and this count can overlap.
   budget. `--layer` filters `entry`, `code`, and `tests` by layer and can
   be repeated.
 - JSON and text select exactly the same items and excerpt lines.
+
+See [section excerpts in diff slices](slice-diff.md#excerpts) for changes to
+anchored Markdown.
 
 ## Empty slices <a id="empty"></a>
 

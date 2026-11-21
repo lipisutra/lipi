@@ -138,6 +138,8 @@ When several linked targets share an applicable decision, the decision appears o
 
 ## Code changes <a id="diff"></a>
 
+For an anchor change with a linked test, see [changing documentation and code together](slice-diff.md#mixed-example).
+
 In this `lipi slice --staged` example, one declaration marked with
 `docs/pricing.md#rounding` and `docs/pricing.md#threshold` and one unmarked
 region changed. A4 is disabled for this example.

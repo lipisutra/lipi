@@ -1,8 +1,9 @@
 # Slice with `lipi slice`
 
 A slice gathers what you need to know before working on a target or reviewing
-code changes. It orders the results, limits their size, and reports gaps in
-coverage. Text is for people and JSON is the contract for tools and agents.
+changes to code or documentation. It orders the results, limits their size,
+and reports gaps in coverage. Text is for people and JSON is the contract for
+tools and agents.
 
 ```bash
 lipi slice <target> [--format json] [--full] [--depth 2|3]
@@ -49,7 +50,8 @@ limit is cut within the word and followed by `…`.
 ## Exit codes <a id="exit"></a>
 
 - **0** means the slice was returned, including an empty or incomplete
-  one. Signal levels do not affect the exit code.
+  one. A diff with a deleted anchor also returns 0. Signal levels do not
+  affect the exit code.
 - **1** means the target was missing or ambiguous. The response lists
   candidates. Suggested commands on a local miss also use exit code 1.
 - **2** means invalid arguments, C1 settings or state errors, or a
@@ -187,10 +189,9 @@ order](slice-output.md#staleness) and [A4 reviews](review.md#summary).
 
 Text and JSON use the same line budget. Up to the first half goes to severe
 signals, then each block gets up to three lines. Remaining lines are assigned
-in output order. An excerpt uses up to one third of the budget. `--full`
-includes it outside the budget. The summary is computed before truncation, and
-`--only` preserves signals. See [content selection](slice-output.md#budget)
-for details.
+in output order. `--full` shows excerpts outside the budget, and `--only`
+preserves signals. See [content selection](slice-output.md#budget) and
+[section excerpts in a diff](slice-diff.md#excerpts).
 
 ## Empty slices <a id="empty"></a>
 
@@ -204,6 +205,7 @@ Missing trace markers, Git, or locations in some layers are reported in
 `reviews.json` exists, the summary includes
 [`reviewed_pairs`](review.md#summary). New keys are compatible. Removing a key
 or changing its meaning requires a new schema and major version.
+See [diff fields](slice-diff.md#json) for `--diff` and `--staged`.
 
 ## Examples <a id="examples"></a>
 
@@ -243,9 +245,10 @@ Connection fields appear only with `repos`. They use the same metadata as the
   accepted refinements from that same source under the usual
   decision rule. Reading requires `decisions`. Third repositories
   are excluded. The direct-marker requirement applies to `obey`.
-- A local code file slice follows external trace markers.
-  `--diff` and `--staged` read changes only from the local tree, with
-  external targets and backlinks as described above.
+- A local code file slice follows external trace markers. With `--diff` or
+  `--staged`, both sides of the change come from the local repository. If a
+  local anchor was removed, the slice still shows markers for its old address
+  in the neighbor's current working tree, within the configured `read` scopes.
 
 ### Addresses, order, and counts
 

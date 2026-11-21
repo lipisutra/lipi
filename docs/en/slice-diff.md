@@ -10,29 +10,56 @@ lipi slice --diff v1.0.0 --format json
 lipi slice --staged
 ```
 
-Choose exactly one source: a target, `--diff <base>`, or `--staged`. With one Git revision as its base, `--diff` examines both staged and unstaged changes to tracked files in the working tree. Stage untracked files to include them. `--staged` compares the index with HEAD, or with the empty tree before the first commit. Unstaged edits do not affect target selection in this mode.
+Choose one source from a target, `--diff <base>`, and `--staged`. With one Git revision as its base, `--diff` examines both staged and unstaged changes to tracked files in the working tree. Stage untracked files to include them. `--staged` compares the index with HEAD, or with the empty tree before the first commit. In this mode, changed contracts and their wording come from HEAD and the index.
 
 Reading a diff leaves files and the index untouched and does not run project checks. The code scan excludes Markdown, binary files, oversized files, documentation, workflow and decision directories, and files excluded by the trace marker scan. A pure rename with no line edits adds no targets.
 
-On each side of the diff, a trace group covers the lines up to the next group or the end of the file. Added lines use their new markers. Deleted lines use the old ones, even if the marker or the whole file was removed. Target paths and work item IDs resolve against current project documents. The slice reads links and code locations from the working tree.
+For Markdown files eligible as marker targets, added lines belong to anchor regions in the new page and deleted lines to regions in the old page. The boundaries are the same as for [A4](codes.md#a4). For example, editing a subheading affects its enclosing marked section, and editing a table header affects each marked row in the table.
+
+On each side of the diff, a trace group covers the lines up to the next group or the end of the file. Added lines use their new markers. Deleted lines use the old ones, even if the marker or the whole file was removed. For a code-only diff, target paths and work item IDs resolve against current project documents. When a contract changes, the slice can also find local markers that referenced its old address on the earlier side. Connected repositories supply locations from their available working trees.
 
 ## Response <a id="response"></a>
 
-The blocks appear in this order: `signals`, `obey`, `concepts`, `entry`, `code`, `tests`, `context`. Concepts include every resolved target of an affected marker, including pages and work item IDs, with its title and code location count. As in an ordinary slice, these targets supply the applicable accepted decisions, instructions, refinements, and related documents. The code and test location blocks list other places marked for the affected targets, excluding the changed declarations. A shared concept, decision, or location appears once across all changed files. With `repos`, the diff remains local. The [repository connection rules](slice.md#repos) govern external targets and consumers.
+Blocks follow the order `signals`, `obey`,
+`concepts`, `entry`, `code`, `tests`, `context`. Concepts include the changed
+sections and the resolved targets of affected markers, with their titles
+and code location counts. As in an ordinary slice, these targets supply
+applicable decisions, instructions, refinements, and related documents.
+The code and test blocks list other locations marked for the affected targets
+and include a changed declaration if it links to a changed contract. Each
+shared concept, decision, or location appears once. The [repository connection
+rules](slice.md#repos) govern external targets and consumers.
 
-When `--diff` or `--staged` affects multiple distinct targets, each location
-in `entry`, `code`, and `tests` ends with `via` and its matching targets,
-separated by commas. A single-target diff uses the ordinary location format.
-Lipi uses `#anchor` if it identifies one distinct target across the entire
-diff before filtering and truncation. When targets share an anchor, Lipi
-uses the full `path#anchor` or `repo::path#anchor`. A target without an
-anchor always uses its full address.
+Code-only diffs with multiple targets list matching targets after `via`
+in `entry`, `code`, and `tests`. Locations linked to changed contracts
+carry their targets and reasons, including whether a marker now points to the
+new address or still points to a deleted anchor. In a diff with multiple
+targets, lipi shortens an address to `#anchor` if that anchor identifies one
+target before filtering and truncation. Shared anchors and targets without
+anchors use their full addresses.
 
-Two notes accompany the summary: a prompt to review related locations, and a count of unmarked changes. An unmarked location is a continuous run of changed lines with no resolved target. For each diff hunk, lipi counts runs on both sides and takes the larger count, so a replacement counts once. An unresolved target does not establish a link.
+The summary prompts you to review related locations and counts unmarked
+code changes. An unmarked location is a continuous run of changed code lines
+with no resolved target. Edits in eligible Markdown outside explicit anchor
+regions have their own count. For each diff hunk, each count uses the larger
+number of runs on either side, so a replacement counts once.
 
-The summary covers the complete slice before truncation; `checks.diff.unmarked` counts all unmarked runs. A4 and T3 appear as ordinary signals. The presence of a link in the diff alone does not trigger a warning. The staleness check uses current linked locations and the usual [limits](slice.md#staleness). `--only`, `--layer`, `--depth`, `--full`, and the line budget apply as usual. Diff slices have no excerpt. An empty diff or one without trace markers returns 0. Missing Git, an invalid base, or a diff read error returns 2.
+The summary covers the slice before truncation. A4 and T3 appear as ordinary
+signals. The staleness check uses current linked locations and the usual
+[limits](slice.md#staleness). An empty diff or one without linked locations
+returns 0. Missing Git, an invalid base, or a diff read error returns 2.
 
 A valid [review mark](review.md) suppresses A4 for its pair and keeps the pair in the coverage count. Review marks do not affect T2 checks.
+
+## Section excerpts <a id="excerpts"></a>
+
+In text, the Changed sections block appears after signals, rules, and
+decisions, before concepts. It shows the wording before and after the edit,
+including sections where lipi found no linked locations. All sections and
+both sides share `max(1, slice_budget // 3)` lines within the
+[overall budget](slice-output.md#budget). To see excerpts and any signals,
+use `--only excerpt`. A `--only` list without `excerpt` hides them. Use
+`--full` to include the full wording outside the budget.
 
 ## JSON <a id="json"></a>
 
@@ -42,13 +69,74 @@ Each `entry`, `code`, and `tests` item has `matched_targets` with all distinct
 targets shared by its markers and the diff, even if there is only one. The
 list contains canonical addresses, including connection prefixes for
 external targets, in lexicographic order by full address. The existing
-`via` string in `entry` and `code` is `matched_targets[0]`. In `tests`,
-`matched_targets` is the only field that lists the matches.
+`via` string in `entry` and `code` is `matched_targets[0]`.
+
+For eligible Markdown edits, `checks.diff.unanchored` counts runs outside
+explicit anchor regions. Each shown item in `checks.diff.sections` has the
+section's `target` and `before` and `after` text. `null` means that the section
+is absent on that side. `linked: false` means lipi found no linked locations
+before output filters. If any lines in a shown section were cut, `omitted`
+contains the counts `before` and `after`. A side can be an empty string if
+its lines were all cut. When the budget drops entire sections,
+`checks.diff.sections_omitted` counts them. Either kind of truncation sets
+`incomplete: true`.
+
+A location's `reasons` identify the target and why it appears: `contract-change`
+for an edited section, `target-removed` for a deleted target, `decision-number`
+for a marker referencing an edited decision by ID, and `code-change` for
+changed code. For a contract link, `link` describes what happened to the
+marker. For example, a test that still points at a deleted anchor has reason
+`target-removed` and link `retained`. Dropping the marker gives `removed`;
+introducing it gives `added`. If the location exists only on the earlier
+side, `side: "before"` identifies the source of its path and line number.
 
 ```json
 {"checks": {"diff": {"mode": "diff", "base": "HEAD", "files": 2, "unmarked": 1}}}
 ```
 
-`files` counts affected code files, including renames with no line edits. With `--staged`, `mode` is `staged` and `base` is `null`. With repository connections, the `cross-repo-staleness` note uses those same related locations and counts each location with a cross-repository link once, before output filtering. Summary notes have codes `diff-review` and `diff-unmarked` and remain visible for all `--only` values. A read error returns `{"schema": 1, "error": "invalid-diff", "message": "Git: fatal: Needed a single revision"}`. Conflicting arguments produce a CLI diagnostic and exit code 2.
+`files` counts affected code files, including renames with no line edits.
+`unmarked` counts code runs without a resolved target. With `--staged`,
+`mode` is `staged` and `base` is `null`. The `cross-repo-staleness` note counts
+each related location with a cross-repository link once before output
+filtering. Notes `diff-review`, `diff-unmarked`, and, when there are edits
+outside anchors, `diff-unanchored`, remain visible for all `--only` values.
+A read error returns `{"schema": 1, "error": "invalid-diff", "message": "Git: fatal: Needed a single revision"}`.
+Conflicting arguments produce a CLI diagnostic and exit code 2.
 
-See the [diff slice example](slice-examples.md#diff). When `reviews.json` exists, `summary.reviewed_pairs` counts suppressed A4 pairs before truncation and `--only`, as in an [ordinary slice](review.md#summary).
+When `reviews.json` exists, `summary.reviewed_pairs` counts suppressed A4 pairs
+before truncation and `--only`, as in an [ordinary slice](review.md#summary).
+
+## Changing documentation and code together <a id="mixed-example"></a>
+
+In `docs/export.md`, change the anchor from `#row` to `#record` and replace
+“Write the name before the identifier” with “Write the identifier before
+the name.” Update the marker on `write_row` in `src/export.py` to point to
+`docs/export.md#record`. The marker on `test_read_row` in
+`tests/test_export.py` still points to `docs/export.md#row`.
+
+```bash
+lipi slice --diff HEAD
+git add docs/export.md src/export.py
+lipi slice --staged --format json
+```
+
+Both slices show the old wording under `docs/export.md#row` and the new
+wording under `docs/export.md#record`. The text location blocks show what
+happened to each link.
+
+```text
+Code locations
+  src/export.py:1  def write_row():  [src] — code change, #record (link added), #row (link removed)
+Test locations
+  tests/test_export.py:1  def test_read_row(): — #row (link to a deleted target)
+```
+
+In JSON the `#row` entry has `after: null` and the `#record` entry has
+`before: null`. The test's `reasons` contains this item.
+
+```json
+{"target": "docs/export.md#row", "reason": "target-removed", "link": "retained"}
+```
+
+The separate `lipi check` command reports [T1](codes.md#t1) for the test
+marker. See also the [code-only example](slice-examples.md#diff).
