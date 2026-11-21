@@ -223,7 +223,7 @@ def _diff_target_labels(blocks):
     return labels
 
 
-def _diff_reason_text(reasons, labels):
+def _diff_reason_text(reasons, labels, roles):
     by_target = {}
     for reason in reasons:
         target = reason["target"]
@@ -250,8 +250,11 @@ def _diff_reason_text(reasons, labels):
         if common_change:
             del keys["code-change"]
         label = labels.get(target, target)
-        if keys:
-            label += " (%s)" % ", ".join(detail(key) for key in keys)
+        details = [detail(key) for key in keys]
+        if target in roles:
+            details.append(roles[target])
+        if details:
+            label += " (%s)" % ", ".join(details)
         parts.append(label)
     return " — " + ", ".join(parts)
 
@@ -286,15 +289,20 @@ def _place_address(item):
     return "%s:%s  %s" % (qualify(item.get("repo"), item["path"]), item["line"], item["symbol"])
 
 
-def _role_suffix(target_roles, labels):
+def _role_text(entry):
+    roles = [tr("slice.role." + role) for role in entry["roles"]]
+    roles.extend(tr("slice.role.unrecognized") % quoted(value)
+                 for value in entry.get("invalid_roles", ()))
+    return ", ".join(roles) or tr("slice.role.unassigned")
+
+
+def _via_text(targets, labels, roles):
     descriptions = []
-    for entry in target_roles:
-        target = entry["target"]
-        roles = [tr("slice.role." + role) for role in entry["roles"]]
-        roles.extend(tr("slice.role.unrecognized") % quoted(value)
-                     for value in entry.get("invalid_roles", ()))
-        descriptions.append("%s (%s)" % (labels.get(target, target),
-                                        ", ".join(roles) or tr("slice.role.unassigned")))
+    for target in targets:
+        label = labels.get(target, target)
+        if target in roles:
+            label += " (%s)" % roles[target]
+        descriptions.append(label)
     return tr("slice.render.via") % ", ".join(descriptions) if descriptions else ""
 
 
@@ -305,12 +313,11 @@ def _item_text(kind, item, labels):
             text += "  [%s]" % qualify(item.get("repo"), item["layer"])
         if item.get("side") == "before":
             text += " [%s]" % tr("slice.diff.place.before")
+        roles = {entry["target"]: _role_text(entry) for entry in item.get("target_roles", ())}
         if item.get("reasons"):
-            text += _diff_reason_text(item["reasons"], labels)
-        elif labels:
-            text += tr("slice.render.via") % ", ".join(labels.get(target, target)
-                                                       for target in item["matched_targets"])
-        return text + _role_suffix(item.get("target_roles", ()), labels)
+            return text + _diff_reason_text(item["reasons"], labels, roles)
+        targets = item["matched_targets"] if labels else roles
+        return text + _via_text(targets, labels, roles)
     if item.get("repo"):
         item = dict(item)
         if "path" in item:
@@ -343,7 +350,8 @@ def _item_text(kind, item, labels):
 def _concept_locations(item):
     locations = item.get("locations", ())
     for location in locations:
-        yield "    " + _place_address(location) + _role_suffix(location["target_roles"], {})
+        roles = {entry["target"]: _role_text(entry) for entry in location["target_roles"]}
+        yield "    " + _place_address(location) + _via_text(roles, {}, roles)
     omitted = item.get("locations_omitted", 0)
     if omitted:
         yield "    " + tr("slice.render.locations_omitted") % (len(locations), len(locations) + omitted)

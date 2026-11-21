@@ -9,7 +9,7 @@ from .checker.conventions import RE_TRACE
 from .checker.marks import physical_lines, trace_groups
 from .checker.model import is_within
 from .checker.targets import normalize_work_id
-from .slice_diff import _unchanged
+from .slice_diff import _staged_worktree, _unchanged
 from .slice_diff_sections import local_section_address
 from .slice_index import declaration_line
 
@@ -141,8 +141,15 @@ def _place(index, path, rows, old, new, contracts, *, repo=None, changed=False):
         targets = current
     else:
         return None
-    return dict(index.code_place(path, rows, new or old), repo=repo,
-                targets=targets, links=links, side='after' if new else 'before', changed=changed)
+    # The current marker can keep the link while dropping its role.
+    roles = {}
+    if old:
+        roles.update((target, values) for target, values in old['target_roles'].items()
+                     if target not in current)
+    if new:
+        roles.update(new['target_roles'])
+    return dict(index.code_place(path, rows, new or old), repo=repo, targets=targets,
+                target_roles=roles, links=links, side='after' if new else 'before', changed=changed)
 
 
 def _snapshot_places(index, snapshot, resolve, contracts):
@@ -205,3 +212,35 @@ def contract_places(index, diff):
                 if place:
                     places.append(place)
     return sorted(places, key=index.place_order)
+
+
+# @trace docs/ru/slice-diff.md#selection
+def staged_code_role_places(index, diff, places, role=None):
+    """Use index locations with role information on a code-only staged diff."""
+    seeds = diff['seeds']
+    anchors = {target for target in seeds if '#' in target}
+    if not anchors:
+        return places
+    local = getattr(index, 'local', index)
+    snapshots = []
+    dirty = _staged_worktree(local.pr, (), snapshots)
+    if not dirty:
+        return places
+    changed = diff.get('changed_index', ())
+    indexed_places = []
+    for snapshot in snapshots:
+        path, rows = snapshot['new_path'], snapshot['after']
+        for group in trace_groups(rows, local.mark):
+            if group['targets'].keys().isdisjoint(seeds) or (path, group['start']) in changed:
+                continue
+            place = local.code_place(path, rows, group)
+            if not place['test']:
+                indexed_places.append(dict(place, repo=None))
+    if role is None:
+        # Keep the legacy working-tree view for files without roles on either side.
+        dirty &= {place['path'] for place in (*places, *indexed_places)
+                  if place.get('repo') is None and not place['test']
+                  and not place['target_roles'].keys().isdisjoint(anchors)}
+    current_places = [place for place in places if place.get('repo') is not None
+                      or place['test'] or place['path'] not in dirty]
+    return current_places + [place for place in indexed_places if place['path'] in dirty]

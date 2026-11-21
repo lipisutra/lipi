@@ -210,7 +210,7 @@ def build_repo_slice(pr, query, depth=1, layers=None, role=None):
 
 
 # @trace docs/ru/slice.md#repos,docs/ru/slice-diff.md#response
-def build_repo_diff_slice(pr, base=None, staged=False, depth=1, layers=None):
+def build_repo_diff_slice(pr, base=None, staged=False, depth=1, layers=None, role=None):
     from .repo_index import RepoIndex
     from .slice_diff_response import diff_target
     from .slice_diff import collect_diff
@@ -219,6 +219,6 @@ def build_repo_diff_slice(pr, base=None, staged=False, depth=1, layers=None):
     index.prune_unavailable()
     index._review_explicit_decisions = {aid for aid in diff['seeds']
                                        if index.nodes.get(aid, {}).get('kind') == 'decision'}
-    response, code = _build_stable(index, diff_target(base), depth, layers, diff=diff)
+    response, code = _build_stable(index, diff_target(base), depth, layers, diff=diff, role=role)
     return _finish(index, response, contract_counts=diff.get('sections', {}).keys()
                    | diff.get('decisions', set())), code

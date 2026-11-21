@@ -362,17 +362,17 @@ def build_slice(pr, query, depth=1, layers=None, role=None):
 
 
 # @trace docs/ru/slice-diff.md#response,docs/ru/slice-diff.md#json
-def build_diff_slice(pr, base=None, staged=False, depth=1, layers=None):
+def build_diff_slice(pr, base=None, staged=False, depth=1, layers=None, role=None):
     """Связи изменённых мест; один индекс и общий ограниченный проход A4."""
     from .slice_diff import collect_diff
     from .slice_diff_response import diff_target
 
     if pr.cfg.get('repos'):
         from .repo_slice import build_repo_diff_slice
-        return build_repo_diff_slice(pr, base, staged, depth, layers)
+        return build_repo_diff_slice(pr, base, staged, depth, layers, role=role)
     index = SliceIndex(pr)
     diff = collect_diff(index, base=base, staged=staged)
-    return _build_slice(index, diff_target(base), depth, layers, diff=diff)
+    return _build_slice(index, diff_target(base), depth, layers, diff=diff, role=role)
 
 
 def _qualified_layer(place):
@@ -420,13 +420,15 @@ def _build_slice(index, target, depth, layers, diff=None, role=None):
                         or (place['path'], place['line']) not in diff['changed']}
         signal_places = list(selected.values())
         all_places = list(selected.values())
+        if kind == 'diff' and target['_base'] is None:
+            from .slice_diff_places import staged_code_role_places
+            all_places = staged_code_role_places(index, diff, all_places, role=role)
     all_places.sort(key=index.place_order)
     places = [place for place in all_places if not layers or _qualified_layer(place) in layers]
     blocks = {name: [] for name in ORDERS[kind]}
     notes = []
 
-    related_places = signal_places if document_diff else all_places
-    related = _related(index, seeds, own_places if kind == 'code' else related_places,
+    related = _related(index, seeds, own_places if kind == 'code' else signal_places,
                        include_seeds=kind in ('code', 'diff'))
     own_signals = _status(index, own_work, own=True) if own_work else []
     signals = _link_status(index, target)
@@ -526,12 +528,12 @@ def _build_slice(index, target, depth, layers, diff=None, role=None):
     visible_places = []
     for place in places:
         matched_targets = sorted(place['targets'].keys() & display_targets)
-        links = matching_roles(place, matched_targets) if kind != 'diff' else {}
+        links = matching_roles(place, matched_targets)
         if links:
             states = role_states(links, role)
             if role is not None and not states:
                 continue
-            address = (place.get('repo'), place['path'], place['line'])
+            address = (place.get('repo'), place['path'], place['line'], place.get('side', 'after'))
             states_by_location.setdefault(address, set()).update(states)
             show_roles = role is not None or states != {'unassigned'}
         else:
@@ -542,8 +544,7 @@ def _build_slice(index, target, depth, layers, diff=None, role=None):
         if connected:
             item['repo'] = place.get('repo')
             item['_test'] = place['test']
-        if (kind == 'diff' or place['test']
-                or (role is None and not has_explicit_roles(place.get('target_roles', {})))):
+        if place['test'] or (role is None and not has_explicit_roles(place.get('target_roles', {}))):
             item['line'] = place['targets'][via]
         if 'reasons' in place:
             item['reasons'] = place['reasons']
@@ -635,7 +636,7 @@ def _build_slice(index, target, depth, layers, diff=None, role=None):
     summary['tests'] = len(visible_places) - len(non_tests)
     summary['code'] = len(non_tests)
     summary['layers'] = len({place['layer'] for place in non_tests})
-    if kind != 'diff' and (role is not None or has_roles):
+    if role is not None or has_roles:
         summary['roles'] = role_counts(role, states_by_location.values())
     if index._reviews_present:
         summary['reviewed_pairs'] = len(index._reviewed_pairs)

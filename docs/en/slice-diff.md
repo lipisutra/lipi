@@ -6,6 +6,7 @@ After an edit, `lipi slice` shows the related code locations, decisions, and tes
 
 ```bash
 lipi slice --diff HEAD
+lipi slice --diff HEAD --role consumes
 lipi slice --diff v1.0.0 --format json
 lipi slice --staged
 ```
@@ -38,6 +39,14 @@ targets, lipi shortens an address to `#anchor` if that anchor identifies one
 target before filtering and truncation. Shared anchors and targets without
 anchors use their full addresses.
 
+Use the [role filter](slice-output.md#roles) to find readers or writers of
+the changed contracts. If a function reads `#row` and produces `#summary`,
+editing only `#row` shows its reader role. Editing both sections shows both
+links at one address. A retained or added marker supplies its current roles.
+A removed link supplies its previous roles. A marker that still points to a
+deleted anchor keeps its own roles. In `--staged`, the index supplies the
+new local roles. Connected consumers supply roles from their working trees.
+
 The summary prompts you to review related locations and counts unmarked
 code changes. An unmarked location is a continuous run of changed code lines
 with no resolved target. Edits in eligible Markdown outside explicit anchor
@@ -69,7 +78,9 @@ Each `entry`, `code`, and `tests` item has `matched_targets` with all distinct
 targets shared by its markers and the diff, even if there is only one. The
 list contains canonical addresses, including connection prefixes for
 external targets, in lexicographic order by full address. The existing
-`via` string in `entry` and `code` is `matched_targets[0]`.
+`via` string in `entry` and `code` is `matched_targets[0]`. For role
+annotations, `target_roles` lists the matching anchors with their roles.
+The role filter selects whole locations and preserves their reasons.
 
 For eligible Markdown edits, `checks.diff.unanchored` counts runs outside
 explicit anchor regions. Each shown item in `checks.diff.sections` has the

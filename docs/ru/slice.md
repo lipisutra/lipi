@@ -8,13 +8,13 @@
 ```bash
 lipi slice <цель> [--format json] [--full] [--depth 2|3]
                   [--layer <слой>]... [--role consumes|produces] [--only <блок>[,<блок>]]
-lipi slice --diff <база> | --staged
+lipi slice (--diff <база> | --staged) [--role consumes|produces]
 ```
 
 Срез только читает: не пишет файлов (и `INDEX.md`), не трогает базовую
 линию, не запускает проверки проекта. Уровни из `codes` действуют: выключенный
 код не даёт сигналов и не считается в сводке.
-Режимы изменений описаны в [срезе по диффу](slice-diff.md). Для среза цели доступен [фильтр по роли](slice-output.md#roles).
+Режимы изменений описаны в [срезе по диффу](slice-diff.md). [Фильтр по роли](slice-output.md#roles) действует во всех режимах.
 
 ## Цель <a id="target"></a>
 

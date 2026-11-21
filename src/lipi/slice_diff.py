@@ -367,5 +367,9 @@ def collect_diff(index, base=None, staged=False):
                 result['seeds'].update(group['targets'])
         new_touched.update(_mapped_groups(old_touched.values(),
                                           _unchanged(before, hunks), new_groups))
+        if staged and snapshots is None:
+            changed_index = {(path, line) for line, group in new_touched.items() if group['targets']}
+            if changed_index:
+                result.setdefault('changed_index', set()).update(changed_index)
         result['changed'].update(_current_places(index, path, after, new_touched.values(), staged))
     return result

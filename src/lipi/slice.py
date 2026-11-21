@@ -40,7 +40,7 @@ def parser():
     changes = ap.add_mutually_exclusive_group()
     changes.add_argument("--diff", metavar=tr('slice.help.base'), help=tr('slice.help.diff'))
     changes.add_argument("--staged", action="store_true", help=tr('slice.help.staged'))
-    changes.add_argument("--role", choices=TRACE_ROLES, help=tr('slice.help.role'))
+    ap.add_argument("--role", choices=TRACE_ROLES, help=tr('slice.help.role'))
     ap.add_argument("--format", choices=("text", "json"), default="text", help=tr('output.help.format'))
     ap.add_argument("--full", action="store_true", help=tr('slice.help.full'))
     ap.add_argument("--depth", type=int, choices=(2, 3), default=1,
@@ -118,7 +118,7 @@ def main(argv=None):
     if args.diff is not None or args.staged:
         try:
             response, code = build_diff_slice(project, base=args.diff, staged=args.staged,
-                                              depth=args.depth, layers=args.layer)
+                                              depth=args.depth, layers=args.layer, role=args.role)
         except RepoConfigError as error:
             _config_errors([(CONFIG_NAME, str(error))], args.format)
             return 2
