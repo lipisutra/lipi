@@ -7,15 +7,15 @@ tools and agents.
 
 ```bash
 lipi slice <target> [--format json] [--full] [--depth 2|3]
-                   [--layer <layer>]... [--only <block>[,<block>]]
+                   [--layer <layer>]... [--role consumes|produces] [--only <block>[,<block>]]
 lipi slice --diff <base> | --staged
 ```
 
 A slice is read-only. It leaves files, including `INDEX.md` and the baseline,
 untouched and runs no project checks. The `codes` levels apply. Disabled codes
 are omitted from the signals and summary. See [diff slices](slice-diff.md) for
-modes that read changes and their JSON. The output flags apply to both kinds
-of slice.
+modes that read changes and their JSON. Use the [role filter](slice-output.md#roles)
+with a target to find code that consumes or produces a contract.
 
 ## Target <a id="target"></a>
 

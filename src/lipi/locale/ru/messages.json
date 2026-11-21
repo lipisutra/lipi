@@ -3235,6 +3235,22 @@
     "source_sha256": "ec889c9d77717ce13bb2be0af94b02c4298c0be5de28a65ba732f1f532e91bb7",
     "text": "%d понятий"
   },
+  "slice.count.consumes.ending_one": {
+    "source_sha256": "02bb25996a00d4c2cf19491cf2e96a95fa075eff78fdd6401453c76f6144a685",
+    "text": "%d потребитель"
+  },
+  "slice.count.consumes.few": {
+    "source_sha256": "02bb25996a00d4c2cf19491cf2e96a95fa075eff78fdd6401453c76f6144a685",
+    "text": "%d потребителя"
+  },
+  "slice.count.consumes.one": {
+    "source_sha256": "4e1f9dc7f87bb98b448df27a26209ac5b1efdb64c9814d896c13d1f0d28444ed",
+    "text": "%d потребитель"
+  },
+  "slice.count.consumes.other": {
+    "source_sha256": "02bb25996a00d4c2cf19491cf2e96a95fa075eff78fdd6401453c76f6144a685",
+    "text": "%d потребителей"
+  },
   "slice.count.decisions.ending_one": {
     "source_sha256": "a177eb07103ec584ea94575025f9df21f5dc77e2c43eeab04f39642ef2d94a43",
     "text": "%d решение"
@@ -3331,6 +3347,22 @@
     "source_sha256": "bffed407ad7ebd8456f4ec0176d9e8d3945ad633fffdd3cc36ed077da5ede1a0",
     "text": "%d открытых работ"
   },
+  "slice.count.produces.ending_one": {
+    "source_sha256": "2c1ed0dff4ac0083d9b97fd82a273ee6c93813f16ecf57f23c5e4cb7a560e073",
+    "text": "%d место, формирующее результат"
+  },
+  "slice.count.produces.few": {
+    "source_sha256": "2c1ed0dff4ac0083d9b97fd82a273ee6c93813f16ecf57f23c5e4cb7a560e073",
+    "text": "%d места, формирующих результат"
+  },
+  "slice.count.produces.one": {
+    "source_sha256": "912ea92c3de9c64837284399849cec06be4d9b2f2a5fd00eb710eb66e0741b56",
+    "text": "%d место, формирующее результат"
+  },
+  "slice.count.produces.other": {
+    "source_sha256": "2c1ed0dff4ac0083d9b97fd82a273ee6c93813f16ecf57f23c5e4cb7a560e073",
+    "text": "%d мест, формирующих результат"
+  },
   "slice.count.repos.ending_one": {
     "source_sha256": "ba76056302332e3977a0122ec2df0970b8a5cb128c1aea137fd19043095539d3",
     "text": "%d репозиторий"
@@ -3394,6 +3426,22 @@
   "slice.count.tests.other": {
     "source_sha256": "4e5bfa9b4ce20b48bf9722443733a0e6e93fe2828361e58ad99cd268147cf97e",
     "text": "%d мест в тестах"
+  },
+  "slice.count.unrecognized.ending_one": {
+    "source_sha256": "0eac3122e88aa62e75d79b409ce00c4d3f1111d60318f0f2afb40097c660f10d",
+    "text": "%d место с нераспознанной ролью"
+  },
+  "slice.count.unrecognized.few": {
+    "source_sha256": "0eac3122e88aa62e75d79b409ce00c4d3f1111d60318f0f2afb40097c660f10d",
+    "text": "%d места с нераспознанной ролью"
+  },
+  "slice.count.unrecognized.one": {
+    "source_sha256": "f05b69661412a897af1d613d8e8601d4002b3e86a279375c7883034250511a9f",
+    "text": "%d место с нераспознанной ролью"
+  },
+  "slice.count.unrecognized.other": {
+    "source_sha256": "0eac3122e88aa62e75d79b409ce00c4d3f1111d60318f0f2afb40097c660f10d",
+    "text": "%d мест с нераспознанной ролью"
   },
   "slice.count.warnings.ending_one": {
     "source_sha256": "74ccb43976d703e7e801e9a6f50c0da24bf14c65265825ffb2324bc7e72b4b4f",
@@ -3555,6 +3603,10 @@
     "source_sha256": "f50eb257109f5ee565ad3fec2cf3ec22a8d36e8c2f67c52c7dd5179809f8f51d",
     "text": "путь#якорь, страница, файл кода, номер работы или поиск"
   },
+  "slice.help.role": {
+    "source_sha256": "d8a4c73e57b6fdb997cf58492bfbecdf6f5a24019136579db8a4275947c4b702",
+    "text": "оставить места с выбранной ролью, без роли или с нераспознанной ролью"
+  },
   "slice.help.staged": {
     "source_sha256": "ccaad7ca2310b1186432fba83d019395b8dd6758b5f85d5e2f923d867fc408f4",
     "text": "показать изменения кода и договоров, подготовленные к коммиту"
@@ -3647,6 +3699,10 @@
     "source_sha256": "3a4463ad79e2115d3c470414ec61d8cbf96100e5d3e390c6d0f7f3708ec78c03",
     "text": "; кандидаты:"
   },
+  "slice.render.code_including_entry": {
+    "source_sha256": "8decc0d91b817137fc9316e95d7292c2f9687c1828419550f54f558c2efc115a",
+    "text": "%s, в том числе %s"
+  },
   "slice.render.concepts_omitted.ending_one": {
     "source_sha256": "0f3dd9b20cf41690a2d3fdf7061c38029fb60a51005dcd5cdbabed6f2c766d0d",
     "text": "реализует ещё %d понятие"
@@ -3670,6 +3726,10 @@
   "slice.render.found": {
     "source_sha256": "72979c9051c0d14cc64a51e11c9dcbf85b09348c6ce9106318e491d851b121d0",
     "text": " (найдено: %s)"
+  },
+  "slice.render.locations_omitted": {
+    "source_sha256": "90fd9b5bdbba95f783a647134fae7059da326179a870c1de6d233593a57ea3a0",
+    "text": "показано %d из %d адресов объявлений"
   },
   "slice.render.not_found": {
     "source_sha256": "be52ae60070ffc04a99cf5d7cadb84a0984ad794e4c7b466d354e98c367bb7c8",
@@ -3702,6 +3762,42 @@
   "slice.render.via": {
     "source_sha256": "270259f016820a4a0dcebcc884b29afb2c8f0a646c63e35033d78a5e8c81d0fa",
     "text": " — через %s"
+  },
+  "slice.role.additional.ending_one": {
+    "source_sha256": "0b9f177d2c93eeb31c92d318fac357584112367746f1e2a649ce31ca49dc86fc",
+    "text": "ещё %d место без роли"
+  },
+  "slice.role.additional.few": {
+    "source_sha256": "0b9f177d2c93eeb31c92d318fac357584112367746f1e2a649ce31ca49dc86fc",
+    "text": "ещё %d места без роли"
+  },
+  "slice.role.additional.one": {
+    "source_sha256": "297d430acac241d55cc7edc06f427377d49ff6a42912356e20119bef0d717071",
+    "text": "ещё %d место без роли"
+  },
+  "slice.role.additional.other": {
+    "source_sha256": "0b9f177d2c93eeb31c92d318fac357584112367746f1e2a649ce31ca49dc86fc",
+    "text": "ещё %d мест без роли"
+  },
+  "slice.role.consumes": {
+    "source_sha256": "150fc68fb82f1089bc6aca12dceb7817c91ebe838d1f252fff6c3f7b3abc39fe",
+    "text": "потребляет результат"
+  },
+  "slice.role.produces": {
+    "source_sha256": "2e117a15e719884a526bb65fd2d038cda500e4ac3456ecb854e8bd5743590709",
+    "text": "формирует результат"
+  },
+  "slice.role.unassigned": {
+    "source_sha256": "b535d402fe11d0906c4d5d720fe47b6809b0a94dae996792eb1b9fa08d4c9cde",
+    "text": "без роли"
+  },
+  "slice.role.unassigned_locations": {
+    "source_sha256": "57d422ba4ad063cd7087582725d3012ddb530f75a96db4dd08fc34463c3b3c06",
+    "text": "мест без роли — %d"
+  },
+  "slice.role.unrecognized": {
+    "source_sha256": "a3ea5865e56e4ef9644f4b6408ecb7e4b1a51ec7cee169248f1489869b99a058",
+    "text": "роль не распознана — %s"
   },
   "slice.signal.stale": {
     "source_sha256": "c72edafca30a4eb9d2b580cac536964124d94bd1ba004077d2671565a3a361a0",

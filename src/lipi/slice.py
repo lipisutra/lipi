@@ -18,7 +18,7 @@ if __package__ in (None, ""):
 
 from lipi.i18n import ArgumentParser, cli_output, tr
 from lipi.checker.config import load_config, validate_config
-from lipi.checker.conventions import CONFIG_NAME
+from lipi.checker.conventions import CONFIG_NAME, TRACE_ROLES
 from lipi.checker.model import Project
 from lipi.checker.report import Report, finding_item, json_output
 from lipi.checker.reviews import REVIEWS_NAME, ReviewError
@@ -40,6 +40,7 @@ def parser():
     changes = ap.add_mutually_exclusive_group()
     changes.add_argument("--diff", metavar=tr('slice.help.base'), help=tr('slice.help.diff'))
     changes.add_argument("--staged", action="store_true", help=tr('slice.help.staged'))
+    changes.add_argument("--role", choices=TRACE_ROLES, help=tr('slice.help.role'))
     ap.add_argument("--format", choices=("text", "json"), default="text", help=tr('output.help.format'))
     ap.add_argument("--full", action="store_true", help=tr('slice.help.full'))
     ap.add_argument("--depth", type=int, choices=(2, 3), default=1,
@@ -131,7 +132,8 @@ def main(argv=None):
             return 2
     else:
         try:
-            response, code = build_slice(project, args.query, depth=args.depth, layers=args.layer)
+            response, code = build_slice(project, args.query, depth=args.depth,
+                                         layers=args.layer, role=args.role)
         except RepoConfigError as error:
             _config_errors([(CONFIG_NAME, str(error))], args.format)
             return 2

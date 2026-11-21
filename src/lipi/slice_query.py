@@ -13,6 +13,9 @@ from .checker.targets import check_target_status, current_link_source, decision_
 from .checker.workflow_index import index_path
 from .slice_index import HEADING, SliceIndex, clean_title, document_order
 from .slice_output import count_text
+from .slice_roles import (
+    file_role_locations, has_explicit_roles, matching_roles, role_counts, role_entries, role_states,
+)
 
 OPEN = {'iss': {'open', 'in progress'}, 'pln': {'new', 'in progress', 'pending acceptance'},
         'dsc': {'open'}, 'adr': {'proposed'}}
@@ -346,16 +349,16 @@ def _work_obligations(index, work):
 
 
 # @trace docs/ru/slice.md#blocks,docs/ru/slice.md#summary,docs/ru/slice.md#json
-def build_slice(pr, query, depth=1, layers=None):
+def build_slice(pr, query, depth=1, layers=None, role=None):
     """Возвращает полный JSON-договор и код выхода; слой применяется до сводки."""
     if pr.cfg.get('repos'):
         from .repo_slice import build_repo_slice
-        return build_repo_slice(pr, query, depth, layers)
+        return build_repo_slice(pr, query, depth, layers, role=role)
     index = SliceIndex(pr)
     target, error = index.resolve(query)
     if error:
         return error, 1
-    return _build_slice(index, target, depth, layers)
+    return _build_slice(index, target, depth, layers, role=role)
 
 
 # @trace docs/ru/slice-diff.md#response,docs/ru/slice-diff.md#json
@@ -372,7 +375,11 @@ def build_diff_slice(pr, base=None, staged=False, depth=1, layers=None):
     return _build_slice(index, diff_target(base), depth, layers, diff=diff)
 
 
-def _build_slice(index, target, depth, layers, diff=None):
+def _qualified_layer(place):
+    return (place['repo'] + '::' if place.get('repo') else '') + place['layer']
+
+
+def _build_slice(index, target, depth, layers, diff=None, role=None):
     pr = index.pr
     connected = hasattr(index, 'sources')
     kind, aid = target['kind'], target['target']
@@ -414,8 +421,7 @@ def _build_slice(index, target, depth, layers, diff=None):
         signal_places = list(selected.values())
         all_places = list(selected.values())
     all_places.sort(key=index.place_order)
-    places = [place for place in all_places if not layers or
-              ((place['repo'] + '::' if place.get('repo') else '') + place['layer']) in layers]
+    places = [place for place in all_places if not layers or _qualified_layer(place) in layers]
     blocks = {name: [] for name in ORDERS[kind]}
     notes = []
 
@@ -497,6 +503,11 @@ def _build_slice(index, target, depth, layers, diff=None):
     blocks['signals'] = own_signals + signals
 
     display_targets = diff['seeds'] | contract_targets if kind == 'diff' else seeds
+    own_locations = {}
+    if own_places:
+        layered_own_places = (place for place in own_places
+                              if not layers or _qualified_layer(place) in layers)
+        own_locations = file_role_locations(layered_own_places, concepts, role)
     if 'concepts' in blocks:
         for item in sorted(display_targets if kind == 'diff' else concepts, key=document_order):
             node = index.nodes.get(item)
@@ -504,17 +515,36 @@ def _build_slice(index, target, depth, layers, diff=None):
             if diff and item in diff.get('sections', {}):
                 from .slice_diff_response import snapshot_title
                 title = snapshot_title(item, diff['sections'][item])
-            blocks['concepts'].append({'target': item, 'title': title,
-                                       'code_count': (contract_counts.get(item, 0) if item in contract_targets
-                                                      else index.count(item))})
+            concept = {'target': item, 'title': title,
+                       'code_count': (contract_counts.get(item, 0) if item in contract_targets
+                                      else index.count(item))}
+            if item in own_locations:
+                concept['locations'] = own_locations[item]
+            blocks['concepts'].append(concept)
+    has_roles = bool(own_locations)
+    states_by_location = {}
+    visible_places = []
     for place in places:
         matched_targets = sorted(place['targets'].keys() & display_targets)
+        links = matching_roles(place, matched_targets) if kind != 'diff' else {}
+        if links:
+            states = role_states(links, role)
+            if role is not None and not states:
+                continue
+            address = (place.get('repo'), place['path'], place['line'])
+            states_by_location.setdefault(address, set()).update(states)
+            show_roles = role is not None or states != {'unassigned'}
+        else:
+            show_roles = False
+        visible_places.append(place)
         via = matched_targets[0]
         item = {key: place[key] for key in ('path', 'line', 'symbol', 'layer')}
         if connected:
             item['repo'] = place.get('repo')
             item['_test'] = place['test']
-        item['line'] = place['targets'][via]
+        if (kind == 'diff' or place['test']
+                or (role is None and not has_explicit_roles(place.get('target_roles', {})))):
+            item['line'] = place['targets'][via]
         if 'reasons' in place:
             item['reasons'] = place['reasons']
             if place.get('side') == 'before':
@@ -533,6 +563,9 @@ def _build_slice(index, target, depth, layers, diff=None):
             item['via'] = via
         if kind == 'diff':
             item['matched_targets'] = matched_targets
+        if show_roles:
+            item['target_roles'] = role_entries(links)
+            has_roles = True
         blocks[destination].append(item)
     if 'targets' in blocks:
         for item in sorted(index.outgoing.get(aid, ()), key=document_order):
@@ -575,9 +608,8 @@ def _build_slice(index, target, depth, layers, diff=None):
         expected_layers = [layer for layer in expected_layers if '::' not in layer or
                            (index.sources.get(layer.partition('::')[0]) is not None
                             and index.sources.get(layer.partition('::')[0]).state != 'unavailable')]
-    missing = [layer for layer in expected_layers if not any(
-        (place.get('repo', '') + '::' if place.get('repo') else '') + place['layer'] == layer
-        for place in places)]
+    missing = [layer for layer in expected_layers
+               if not any(_qualified_layer(place) == layer for place in places)]
     if missing:
         notes.append({'code': 'layers-no-marks', 'text': tr('slice.note.layers_no_marks') % ', '.join(missing)})
     state = staleness['state']
@@ -599,10 +631,12 @@ def _build_slice(index, target, depth, layers, diff=None):
         summary['decisions' if index.nodes[item['target']]['kind'] == 'decision' else 'rules'] += 1
     for key in ('concepts', 'entry', 'tests', 'targets'):
         summary[key] = len(blocks.get(key, []))
-    non_tests = [place for place in places if not place['test']]
-    summary['tests'] = len(places) - len(non_tests)
+    non_tests = [place for place in visible_places if not place['test']]
+    summary['tests'] = len(visible_places) - len(non_tests)
     summary['code'] = len(non_tests)
     summary['layers'] = len({place['layer'] for place in non_tests})
+    if kind != 'diff' and (role is not None or has_roles):
+        summary['roles'] = role_counts(role, states_by_location.values())
     if index._reviews_present:
         summary['reviewed_pairs'] = len(index._reviewed_pairs)
     public_target = {key: value for key, value in target.items() if key not in ('page', 'line') and not key.startswith('_')}

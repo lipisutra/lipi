@@ -300,7 +300,8 @@ class RepoIndex:
                 targets = {aid: line for aid, line in original['targets'].items() if aid in self.nodes}
                 if not targets:
                     continue
-                place = dict(original, targets=targets, repo=repo)
+                roles = {aid: values for aid, values in original['target_roles'].items() if aid in targets}
+                place = dict(original, targets=targets, target_roles=roles, repo=repo)
                 self.places.append(place)
                 self.by_file.setdefault(qualify(repo, place['path']), []).append(place)
                 for aid in targets:

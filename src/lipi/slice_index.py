@@ -207,7 +207,7 @@ class SliceIndex:
         declaration = rows[line - 1] if line is not None else ''
         layer = self.layer(path)
         return {'path': path, 'line': group['start'], 'symbol': declaration.strip()[:80],
-                'layer': layer, 'targets': group['targets'],
+                'layer': layer, 'targets': group['targets'], 'target_roles': group['target_roles'],
                 'history_line': group['end'],
                 'end_line': group['end'], 'region_end': group['region_end'],
                 'test': is_configured_test_file(path, layer, self.pr.cfg),

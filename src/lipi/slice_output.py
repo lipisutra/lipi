@@ -2,9 +2,11 @@
 import copy
 import re
 from collections import Counter
+from itertools import islice
 
 from .checker.model import mask_code
-from .i18n import plural_form, tr
+from .i18n import plural_form, quoted, tr
+from .repo_index import qualify
 from .slice_diff_budget import section_line_count, trim_sections
 
 
@@ -42,6 +44,17 @@ def _short_excerpt(lines, limit):
     return (selected or lines)[:limit]
 
 
+def _block_rows(block):
+    """Объявление под понятием занимает свою строку после строки понятия."""
+    if block["kind"] != "concepts":
+        yield from range(len(block["items"]))
+        return
+    for number, item in enumerate(block["items"]):
+        yield number
+        for location_number in range(len(item.get("locations", ()))):
+            yield number, location_number
+
+
 # @trace docs/ru/slice.md#budget
 def select_response(response, budget=60, full=False, only=None):
     """Один отбор для text и JSON; полный исходный ответ не меняется."""
@@ -76,8 +89,11 @@ def select_response(response, budget=60, full=False, only=None):
 
     def take(index, candidates, limit):
         nonlocal remaining
-        choices = [n for n in candidates if n not in selected[index]]
-        chosen = choices[:min(limit, remaining)]
+        count = min(limit, remaining)
+        if count <= 0:
+            return
+        choices = (n for n in candidates if n not in selected[index])
+        chosen = list(islice(choices, count))
         selected[index].update(chosen)
         remaining -= len(chosen)
 
@@ -103,7 +119,7 @@ def select_response(response, budget=60, full=False, only=None):
             take(index, [n for n, item in enumerate(block["items"])
                          if item["level"] == "info"], 3)
         else:
-            take(index, range(len(block["items"])), 3)
+            take(index, _block_rows(block), 3)
 
     # Остаток — сначала серьёзным сигналам, потом по порядку ответа.
     for index, block in enumerate(blocks):
@@ -117,7 +133,7 @@ def select_response(response, budget=60, full=False, only=None):
             if index in excerpts and not full:
                 take(index, range(len(excerpts[index][1])), remaining)
         else:
-            take(index, range(len(block["items"])), remaining)
+            take(index, _block_rows(block), remaining)
 
     incomplete = result['incomplete']
     if diff_index is not None:
@@ -138,6 +154,17 @@ def select_response(response, budget=60, full=False, only=None):
         else:
             block["items"] = [item for n, item in enumerate(items) if n in selected[index]]
             omitted = len(items) - len(block["items"])
+            if kind == "concepts":
+                for number, item in enumerate(items):
+                    locations = item.get("locations", ())
+                    if number not in selected[index] or not locations:
+                        continue
+                    visible = [location for location_number, location in enumerate(locations)
+                               if (number, location_number) in selected[index]]
+                    hidden = len(locations) - len(visible)
+                    if hidden:
+                        item.update(locations=visible, locations_omitted=hidden)
+                        incomplete = True
         block["omitted"] = omitted
         block["hint"] = (["--full"] if kind == "excerpt" else ["--only " + kind]) if omitted else []
         if omitted and kind in ("entry", "code", "tests"):
@@ -152,25 +179,38 @@ def count_text(number, kind):
 
 
 def _summary(summary):
+    roles = summary.get("roles", {})
+    entry = count_text(summary["entry"], "entry") if roles and summary.get("entry") else ""
     parts = []
     for key in ("errors", "warnings", "decisions", "rules", "concepts", "entry",
                 "code", "tests", "open_work", "targets"):
         number = summary.get(key, 0)
-        if not number:
+        if not number or (key == "entry" and entry):
             continue
         part = count_text(number, key)
-        if key == "code" and summary.get("layers"):
-            detail = count_text(summary["layers"], "layers")
-            if "repos" in summary:
-                detail += ", " + count_text(summary["repos"], "repos")
-            part += " (%s)" % detail
+        if key == "code":
+            if summary.get("layers"):
+                detail = count_text(summary["layers"], "layers")
+                if "repos" in summary:
+                    detail += ", " + count_text(summary["repos"], "repos")
+                part += " (%s)" % detail
+            if entry:
+                part = tr("slice.render.code_including_entry") % (part, entry)
         parts.append(part)
+    if "role" in roles:
+        parts.append(count_text(roles["matched"], roles["role"]))
+        unassigned = roles["unassigned"]
+        if unassigned:
+            parts.append(tr("slice.role.additional." + plural_form(unassigned)) % unassigned)
+    elif roles.get("unassigned"):
+        parts.append(tr("slice.role.unassigned_locations") % roles["unassigned"])
+    if roles.get("unrecognized"):
+        parts.append(count_text(roles["unrecognized"], "unrecognized"))
     return " · ".join(parts)
 
 
 # @trace docs/ru/slice-diff.md#response
 def _diff_target_labels(blocks):
-    from .repo_index import qualify
     targets = {qualify(item.get("repo"), item["target"])
                for block in blocks if block["kind"] == "concepts" for item in block["items"]}
     if len(targets) < 2:
@@ -242,14 +282,41 @@ def _diff_sections_text(diff):
     return lines
 
 
+def _place_address(item):
+    return "%s:%s  %s" % (qualify(item.get("repo"), item["path"]), item["line"], item["symbol"])
+
+
+def _role_suffix(target_roles, labels):
+    descriptions = []
+    for entry in target_roles:
+        target = entry["target"]
+        roles = [tr("slice.role." + role) for role in entry["roles"]]
+        roles.extend(tr("slice.role.unrecognized") % quoted(value)
+                     for value in entry.get("invalid_roles", ()))
+        descriptions.append("%s (%s)" % (labels.get(target, target),
+                                        ", ".join(roles) or tr("slice.role.unassigned")))
+    return tr("slice.render.via") % ", ".join(descriptions) if descriptions else ""
+
+
 def _item_text(kind, item, labels):
+    if kind in ("entry", "code", "tests"):
+        text = _place_address(item)
+        if kind != "tests":
+            text += "  [%s]" % qualify(item.get("repo"), item["layer"])
+        if item.get("side") == "before":
+            text += " [%s]" % tr("slice.diff.place.before")
+        if item.get("reasons"):
+            text += _diff_reason_text(item["reasons"], labels)
+        elif labels:
+            text += tr("slice.render.via") % ", ".join(labels.get(target, target)
+                                                       for target in item["matched_targets"])
+        return text + _role_suffix(item.get("target_roles", ()), labels)
     if item.get("repo"):
         item = dict(item)
-        for key in ("path", "layer"):
-            if key in item:
-                item[key] = item["repo"] + "::" + item[key]
+        if "path" in item:
+            item["path"] = qualify(item["repo"], item["path"])
         if "target" in item and kind != "signals":
-            item["target"] = item["repo"] + "::" + item["target"]
+            item["target"] = qualify(item["repo"], item["target"])
     if kind == "signals":
         if item.get("code"):
             prefix = "! %s  " % item["code"]
@@ -260,18 +327,6 @@ def _item_text(kind, item, labels):
                 prefix += " — "
             return prefix + item["message"]
         return "· " + item["message"]
-    if kind in ("entry", "code", "tests"):
-        text = "%s:%s  %s" % (item["path"], item["line"], item["symbol"])
-        if kind != "tests":
-            text += "  [%s]" % item["layer"]
-        if item.get("side") == "before":
-            text += " [%s]" % tr("slice.diff.place.before")
-        if item.get("reasons"):
-            text += _diff_reason_text(item["reasons"], labels)
-        elif labels:
-            text += tr("slice.render.via") % ", ".join(labels.get(target, target)
-                                                       for target in item["matched_targets"])
-        return text
     text = item["target"]
     if kind == "obey" and item.get("status"):
         text += " " + item["status"]
@@ -283,6 +338,15 @@ def _item_text(kind, item, labels):
     if kind in ("concepts", "targets"):
         text += " (%s)" % count_text(item["code_count"], "code")
     return text
+
+
+def _concept_locations(item):
+    locations = item.get("locations", ())
+    for location in locations:
+        yield "    " + _place_address(location) + _role_suffix(location["target_roles"], {})
+    omitted = item.get("locations_omitted", 0)
+    if omitted:
+        yield "    " + tr("slice.render.locations_omitted") % (len(locations), len(locations) + omitted)
 
 
 # @trace docs/ru/slice.md#json
@@ -337,6 +401,8 @@ def render_text(response, *, target_path=None, selected_blocks=None, selected_re
         for item in block["items"]:
             content = item["text"].splitlines() if kind == "excerpt" else [_item_text(kind, item, labels)]
             body.extend("  " + line for line in content)
+            if kind == "concepts":
+                body.extend(_concept_locations(item))
         if block["omitted"]:
             hints = ", ".join(block["hint"])
             shown = sum(item["lines"] for item in block["items"]) if kind == "excerpt" else len(block["items"])

@@ -49,7 +49,7 @@ some are unchecked, or `no-git` when Git is unavailable. For `no-git`,
 repository's history, so A4 and review marks work as at the root. A
 missing scan file list alone does not trigger `no-git`. A `full` state
 with a nonzero `total` also shows the checked and total counts
-(`notes[].code` is `staleness-full`). `--only`, `--layer`, `--full`, and
+(`notes[].code` is `staleness-full`). `--only`, `--layer`, `--role`, `--full`, and
 the output budget leave history coverage unchanged.
 
 With connections, the checked and total counts describe local A4 coverage.
@@ -142,6 +142,36 @@ decision ID, such as `ADR-001` for `0001-….md`.
 
 Adding a field is compatible. Removing a field or changing its meaning
 requires a new `schema` number and a major lipi release.
+
+## Code roles <a id="roles"></a>
+
+After changing a format, run `lipi slice docs/export.md#row --role consumes`
+to find readers. The filter also shows addresses worth checking where the
+role is missing or misspelled. Use `--role produces` to find writers. Roles
+belong to individual links. A function can read one format and write another.
+See [trace role syntax](rules.md#trace-roles).
+
+In `entry` and `code`, `target_roles` lists each matching anchor and its
+`roles` if a role was specified or a filter was used. An empty list means
+the marker supplied no recognized value. When a value was misspelled,
+`invalid_roles` preserves it. For example, `role=consumes,produce` identifies
+a reader and keeps the address visible under either filter. Test locations
+remain in their usual block.
+
+`summary.roles` counts code and entry points across the sources read after
+layer selection and before output limits. With a filter, `matched` counts
+locations with the requested role. `unassigned` counts additional locations
+with a missing role. `unrecognized` counts locations with a role error,
+including matches that also have an error. Each count uses distinct locations.
+For a connected target, `target_roles[].target` includes the repository name,
+for example `service::docs/export.md#row`.
+
+In a file slice, when the file uses roles or you pass `--role`, each linked
+concept lists the file's matching declarations under `locations`, including
+those with no role. All anchors on one declaration use the first marker's
+line number. If the budget cuts the list short, `locations_omitted` gives the
+remaining count. The code total includes entry points and other related code
+locations that pass the filters.
 
 ## Search in a connected repository <a id="repo-search"></a>
 

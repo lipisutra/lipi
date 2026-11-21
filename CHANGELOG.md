@@ -9,6 +9,8 @@
 - Code trace markers can declare `role=consumes`, `role=produces`, or both
   for a Markdown anchor. `lipi check` reports an invalid role or an invalid
   use of the attribute as T5. Its default level is `error`.
+- `lipi slice <target> --role consumes` or `--role produces` finds related
+  code by role and includes locations with missing or unrecognized roles.
 
 ### Upgrading your project
 

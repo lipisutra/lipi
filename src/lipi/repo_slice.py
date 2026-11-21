@@ -39,26 +39,30 @@ def _suggestions(index, query):
     return suggestions
 
 
-def _empty(target):
+def _empty(target, role=None):
     from .slice_query import SUMMARY
+    from .slice_roles import role_counts
+    summary = dict.fromkeys(SUMMARY, 0)
+    if role:
+        summary['roles'] = role_counts(role)
     return {'schema': 1,
             'target': {key: value for key, value in target.items()
                        if key not in ('page', 'line', 'unavailable') and not key.startswith('_')},
-            'summary': dict.fromkeys(SUMMARY, 0), 'blocks': [], 'incomplete': True,
+            'summary': summary, 'blocks': [], 'incomplete': True,
             'notes': [], 'checks': {'staleness': {'state': 'full', 'checked': 0, 'total': 0}}}
 
 
-def _build_stable(index, target, depth, layers, diff=None):
+def _build_stable(index, target, depth, layers, diff=None, role=None):
     """Новый сбой чтения убирает источник и пересобирает зависящие от него связи."""
     from .slice_query import _build_slice
     while True:
         before = {source.name for source in index.sources.all if source.state == 'unavailable'}
         if target.get('repo') in before:
-            return _empty(target), 0
+            return _empty(target, role), 0
         if diff is not None and before:
             diff['seeds'] = {aid for aid in diff['seeds'] if _split(aid)[0] not in before}
         try:
-            response = _build_slice(index, target, depth, layers, diff=diff)
+            response = _build_slice(index, target, depth, layers, diff=diff, role=role)
         except KeyError:
             after = {source.name for source in index.sources.all if source.state == 'unavailable'}
             if after == before:
@@ -182,6 +186,8 @@ def _finish(index, response, *, contract_counts=()):
         summary[kind] = sum(len(block['items']) for block in blocks if block['kind'] == kind)
     summary.update(code=len(non_tests), layers=len({(item['repo'], item['layer']) for item in non_tests}),
                    repos=len({item['repo'] for item in non_tests}))
+    if 'roles' in response['summary']:
+        summary['roles'] = response['summary']['roles']
     from .checker.reviews import load_reviews
     if load_reviews(index.pr.root) is not None:
         summary['reviewed_pairs'] = (0 if target_repo in unavailable
@@ -191,15 +197,15 @@ def _finish(index, response, *, contract_counts=()):
 
 
 # @trace docs/ru/slice.md#repos
-def build_repo_slice(pr, query, depth=1, layers=None):
+def build_repo_slice(pr, query, depth=1, layers=None, role=None):
     from .repo_index import RepoIndex
     index = RepoIndex(pr)
     target, error = index.resolve(query)
     if error:
         return _finish(index, error), 1
     if target.get('unavailable'):
-        return _finish(index, _empty(target)), 0
-    response, code = _build_stable(index, target, depth, layers)
+        return _finish(index, _empty(target, role)), 0
+    response, code = _build_stable(index, target, depth, layers, role=role)
     return _finish(index, response), code
 
 
