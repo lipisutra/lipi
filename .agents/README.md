@@ -48,8 +48,6 @@ Change a rule, its template, and its check in the same commit.
 
 Add rules that the checker can enforce or that an agent can follow from a single sentence. Keep project-specific language and stack conventions in the relevant project. Use the Python standard library for the checker.
 
-Occasionally look back at how a task went. If a step wasted time or a check missed a problem, tell the user what happened and suggest one concrete improvement for discussion before adopting it.
-
 To add an interface language, create a sibling of `src/lipi/locale/en/`. Each translated message or term has `text` and `source_sha256`. For a term, `text` contains `term` and `definition`. In `template-hashes.json`, use the seed file's path relative to `templates/` as its key. The managed rules and CI template always come from English. Use `lipi.i18n.fingerprint` on the English value or UTF-8 template text and update the fingerprint after reviewing the translation. Check the translation inventory with `python3 -m unittest tests.test_interface_language.LanguageResources.test_translation_inventory`.
 
 ## Documentation <a id="documentation"></a>
@@ -62,10 +60,7 @@ Follow the [workflow instructions](https://github.com/lipisutra/lipi/blob/master
 
 ## Checks <a id="checks"></a>
 
-- For wording changes in documentation or contributor instructions, run `lipi check` and `lipi audit`. If a test checks an edited example, run that test too.
-- For wording changes in managed templates, also apply them with `lipi init` and verify that a second `lipi init --dry-run` proposes no changes.
-- For behavior changes, run tests for the affected commands and their callers. Widen the run when shared code puts other commands at risk. Run `lipi index` when workflow headers change.
-- Run the full suite (`python3 -m unittest discover -s tests`) at agreed checkpoints and in both interface languages before tagging. For each language, reuse a passing run on the same tree. If only the release date, work item statuses or results, or the generated workflow index have changed since that run, it still counts. For those changes, run `lipi check`, `lipi audit`, and `python3 -m unittest tests.test_release`.
+See [Verification and reflection in the repository’s AGENTS.md](https://github.com/lipisutra/lipi/blob/master/AGENTS.md#verification-and-reflection).
 
 After a clean pipx install, run [tests/check_package.py](https://github.com/lipisutra/lipi/blob/master/tests/check_package.py) with the installed environment's Python. Pass `--source` pointing to a snapshot of the same revision. Run outside the checkout and snapshot with `PYTHONPATH` unset. The test checks installed documentation and `lipi guide` against the snapshot and imports modules from the installation.
 
