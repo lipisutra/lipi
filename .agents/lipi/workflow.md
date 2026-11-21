@@ -165,5 +165,6 @@ context, verify any claims against the current code and documentation.
 ## Links <a id="links"></a>
 
 Use relative links between workflow documents. Link to documentation
-and code where they already explain something. Rerun checks when the
-code changes.
+and code where they already explain something. When filing an issue,
+link to the section that defines the expected behavior if you already
+know its anchor. Rerun checks when the code changes.

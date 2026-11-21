@@ -1,9 +1,9 @@
 {
   "enforce": false,
   "files": {
-    ".agents/lipi/README.md": "e3b908303f104149e21b0353717b541e50c71fbb235387475438702ffa080d02",
+    ".agents/lipi/README.md": "4059b24087d659f2a68b1ad2cde6bab0ffbdb6f5a984aa196c014de6d56136f4",
     ".agents/lipi/documentation.md": "fd420a88b2cab74cf691585fea371747a70972264609320411f5bc09e5685616",
-    ".agents/lipi/workflow.md": "6b2267b8afe9dc7633bf33d19c827a3baed7d7d3c400ae13da9c007756a885ce"
+    ".agents/lipi/workflow.md": "aad9a3f15ac3800274765ecbba4a9113774bcb89c78f0ae15af1ec48001d1828"
   },
   "lipi": "1.3.1"
 }

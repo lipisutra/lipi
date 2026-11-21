@@ -27,12 +27,15 @@ rules in [Workflow documents](workflow.md).
 
 ## Working on a task <a id="task"></a>
 
-- Start with `lipi slice` for a concept, source file, or work item ID. Read
-  the relevant files, make the change, verify it, and report the result.
-  Try `lipi slice docs/en/api.md#requests`, `lipi slice src/api.py`, or
-  `lipi slice ISS-001`. If a slice finds no target, try a suggested repository
-  search when it fits the task. If a relevant location is still missing,
-  search the code directly.
+- If you know the section that describes the behavior, open its slice to
+  find linked code and tests (for example, `lipi slice docs/en/api.md#requests`).
+  If you have an exact error message, a function name, or a failing test,
+  start there. Once you find the code, slice the section named in its trace
+  marker if you need to see what else the change may affect.
+  If a slice finds no target, try a suggested repository search when it
+  fits the task. If a relevant location is still missing, search the code
+  directly. Read the relevant files, make the change, verify it, and report
+  the result.
 - After editing code, review its links with `lipi slice --diff HEAD` or
   `lipi slice --staged`. The slice lists things to check.
   If your conclusion depends on a linked test, read its assertion and run

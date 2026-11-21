@@ -8,11 +8,13 @@
 - For an explicit Markdown address in a connected repository, `lipi slice`
   explains which read setting, file path, or anchor to check. JSON includes
   the cause in `reason` (schema 1).
+- Agent instructions explain when to start with a section slice or a concrete
+  symptom and when to link an issue to the documented behavior.
 
 ### Upgrading your project
 
 1. Upgrade Lipi with `pipx upgrade lipi`.
-2. The rules and templates are unchanged. You can skip `lipi init`.
+2. The rules and templates have changed. Run `lipi init`.
 
 ## 1.3.0 — 2026-11-21
 
