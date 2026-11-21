@@ -4,6 +4,8 @@
 
 ## Сейчас
 
+- [ISS-024](issue/2026/iss-024-roli-svyazey-mezhdu-kodom-i-dogovorom.md) — роли «формирует» и «потребляет» в срезе. [План реализации](plan/2026/pln-004-roli-svyazey-v-sreze.md).
+
 ## Дальше
 
 ## Позже
