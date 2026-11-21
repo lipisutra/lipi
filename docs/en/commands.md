@@ -59,7 +59,7 @@ lipi slice ISS-007
 lipi slice --diff HEAD   # Or --staged to see related locations to review
 ```
 
-See the [slice reference](slice.md), [diff slice](slice-diff.md), and
+See [text search](slice-search.md), the [slice reference](slice.md), [diff slice](slice-diff.md), and
 [examples](slice-examples.md) for targets, blocks, limits, flags, and JSON. Exit
 code 0 means the command returned a result, including an empty slice. A missing or
 ambiguous target exits with 1. An invalid invocation or settings exits with 2.

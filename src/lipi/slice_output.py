@@ -353,6 +353,24 @@ def _concept_locations(item):
         yield "    " + tr("slice.render.locations_omitted") % (len(locations), len(locations) + omitted)
 
 
+# @trace docs/ru/slice-search.md#output
+def render_search_text(response):
+    candidates = response["candidates"]
+    lines = []
+    if not response.get("incomplete"):
+        lines.append(tr("slice.search.results") % (response["total"], len(candidates)))
+    if response.get("message"):
+        lines.append(response["message"])
+    for item in candidates:
+        lines.append("  %s — %s" % (qualify(item["repo"], item["target"]), item["title"]))
+        lines.append("    %s:%d" % (item["file"], item["line"]))
+        lines.append("    " + item["excerpt"])
+    if response.get("suggestions"):
+        lines.append(tr("slice.search.suggestions"))
+        lines.extend("  " + item["command"] for item in response["suggestions"])
+    return "\n".join(lines)
+
+
 # @trace docs/ru/slice.md#json
 def render_text(response, *, target_path=None, selected_blocks=None, selected_response=None):
     """Render selected items and sections using all concepts to disambiguate target labels."""
@@ -364,6 +382,8 @@ def render_text(response, *, target_path=None, selected_blocks=None, selected_re
             lines.append(response["message"])
         lines += ["  %s — %s" % ((item["repo"] + "::" if item.get("repo") else "") + item["target"], item["title"])
                   for item in response.get("candidates", [])]
+        if response.get("search_command"):
+            lines.extend([tr("slice.render.search"), "  " + response["search_command"]])
         if response.get("suggestions"):
             lines.append(tr("slice.render.suggestions"))
             lines.extend("  " + item["command"] for item in response["suggestions"])

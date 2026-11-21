@@ -19,6 +19,7 @@ Read this documentation [in Russian](../ru/README.md).
 | [move.md](move.md) | Move a page, directory, or list of files and update references |
 | [map.md](map.md) | Project-wide map of targets, code layers, and tests |
 | [slice.md](slice.md) | Rules, signals, code, and tests for a target before starting work |
+| [Search documents](slice-search.md) | Find the first useful section from the words in a question |
 | [slice-diff.md](slice-diff.md) | Related locations to review after changing code or documentation |
 | [checking.md](checking.md) | Check modes, severity levels, the baseline, and history |
 | [review.md](review.md) | A4 review fingerprints, confirmation, and cleanup |

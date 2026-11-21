@@ -32,8 +32,9 @@ rules in [Workflow documents](workflow.md).
   If you have an exact error message, a function name, or a failing test,
   start there. Once you find the code, slice the section named in its trace
   marker if you need to see what else the change may affect.
-  If a slice finds no target, try a suggested repository search when it
-  fits the task. If a relevant location is still missing, search the code
+  If a question finds no target, try the suggested `--search` command.
+  If the local excerpts leave the question open and a connected repository
+  is relevant, try the suggested search there. If you still need code, search it
   directly. Read the relevant files, make the change, verify it, and report
   the result.
 - After editing code, review its links with `lipi slice --diff HEAD` or

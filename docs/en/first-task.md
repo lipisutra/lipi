@@ -23,10 +23,14 @@ If the project keeps its own backlog, it can set `"workflow": null` in
 `lipi.json`. On first setup, `lipi check --no-baseline` also shows
 pre-existing errors recorded in the baseline. [Setup details](../../SETUP.md#init).
 
-Look for the operation on the map, or try a short phrase from a page or
-section title, such as `lipi slice 'read a saved revision'`. An exact
-address such as `lipi slice 'docs/records.md#read-revision'` goes straight
-to that section. Open the implementation and the client it leads to.
+Look for the operation on the map. If you only have the question, try
+`lipi slice --search 'Can I read a saved revision by ID?'`. Read the
+excerpts and open `file:line` to check the wording, even on a page with
+no trace markers. If the contract is in a connected repository, follow
+the suggested search there. [Document search](slice-search.md#command).
+
+Once you know the target, `lipi slice 'docs/records.md#read-revision'`
+opens the section and shows its linked implementation and client code.
 If the service already accepts a revision ID and the screen still calls
 the list operation, you have found where to start the change.
 

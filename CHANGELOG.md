@@ -1,5 +1,19 @@
 # lipi releases
 
+## 1.4.0 — 2026-11-22
+
+- `lipi slice --search 'question'` searches document headings and paragraphs.
+  Each candidate includes a slice target, an excerpt, and a file and line to
+  open. Use `name::question` to search one connected repository.
+- When a text query misses, `lipi slice` suggests a search command for the
+  same words. The agent instructions and first-task guide explain how to
+  follow a match or try a connected repository.
+
+### Upgrading your project
+
+1. Upgrade Lipi with `pipx upgrade lipi`.
+2. The rules and templates have changed. Run `lipi init`.
+
 ## 1.3.3 — 2026-11-21
 
 - Agent instructions explain how to tell which part of a behavior a linked

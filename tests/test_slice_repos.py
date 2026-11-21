@@ -125,7 +125,7 @@ class RepositorySlices(support.Case):
         code, output = support.cli(self.root, 'slice', phrase)
         self.assertEqual(code, 1, output)
         self.assertEqual([line.strip() for line in output.splitlines() if line.startswith('  lipi slice ')],
-                         [item['command'] for item in result['suggestions']])
+                         [result['search_command'], *[item['command'] for item in result['suggestions']]])
 
     # @trace docs/ru/slice-output.md#repo-search
     def test_suggestions_only_for_local_text_misses_with_eligible_connections(self):

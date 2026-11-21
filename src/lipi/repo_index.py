@@ -60,12 +60,12 @@ class _LocalIndex(SliceIndex):
 class _NeighborIndex(SliceIndex):
     """Документы только из разрешённых областей; код читается отдельным проходом."""
 
-    def __init__(self, source, links):
+    def __init__(self, source, links, *, documents_only=False):
         self.source = source
         self.local = None
-        self.eager_documents = links
-        super().__init__(source.project, links=False)
-        if links and source.has_config and source.unavailable_reason is None:
+        self.eager_documents = links or documents_only
+        super().__init__(source.project, links=False, documents_only=documents_only)
+        if links and not documents_only and source.has_config and source.unavailable_reason is None:
             self._links()
             self._relations()
 
@@ -74,8 +74,8 @@ class _NeighborIndex(SliceIndex):
         if not source.has_config:
             return
         work_by_path = {}
-        pr.mark_work_index = _decision_targets(pr) if 'decisions' in source.read else {}
-        if 'decisions' in source.read:
+        if not self.documents_only:
+            pr.mark_work_index = _decision_targets(pr) if 'decisions' in source.read else {}
             for did, paths in pr.mark_work_index.items():
                 match = WORK_ID.fullmatch(did)
                 self.work_aliases.setdefault((match[1], int(match[2])), []).append(did)
@@ -97,7 +97,11 @@ class _NeighborIndex(SliceIndex):
             if any(other != root and other in root.parents for other in roots):
                 continue
             paths.update(pr.walk_md(root, exclusions=pr.target_skip_dirs, onerror=self._walk_error))
+            if self.documents_only and source.unavailable_reason is not None:
+                return
         for path in sorted(paths):
+            if self.documents_only and source.unavailable_reason is not None:
+                return
             safe = source.resolve_path(path)
             if (safe is None or safe.suffix.lower() != '.md' or not safe.is_file()
                     or _external_path_kind(source, safe) not in source.read):

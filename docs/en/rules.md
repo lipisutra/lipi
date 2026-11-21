@@ -216,6 +216,10 @@ excluded. An unavailable source contributes no results. T4 leaves
 reference command exit codes unchanged, while `check` exits with 1 for
 T4 at `error` level. See [map](map.md) and [slice](slice.md).
 
+If a question finds no target, try the suggested [document search](slice-search.md#command).
+If local excerpts leave the question open and a connected repository is relevant,
+use its suggested search.
+
 When drawing a conclusion from a linked test, read its assertion, run the
 test, and identify a plausible wrong result it would catch. If it covers only
 part of the behavior, report what it checks and what remains unverified.

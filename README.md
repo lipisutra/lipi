@@ -24,7 +24,8 @@ consumers, and tests marked for that contract.
 
 - **Find existing behavior.** Run `lipi map` to see which concepts have
   markers in each layer. Open a concept with `lipi slice` to find the
-  linked decisions, code, and test locations.
+  linked decisions, code, and test locations. If you only have a question, try
+  `lipi slice --search 'Can I read a saved revision by ID?'`.
 - **Review a change.** Run `lipi slice --diff HEAD` for related locations
   in your project and its connected repositories. When the diff touches
   several targets, each location shows the targets it shares with the change.

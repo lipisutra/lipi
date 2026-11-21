@@ -1,12 +1,8 @@
 """Срез подключений: общий индекс, локальная история, явные адреса ответа."""
 
-import os
-import re
-from shlex import quote
-from urllib.parse import unquote
-
 from .i18n import plural_form, tr
 from .repo_output import repository_status
+from .slice_commands import is_title_query, slice_command
 from .slice_index import document_order
 
 
@@ -15,28 +11,19 @@ def _split(target):
     return (repo, local) if separator else (None, target)
 
 
-# @trace docs/ru/slice-output.md#repo-search
-def _suggestions(index, query):
-    path = unquote(query)
-    if (not query.strip() or path in ('.', '..')
-            or any(separator in path for separator in ('#', '/', '\\'))
-            or re.fullmatch(r'\S+\.[a-zA-Z][\w-]*', path)):
+def _can_search(source, scopes):
+    return (source.has_config and bool(scopes.intersection(source.read))
+            and source.state != 'unavailable')
+
+
+# @trace docs/ru/slice-output.md#repo-search,docs/ru/slice-search.md#command
+def repository_suggestions(sources, query, *, search=False):
+    if not search and not is_title_query(query):
         return []
-    suggestions = []
-    for source in index.sources.all:
-        if source.name is None or 'docs' not in source.read or not source.has_config:
-            continue
-        if source.state == 'unavailable':
-            continue
-        target = source.name + '::' + query
-        if os.name == 'nt':
-            # PowerShell распознаёт и типографские одинарные кавычки.
-            quoted = "'%s'" % re.sub(r"['‘’‚‛]", r'\g<0>\g<0>', target)
-        else:
-            quoted = quote(target)
-        command = 'lipi slice -- ' if target.startswith('-') else 'lipi slice '
-        suggestions.append({'repo': source.name, 'command': command + quoted})
-    return suggestions
+    scopes = {'docs', 'decisions'} if search else {'docs'}
+    return [{'repo': source.name, 'command': slice_command(source.name + '::' + query, search=search)}
+            for source in sources.all
+            if source.name is not None and _can_search(source, scopes)]
 
 
 def _empty(target, role=None):
@@ -100,9 +87,16 @@ def _finish(index, response, *, contract_counts=()):
             repo, target = _split(candidate['target'])
             candidate.update(repo=repo or candidate.get('repo'), target=target)
         if response.pop('_local_title_miss', False):
-            suggestions = _suggestions(index, response['query'])
+            suggestions = repository_suggestions(index.sources, response['query'])
             if suggestions:
                 response['suggestions'] = suggestions
+        if 'search_command' in response:
+            repo, _ = _split(response['query'])
+            if repo is not None:
+                if _can_search(index.sources.get(repo), {'docs', 'decisions'}):
+                    response['search_command'] = slice_command(response['query'], search=True)
+                else:
+                    del response['search_command']
         return response
 
     target = response['target']

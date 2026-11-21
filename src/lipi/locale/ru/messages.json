@@ -3184,8 +3184,16 @@
     "text": "блоки через запятую: %s"
   },
   "slice.arguments.query": {
-    "source_sha256": "493046d38793212ff439ebd0ec86e7e41c460467849fdec272e72f8d7f06b88a",
-    "text": "укажите одно: цель, --diff <база> или --staged"
+    "source_sha256": "db756eea310a7178eb0cf876aa5462bd3d0b29d7caed0847fbb847574aca67b6",
+    "text": "укажите что-то одно: цель, --search <фраза>, --diff <база> или --staged"
+  },
+  "slice.arguments.search_conflict": {
+    "source_sha256": "614ee39f9a44e6c60c1d732aef5992dc33ca2a7e039d2c5259c30950c152eade",
+    "text": "--search можно использовать только с --format"
+  },
+  "slice.arguments.search_empty": {
+    "source_sha256": "f1c6a863d6c9deff6a1987d9fcb565895e483e84151e4faf9c59620790668134",
+    "text": "для --search нужна непустая фраза"
   },
   "slice.block.code": {
     "source_sha256": "dcadc0999858878e1e12edccc3dcd1c08793cc54314931c83ccaf42089173d4a",
@@ -3623,6 +3631,10 @@
     "source_sha256": "8cbeb3f80882ad78ac643ce187a52819561cfbc1ea4f139baaa042fc5830cba4",
     "text": "оставить выбранные блоки и сигналы. Изменённые разделы входят в excerpt"
   },
+  "slice.help.phrase": {
+    "source_sha256": "c00062f7ec9c80e2e77abc65b046049364054299a26cba17c81067b4d37552a2",
+    "text": "фраза"
+  },
   "slice.help.query": {
     "source_sha256": "f50eb257109f5ee565ad3fec2cf3ec22a8d36e8c2f67c52c7dd5179809f8f51d",
     "text": "путь#якорь, страница, файл кода, номер работы или поиск"
@@ -3630,6 +3642,10 @@
   "slice.help.role": {
     "source_sha256": "d8a4c73e57b6fdb997cf58492bfbecdf6f5a24019136579db8a4275947c4b702",
     "text": "оставить места с выбранной ролью, без роли или с нераспознанной ролью"
+  },
+  "slice.help.search": {
+    "source_sha256": "449d31fa4269afd83ce0977d2fc58a296d31b3facc6fa3a64840b98ff2c2f9ae",
+    "text": "искать по тексту местных документов или по документам соседа с имя::фраза"
   },
   "slice.help.staged": {
     "source_sha256": "ccaad7ca2310b1186432fba83d019395b8dd6758b5f85d5e2f923d867fc408f4",
@@ -3767,6 +3783,10 @@
     "source_sha256": "04ad3580671ba2076978892367b7a4b1953ff607daed891d3d729b2e2b106ef5",
     "text": "просмотрено пар устаревания: %d"
   },
+  "slice.render.search": {
+    "source_sha256": "55a0404f815c46296e87136b7ea440367ff3cdbd2f2cf114e545231e1bc36496",
+    "text": "Поиск по тексту документов"
+  },
   "slice.render.show_more": {
     "source_sha256": "5e006eed26e5ce8c56ecb49e787c455b4e84f6e3b74858b278a013f33647ce45",
     "text": "  %s; ещё — %s"
@@ -3818,6 +3838,14 @@
   "slice.role.unrecognized": {
     "source_sha256": "a3ea5865e56e4ef9644f4b6408ecb7e4b1a51ec7cee169248f1489869b99a058",
     "text": "роль не распознана — %s"
+  },
+  "slice.search.results": {
+    "source_sha256": "2dee778eb43683f5c083da0f821fc60be1435a0a74326d7ec5137dfdc41861b5",
+    "text": "Найдено %d. Показано %d."
+  },
+  "slice.search.suggestions": {
+    "source_sha256": "b5d39bccfd01a57d43f41fede17e32d2fe6c22dc894515e1afa1138c37273919",
+    "text": "Поиск по тексту документов в подключениях"
   },
   "slice.signal.stale": {
     "source_sha256": "c72edafca30a4eb9d2b580cac536964124d94bd1ba004077d2671565a3a361a0",

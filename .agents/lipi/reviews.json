@@ -79,25 +79,6 @@
     },
     {
       "head": "29d230059421580e936a1e13886dfce398eff479",
-      "id": "5d651a828c93a3046a23a2d65e2ef2c835df9b0a554274ee42096eef5245dd21",
-      "reason": "CLI возвращает код разрешения цели и не меняет его после отбора и вывода сигналов. Неудачное разрешение даёт 1, а неверные аргументы, ошибки конфигурации, реестра просмотра и диффа дают 2.",
-      "relation": "trace",
-      "reviewed_at": "2026-11-21T10:07:56Z",
-      "reviewer": "summary_z4",
-      "source": {
-        "kind": "trace",
-        "path": "src/lipi/slice.py",
-        "sha256": "d8b59d5f699766ba02076a7933e35f967a123d1397817e9d8968ea26dcaf5c07"
-      },
-      "target": {
-        "anchor": "exit",
-        "kind": "anchor",
-        "path": "docs/ru/slice.md",
-        "sha256": "3276057e9ebac0f274dd18d5a6021567eb398df83f89033134c7eb8e23729ac2"
-      }
-    },
-    {
-      "head": "29d230059421580e936a1e13886dfce398eff479",
       "id": "62df43731d89f0705c0324b19a4a33b8bbcbf3f77d5faf59bac7e7ab6a7ff6eb",
       "reason": "build_slice передаёт тип разрешённой цели, глубину и фильтры общему построителю, а для подключений использует тот же построитель через адаптер. Порядок блоков соответствует таблице по типам целей. Тесты срезов проверяют пути попадания в блоки и сохранение сигналов.",
       "relation": "trace",
@@ -154,6 +135,25 @@
       }
     },
     {
+      "head": "ce1275140cb3e5635f21c74a73fb67d36bd98796",
+      "id": "7b5ba9b7224bbc3d3c4a8f29762f96d95d46400f3701ad4180ec2bf67b4404ac",
+      "reason": "Карта вызывает индекс подключений без режима documents_only. Состав внешних целей по меткам, области docs и decisions и порядок источников сохранены.",
+      "relation": "trace",
+      "reviewed_at": "2026-11-21T22:28:14Z",
+      "reviewer": "Codex",
+      "source": {
+        "kind": "trace",
+        "path": "src/lipi/repo_index.py",
+        "sha256": "79fb0b678d7c2cb2b66001cdf032e8585e55b277de279d71fff921db80fd2545"
+      },
+      "target": {
+        "anchor": "repos",
+        "kind": "anchor",
+        "path": "docs/ru/map.md",
+        "sha256": "3a26d4f6cf1358ac7413233dda40adf0bfe8c29810c3f172c151a991055ad62d"
+      }
+    },
+    {
       "head": "3d228a7424de60cecbcd2da7ddf8899eaf8db9d5",
       "id": "818be86cdd893c85ff0134ad25c58cb6126c16c5d1b49f040f68922a9bea82a3",
       "reason": "Пустой lipi.json подключает workflow для теста предела Closed. Отдельный сценарий W11 по-прежнему проверяет расхождение с годом из Created и требует предупреждение с командой lipi mv для переноса целого контейнера AUD.",
@@ -192,25 +192,6 @@
       }
     },
     {
-      "head": "29d230059421580e936a1e13886dfce398eff479",
-      "id": "9716a4b6b9168b4a8887d6f2b2525976c0633952c8122b119d429779d02f545a",
-      "reason": "render_text берёт сводку из исходного ответа и показывает выбранные общим отбором блоки и дифф-выдержки. CLI в режиме JSON сериализует выбранный ответ схемы 1 напрямую, сохраняя общий summary.code и отдельный summary.entry, а также дополнительные поля диффа, подсказки и отметки просмотра.",
-      "relation": "trace",
-      "reviewed_at": "2026-11-21T10:07:53Z",
-      "reviewer": "audit_z4",
-      "source": {
-        "kind": "trace",
-        "path": "src/lipi/slice_output.py",
-        "sha256": "2c4beaf0133e999887b1d84b6e4b9268f69f6c870acbbeb1345201c29d088df2"
-      },
-      "target": {
-        "anchor": "json",
-        "kind": "anchor",
-        "path": "docs/ru/slice.md",
-        "sha256": "e49e86dc621dd0116edc88bbec7eb6fefcc0ee13b7773778e409b5fdb0dd1702"
-      }
-    },
-    {
       "head": "581647120f0a417649bc945f4619ce7c5a1ec63c",
       "id": "aaae22fdc9013e7e63e13632f9057e5e12cef15232cfbcb326b15117da428397",
       "reason": "The fixture still connects workflow for both empty settings files, including explicit config, and leaves the unconfigured workflow directory alone.",
@@ -246,25 +227,6 @@
         "kind": "anchor",
         "path": "docs/ru/codes.md",
         "sha256": "3dbc9187d84ca7404c6367a822b91137c0c4897b8e6404d7e725382211b9d111"
-      }
-    },
-    {
-      "head": "29d230059421580e936a1e13886dfce398eff479",
-      "id": "bf1737de43599d31d4a625ae102973ba562e3ca1e8eb48e13045c92975ad0dd6",
-      "reason": "build_slice в обеих ветках возвращает договор схемы 1. Неоднозначная или отсутствующая цель возвращает структурированную ошибку. При локальном промахе ветка подключений может предложить поиск у соседей, а успешный ответ сохраняет сводку и блоки.",
-      "relation": "trace",
-      "reviewed_at": "2026-11-21T10:07:59Z",
-      "reviewer": "summary_z4",
-      "source": {
-        "kind": "trace",
-        "path": "src/lipi/slice_query.py",
-        "sha256": "27c267137a44cad7cf15f58f3af89c836cc9dd1eab59131356a7c528f2b10892"
-      },
-      "target": {
-        "anchor": "json",
-        "kind": "anchor",
-        "path": "docs/ru/slice.md",
-        "sha256": "e49e86dc621dd0116edc88bbec7eb6fefcc0ee13b7773778e409b5fdb0dd1702"
       }
     }
   ],

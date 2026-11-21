@@ -5,6 +5,7 @@ from pathlib import Path
 from urllib.parse import unquote
 
 from .i18n import tr
+from .slice_commands import is_title_query, slice_command
 from .checker.config import code_layer, is_configured_test_file
 from .checker.conventions import K_STATUS, MAX_CODE_FILE
 from .checker.marks import physical_lines, standalone_trace, trace_groups
@@ -13,6 +14,13 @@ from .checker.targets import decision_relations, resolve_mark, target_excluded, 
 
 WORK_ID = re.compile(r"^(ADR|ISS|PLN|DSC|AUD)-(\d+)$", re.I)
 HEADING = re.compile(r"^(#{1,6})\s+(.*?)\s*#*\s*$")
+
+
+def document_address(path, anchor=''):
+    """Preserve literal path and fragment characters in slice input."""
+    path = path.replace('%', '%25').replace('#', '%23').replace('::', '%3A%3A')
+    anchor = anchor.replace('%', '%25').replace('::', '%3A%3A')
+    return path + '#' + anchor if anchor else path
 
 
 def clean_title(text):
@@ -73,11 +81,17 @@ def declaration_line(rows, group):
 
 
 class SliceIndex:
-    def __init__(self, pr, *, links=True):
+    def __init__(self, pr, *, links=True, documents_only=False):
         self.pr = pr
+        self.documents_only = documents_only
+        self.document_error = None
         self.nodes = {}
         self.page_ids = {}
         self.anchors = {}
+        self.work_aliases = {}
+        self._documents()
+        if documents_only:
+            return
         self.outgoing = {}
         self.incoming = {}
         self.places = []
@@ -85,11 +99,9 @@ class SliceIndex:
         self.by_file = {}
         self.boundaries = {}
         self.code_texts = {}
-        self.work_aliases = {}
         self._marks = {}
         self.layer_order = list(dict.fromkeys(pr.cfg.get('layers', {}).values()))
         self.entry = [re.compile(pattern) for pattern in pr.cfg.get('entry', [])]
-        self._documents()
         self.refines = {}
         self.refinements = {}
         if links:
@@ -113,17 +125,25 @@ class SliceIndex:
     def _documents(self):
         pr = self.pr
         work_by_path = {}
-        for did, paths in work_targets(pr).items():
-            match = WORK_ID.fullmatch(did)
-            self.work_aliases.setdefault((match[1].upper(), int(match[2])), []).append(did)
-            if len(paths) == 1:
-                work_by_path[paths[0]] = did
+        if not self.documents_only:
+            for did, paths in work_targets(pr).items():
+                match = WORK_ID.fullmatch(did)
+                self.work_aliases.setdefault((match[1].upper(), int(match[2])), []).append(did)
+                if len(paths) == 1:
+                    work_by_path[paths[0]] = did
+        onerror = self._document_walk_error if self.documents_only else None
         for real in pr.walk_md(pr.root, exclusions=pr.target_skip_dirs, resolved=True,
+                               onerror=onerror,
                                path_filter=lambda path: not target_excluded(pr, path)):
+            if self.document_error is not None:
+                return
             if target_excluded(pr, real) or real in self.page_ids:
                 continue
             page = pr.page(real)
             if page is None:
+                if self.documents_only:
+                    self.document_error = tr('repo.page.encoding') % pr.rel(real)
+                    return
                 continue
             rel = pr.rel(real)
             did = work_by_path.get(real)
@@ -140,7 +160,7 @@ class SliceIndex:
             for line, anchor in page.anchor_order:
                 if anchor in duplicate:
                     continue
-                aid, error = resolve_mark(pr, rel + '#' + anchor)
+                aid, error = resolve_mark(pr, document_address(rel, anchor))
                 if error:
                     continue
                 title = anchor_title(page, line)
@@ -149,6 +169,9 @@ class SliceIndex:
                 self.nodes[aid] = {'target': aid, 'title': title, 'kind': 'section',
                                    'page': page, 'line': line}
                 self.anchors[page.path].append(aid)
+
+    def _document_walk_error(self, error):
+        self.document_error = tr('repo.directory.unreadable') % error
 
     def mark(self, token):
         if token not in self._marks:
@@ -313,9 +336,12 @@ class SliceIndex:
                                if node['target'] not in matched
                                and query.casefold() in node['title'].casefold()),
                               key=lambda node: target_order(node['target']))
-        return None, {'schema': 1, 'error': 'ambiguous' if matches else 'not-found',
-                      'query': query, 'candidates': [
-                          {'target': node['target'], 'title': node['title']} for node in matches[:5]]}
+        error = {'schema': 1, 'error': 'ambiguous' if matches else 'not-found',
+                 'query': query, 'candidates': [
+                     {'target': node['target'], 'title': node['title']} for node in matches[:5]]}
+        if found == 'title' and not matches and '::' not in query and is_title_query(query):
+            error['search_command'] = slice_command(query, search=True)
+        return None, error
 
     def count(self, target):
         targets = {target}

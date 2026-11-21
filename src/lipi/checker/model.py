@@ -254,7 +254,10 @@ class Page:
                 if self.h1 is None and len(m.group(1)) == 1:
                     self.h1 = re.sub(r"\s*<a\s+id=[^>]*>\s*(</a>)?", "", title).strip()
                     self.h1_line = n
-        self.links = [(line_of(text, link.start), link.address) for link in markdown_links(text)]
+
+    @cached_property
+    def links(self):
+        return [(line_of(self.text, link.start), link.address) for link in markdown_links(self.text)]
 
     def header(self):
         """Шапка: строки «- Ключ: значение» сразу после H1."""

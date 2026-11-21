@@ -9,13 +9,13 @@ tools and agents.
 lipi slice <target> [--format json] [--full] [--depth 2|3]
                    [--layer <layer>]... [--role consumes|produces] [--only <block>[,<block>]]
 lipi slice (--diff <base> | --staged) [--role consumes|produces]
+lipi slice --search 'question' [--format json]
 ```
 
 A slice is read-only. It leaves files, including `INDEX.md` and the baseline,
 untouched and runs no project checks. The `codes` levels apply. Disabled codes
 are omitted from the signals and summary. See [diff slices](slice-diff.md) for
-modes that read changes and their JSON. The [role filter](slice-output.md#roles)
-finds code that consumes or produces a contract.
+modes that read changes. The [role filter](slice-output.md#roles) finds producers and consumers.
 
 ## Target <a id="target"></a>
 
@@ -35,7 +35,7 @@ shows how it was found. Zero or multiple matches exit with 1 and list up to
 five candidates in a fixed order. Anchor and ID matches come before title
 matches. Within each group, results sort by `target`, with alphabetical paths
 and IDs ordered by type and number. If nothing is similar, the candidate list
-is empty.
+is empty. A text query that misses suggests [searching document text](slice-search.md#command).
 
 A page target with no anchor in the query returns page signals and a
 `concepts` block with the page's anchors and the code location count for each.
@@ -53,7 +53,7 @@ limit is cut within the word and followed by `…`.
   one. A diff with a deleted anchor also returns 0. Signal levels do not
   affect the exit code.
 - **1** means the target was missing or ambiguous. The response lists
-  candidates. Suggested commands on a local miss also use exit code 1.
+  candidates. An explicit document search with zero matches also returns 1.
 - **2** means invalid arguments, C1 settings or state errors, or a
   Git diff error.
 
@@ -203,8 +203,8 @@ Missing trace markers, Git, or locations in some layers are reported in
 
 ## JSON <a id="json"></a>
 
-`schema: 1` uses the [response schema](slice-output.md#json). A local miss may include
-[`suggestions`](slice-output.md#repo-search). When
+`schema: 1` uses the [response schema](slice-output.md#json). A text miss can provide
+[`search_command`](slice-search.md#output) and local misses can include [`suggestions`](slice-output.md#repo-search). When
 `reviews.json` exists, the summary includes
 [`reviewed_pairs`](review.md#summary). New keys are compatible. Removing a key
 or changing its meaning requires a new schema and major version.
@@ -222,8 +222,8 @@ Connection fields appear only with `repos`. They use the same metadata as the
 
 ### Targets and links
 
-- An unqualified query searches the local project. See [searching a connected
-  repository](slice-output.md#repo-search) for query forms and suggestions.
+- An unqualified query searches the local project. Use `name::` for
+  [title search](slice-output.md#repo-search) or [text search](slice-search.md#scope) in one connection.
   External code files, work items other than decisions, and agent instructions
   are unsupported.
 - An unknown connection or missing or disallowed target exits with

@@ -22,7 +22,8 @@ from lipi.checker.conventions import CONFIG_NAME, TRACE_ROLES
 from lipi.checker.model import Project
 from lipi.checker.report import Report, finding_item, json_output
 from lipi.checker.reviews import REVIEWS_NAME, ReviewError
-from lipi.slice_output import BLOCK_KINDS, render_text, select_response
+from lipi.repo_index import RepoConfigError, split_id
+from lipi.slice_output import BLOCK_KINDS, render_search_text, render_text, select_response
 
 
 def _only(value):
@@ -37,9 +38,10 @@ def parser():
         prog="lipi slice", description=tr('slice.help.description'),
         epilog=tr('slice.help.epilog'))
     ap.add_argument("query", nargs="?", metavar=tr('slice.help.target'), help=tr('slice.help.query'))
-    changes = ap.add_mutually_exclusive_group()
-    changes.add_argument("--diff", metavar=tr('slice.help.base'), help=tr('slice.help.diff'))
-    changes.add_argument("--staged", action="store_true", help=tr('slice.help.staged'))
+    modes = ap.add_mutually_exclusive_group()
+    modes.add_argument("--search", metavar=tr('slice.help.phrase'), help=tr('slice.help.search'))
+    modes.add_argument("--diff", metavar=tr('slice.help.base'), help=tr('slice.help.diff'))
+    modes.add_argument("--staged", action="store_true", help=tr('slice.help.staged'))
     ap.add_argument("--role", choices=TRACE_ROLES, help=tr('slice.help.role'))
     ap.add_argument("--format", choices=("text", "json"), default="text", help=tr('output.help.format'))
     ap.add_argument("--full", action="store_true", help=tr('slice.help.full'))
@@ -92,12 +94,32 @@ def _external_title_path(project, target, cwd):
         return str(path)
 
 
+# @trace docs/ru/slice-search.md#command,docs/ru/slice-search.md#output
+def _run_search(project, query, cwd, fmt):
+    from lipi.repo_slice import repository_suggestions
+    from lipi.search_sources import search_documents
+
+    response, code = search_documents(project, query, cwd)
+    if split_id(query)[0] is None:
+        suggestions = repository_suggestions(project.sources, query, search=True)
+        if suggestions:
+            response["suggestions"] = suggestions
+    print(json.dumps(response, ensure_ascii=False) if fmt == "json" else render_search_text(response))
+    return code
+
+
 # @trace docs/ru/slice.md#exit
 @cli_output
 def main(argv=None):
     ap = parser()
     args = ap.parse_args(argv)
-    if (args.query is not None) + (args.diff is not None or args.staged) != 1:
+    if args.search is not None:
+        if not split_id(args.search)[1].strip():
+            ap.error(tr('slice.arguments.search_empty'))
+        if (args.query is not None or args.role is not None or args.full or args.depth != 1
+                or args.layer is not None or args.only is not None):
+            ap.error(tr('slice.arguments.search_conflict'))
+    elif (args.query is not None) + (args.diff is not None or args.staged) != 1:
         ap.error(tr('slice.arguments.query'))
     cwd = Path.cwd().resolve()
     try:
@@ -110,11 +132,13 @@ def main(argv=None):
     if errors:
         _config_errors(errors, args.format)
         return 2
+    project = Project(root, cfg)
+    if args.search is not None:
+        return _run_search(project, args.search, cwd, args.format)
+
     # Не вызываем runner: срезу нужны только модель и чтение связей.
     from lipi.slice_query import build_diff_slice, build_slice
-    from lipi.repo_index import RepoConfigError
 
-    project = Project(root, cfg)
     if args.diff is not None or args.staged:
         try:
             response, code = build_diff_slice(project, base=args.diff, staged=args.staged,

@@ -208,7 +208,8 @@ for each available direct connection with `docs` in `read` and its own
 `lipi.json`, in `repos` order. For `lipi slice 'export report'`, one suggestion
 could be `lipi slice 'core::export report'`. Suggestions use the original
 phrase and are generated without searching the neighbor. Following one may
-still return `not-found`.
+still return `not-found`. A text miss can also return `search_command` for
+[searching headings and paragraphs](slice-search.md#output) in the selected repository.
 
 The schema 1 error response includes a `suggestions` array of `{repo, command}`
 objects when there are suggestions. The field is absent for other outcomes,
