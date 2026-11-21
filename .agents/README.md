@@ -43,10 +43,12 @@ Change a rule, its template, and its check in the same commit.
 2. Update `docs/{en,ru}/rules.md` for the rule and its rationale, the relevant template under `src/lipi/locale/` for the agent instructions, and the corresponding checker module under `src/lipi/checker/`.
 3. Cover a new check with a case in `tests/`.
 4. For a change in behavior, update `src/lipi/__init__.py` and `CHANGELOG.md` according to the [release procedure](#release).
-5. Run the [checks](#checks).
+5. Choose [checks](#checks) that exercise what changed.
 6. Include the work item ID in the commit message. A5 uses it to check whether the status is up to date.
 
 Add rules that the checker can enforce or that an agent can follow from a single sentence. Keep project-specific language and stack conventions in the relevant project. Use the Python standard library for the checker.
+
+Occasionally look back at how a task went. If a step wasted time or a check missed a problem, tell the user what happened and suggest one concrete improvement for discussion before adopting it.
 
 To add an interface language, create a sibling of `src/lipi/locale/en/`. Each translated message or term has `text` and `source_sha256`. For a term, `text` contains `term` and `definition`. In `template-hashes.json`, use the seed file's path relative to `templates/` as its key. The managed rules and CI template always come from English. Use `lipi.i18n.fingerprint` on the English value or UTF-8 template text and update the fingerprint after reviewing the translation. Check the translation inventory with `python3 -m unittest tests.test_interface_language.LanguageResources.test_translation_inventory`.
 
@@ -60,12 +62,10 @@ Follow the [workflow instructions](https://github.com/lipisutra/lipi/blob/master
 
 ## Checks <a id="checks"></a>
 
-```bash
-python3 -m unittest discover -s tests
-lipi check
-lipi audit
-lipi index
-```
+- For wording changes in documentation or contributor instructions, run `lipi check` and `lipi audit`. If a test checks an edited example, run that test too.
+- For wording changes in managed templates, also apply them with `lipi init` and verify that a second `lipi init --dry-run` proposes no changes.
+- For behavior changes, run tests for the affected commands and their callers. Widen the run when shared code puts other commands at risk. Run `lipi index` when workflow headers change.
+- Run the full suite (`python3 -m unittest discover -s tests`) at agreed checkpoints and on the release candidate in both interface languages before tagging. Reuse a passing run on the same tree.
 
 After a clean pipx install, run [tests/check_package.py](https://github.com/lipisutra/lipi/blob/master/tests/check_package.py) with the installed environment's Python. Pass `--source` pointing to a snapshot of the same revision. Run outside the checkout and snapshot with `PYTHONPATH` unset. The test checks installed documentation and `lipi guide` against the snapshot and imports modules from the installation.
 
