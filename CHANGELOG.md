@@ -1,6 +1,6 @@
 # lipi releases
 
-## 1.3.2 — Unreleased
+## 1.3.2 — 2026-11-21
 
 - The workflow rules explain when to ask the user to accept a decision or a
   completed plan, and how to refine or replace an accepted decision.
