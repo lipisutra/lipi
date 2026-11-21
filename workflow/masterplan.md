@@ -4,6 +4,8 @@
 
 ## Сейчас
 
+- [ISS-023](issue/2026/iss-023-srez-po-diffu-ot-izmeneniya-dogovora.md) — срез от правки договора по [PLN-003](plan/2026/pln-003-srez-po-izmeneniyu-dogovora.md).
+
 ## Дальше
 
 ## Позже
