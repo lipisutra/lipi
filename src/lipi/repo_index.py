@@ -1,10 +1,10 @@
 """Общий индекс прямых подключений для среза и карты."""
 
-import fnmatch
 import re
 from urllib.parse import unquote
 
 from .i18n import tr
+from .checker.config import is_configured_test_file
 from .checker.conventions import CODE_EXT, K_REFINES, K_STATUS, RE_LINK
 from .checker.model import anchor_region, mask_code
 from .checker.targets import (
@@ -190,9 +190,8 @@ class _NeighborIndex(SliceIndex):
         if self.source.unavailable_reason is not None:
             return False
         for candidate in {path, real}:
-            layer = self.layer(self.pr.rel(candidate))
-            test = layer == 'tests' or any(fnmatch.fnmatchcase(candidate.name, pattern)
-                                          for pattern in self.pr.cfg['tests'])
+            rel = self.pr.rel(candidate)
+            test = is_configured_test_file(rel, self.layer(rel), self.pr.cfg)
             if ('tests' if test else 'code') not in self.source.read:
                 return False
         return True

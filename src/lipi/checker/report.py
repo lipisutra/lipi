@@ -9,6 +9,7 @@ from lipi import __version__
 # новый код может быть только "warning", а повышение уровня с "warning" до
 # "error" — только при смене первой цифры; это проверяет тест выпуска
 # (tests/test_release.py против тега v<первая цифра>.0.0).
+# Исключение по ADR-022: T5 проверяет только явно указанный атрибут role=.
 # Три исключения уровня задаёт правило, а не таблица, и call-site передаёт
 # level явно: V1 (совместимость версий), V3 (расхождение enforce) и
 # предупреждение D2 о повторном slug заголовка.
@@ -19,7 +20,7 @@ CODE_LEVELS = {
     "W1": "error", "W2": "error", "W3": "error", "W4": "error",
     "W5": "error", "W6": "error", "W7": "error", "W8": "error",
     "W9": "warning", "W10": "error", "W11": "warning",
-    "T1": "error", "T2": "warning", "T3": "warning", "T4": "warning",
+    "T1": "error", "T2": "warning", "T3": "warning", "T4": "warning", "T5": "error",
     "V1": "error", "V2": "error", "V3": "error", "V4": "warning",
     "A1": "warning", "A2": "warning", "A3": "warning",
     "A4": "warning", "A5": "warning", "A6": "warning",

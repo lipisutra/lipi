@@ -60,7 +60,13 @@ RE_DOC_REF = re.compile(r"(?<![A-Za-z0-9-])(%s)-(\d{3,})(?![0-9])" % "|".join(TY
 RE_ANCHOR = re.compile(r'<a\s+id="([^"]*)"[^>]*>')
 RE_LINK = re.compile(r'\[[^\]]*\]\(\s*<?([^)\s>]+)>?(?:\s+"[^"]*")?\s*\)')
 RE_SCHEME = re.compile(r"^[a-zA-Z][a-zA-Z0-9+.-]*:")
-RE_TRACE = re.compile(r"@trace\s+((?=\S)[^\s,]*(?:\s*,\s*[^\s,]*)*)")
+TRACE_ROLES = ("consumes", "produces")
+# Закрывающий разделитель комментария или строки остаётся вне списка ролей.
+_TRACE_ROLE = r"""(?:(?!@trace(?=\s)|\*/|-->|["'`])[^\s,])*"""
+RE_TRACE = re.compile(
+    r"@trace\s+((?=\S)[^\s,]*(?:\s*,\s*[^\s,]*)*)"
+    rf"(?:[^\S\n]+role=(?P<roles>{_TRACE_ROLE}(?:[^\S\n]*,[^\S\n]*{_TRACE_ROLE})*))?"
+)
 RE_COVERS = re.compile(r"<!--\s*covers:\s*([^>]*?)\s*-->")
 RE_HEADER = re.compile(r"^- ([^:]+):\s*(.*)$")
 # markdown-ссылка на правила lipi; якорь в цели допустим, упоминание текстом — нет

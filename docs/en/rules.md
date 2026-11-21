@@ -82,6 +82,31 @@ under `.agents/` are eligible. `skip_dirs`, `.agents/lipi/`, and
 directory are available. An invalid trace marker target raises T1.
 An invalid `covers` target raises D6.
 
+A code trace to an explicit Markdown anchor can end with `role=consumes` <a id="trace-roles"></a>
+if the code uses the documented contract, `role=produces` if it supplies
+what the contract describes, or `role=consumes,produces` if it does both.
+Separate the suffix from the targets with a space. It applies to every
+target on that marker. Use adjacent stand-alone markers when targets need
+different roles.
+
+```python
+# @trace docs/export.md#row role=consumes
+# @trace docs/report.md#summary role=produces
+def rebuild(row):
+    return make_summary(parse_row(row))
+```
+
+Within one group, repeated references to an anchor combine their roles
+without duplicates. A plain marker in the group leaves any roles on the
+same target intact.
+
+Roles apply to code outside tests and to explicit anchors, including
+anchors in decisions. [T5](codes.md#t5) reports empty or unknown role
+values (including `role=consumes,reads`) and roles on test markers or work
+item IDs such as `PLN-003` and `ADR-007`. `codes.T5` defaults to `error`
+and also accepts `warning` or `off`. A resolvable target remains linked
+in a slice at every T5 level.
+
 External trace markers and `covers` use a connection prefix, such as
 `core::docs/api.md#request` or `core::ADR-018`. The project declares
 connections in `repos`. Reads follow `read` scopes and stay within the

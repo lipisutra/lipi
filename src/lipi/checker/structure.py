@@ -150,7 +150,7 @@ def work_references(pr, docs):
     return refs
 
 
-def build_stale(pr, pages, anchor_ids, covers, tag_lines, docs, changed):
+def build_stale(pr, pages, anchor_ids, covers, tag_groups, docs, changed):
     """Цепочка устаревания: изменённый код под меткой -> якорь -> раздел -> справка -> работы."""
     # Даты из разных репозиториев не определяют согласованность их связи.
     anchor_ids = {aid: value for aid, value in anchor_ids.items()
@@ -158,9 +158,8 @@ def build_stale(pr, pages, anchor_ids, covers, tag_lines, docs, changed):
     refs = work_references(pr, docs)
     code_touched = {}
     for f, ranges in changed.items():
-        for line, ids in touched_places(ranges, tag_lines.get(f, [])):
-            for i in ids:
-                code_touched.setdefault(i, []).append((f, line))
+        for i, line in touched_places(ranges, tag_groups.get(f, [])):
+            code_touched.setdefault(i, []).append((f, line))
     docs_touched = set()
     for page in {page for page, _ in anchor_ids.values()}:
         ranges = changed.get(pr.rel(page.path))

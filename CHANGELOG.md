@@ -6,11 +6,14 @@
   Markdown sections alongside linked code and tests, in text and JSON. They
   distinguish changed markers from references still pointing at a deleted
   anchor.
+- Code trace markers can declare `role=consumes`, `role=produces`, or both
+  for a Markdown anchor. `lipi check` reports an invalid role or an invalid
+  use of the attribute as T5. Its default level is `error`.
 
 ### Upgrading your project
 
 1. Upgrade Lipi with `pipx upgrade lipi`.
-2. The rules and templates are unchanged. You can skip `lipi init`.
+2. The rules and templates have changed. Run `lipi init`.
 
 ## 1.2.1 — 2026-11-20
 

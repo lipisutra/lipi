@@ -6,6 +6,7 @@ import os
 import re
 import stat
 from collections import deque
+from fnmatch import fnmatchcase
 from pathlib import Path, PureWindowsPath
 
 from lipi.i18n import quoted, tr
@@ -27,6 +28,21 @@ DEFAULTS = {
     "tests": ["test_*", "*_test.*", "*.test.*", "*.spec.*", "*Test.*"],
     "slice_budget": 60,
 }
+
+
+def code_layer(path, cfg):
+    """First configured layer, or the file's top-level directory."""
+    for pattern, name in cfg.get("layers", {}).items():
+        if fnmatchcase(path, pattern):
+            return name
+    return path.split("/")[0] if "/" in path else "."
+
+
+def is_configured_test_file(path, layer, cfg):
+    """Classify a file using the layer and basename rules of map and slice."""
+    name = Path(path).name
+    return layer == "tests" or any(fnmatchcase(name, pattern)
+                                   for pattern in cfg.get("tests", DEFAULTS["tests"]))
 
 
 # --- Схема настроек (C1) ------------------------------------------------------

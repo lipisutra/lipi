@@ -22,7 +22,7 @@ Decision groups are ordered by ID, other pages by path. Within a group the ID ro
 
 ## Counting locations <a id="counts"></a>
 
-A location is a group of adjacent marker-only lines before a declaration, or one code line with an inline marker. Its identity includes repository, path, and line. Repeating a target in a group counts once for that target. Adjacent code lines with inline markers count separately. A group with several targets contributes once to each. Summing rows can therefore count a single location more than once.
+A location is a group of adjacent marker-only lines before a declaration, or one code line with an inline marker. Its identity includes repository, path, and line. Repeating a target in a group counts once for that target, even when the location both consumes and produces the same format. Adjacent code lines with inline markers count separately. A group with several targets contributes once to each. Summing rows can therefore count a single location more than once.
 
 Configure layers and tests with [`layers` and `tests`](settings.md#layers). Configured code layers appear in configuration order even when their counts are zero. Additional layers appear alphabetically. The default layer is the top-level directory, or `.` for a file at the root. Test locations count exclusively in the tests column; a layer named `tests` also identifies tests.
 

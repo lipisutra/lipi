@@ -1,6 +1,6 @@
 """Общий разбор меток физической строки и её явного исключения."""
 
-from .conventions import RE_TRACE
+from .conventions import RE_TRACE, TRACE_ROLES
 
 
 def physical_lines(text):
@@ -20,6 +20,18 @@ def trace_matches(line):
     return () if ignores_trace(line) else RE_TRACE.finditer(line)
 
 
+# @trace docs/ru/rules.md#trace-roles
+def trace_roles(match):
+    """Распознанные и ошибочные значения; явно пустое значение — ошибка."""
+    value = match['roles']
+    if value is None:
+        return (), ()
+    tokens = dict.fromkeys(token.strip() for token in value.split(','))
+    return (tuple(token for token in tokens if token in TRACE_ROLES),
+            tuple(token for token in tokens if token not in TRACE_ROLES))
+
+
+# @trace docs/ru/review.md#pair
 def standalone_trace(line):
     """Отдельный комментарий с меткой; исключённый пример остаётся кодом."""
     if ignores_trace(line):
@@ -30,28 +42,32 @@ def standalone_trace(line):
 
 # @trace docs/ru/review.md#pair
 def trace_groups(rows, resolve):
-    """Общие физические группы: неразрешённая метка тоже ограничивает область."""
+    """Границы групп, первая строка каждой цели и множества явно заданных ролей."""
     groups = []
     for num, row in enumerate(rows, 1):
         matches = list(trace_matches(row))
         if not matches:
             continue
-        targets = {}
-        for match in matches:
-            for token in match[1].split(','):
-                target = resolve(token.strip())
-                if target:
-                    targets.setdefault(target, num)
         standalone = standalone_trace(row)
         if (groups and standalone and groups[-1]['standalone']
                 and num == groups[-1]['end'] + 1):
             group = groups[-1]
             group['end'] = num
-            for target, line in targets.items():
-                group['targets'].setdefault(target, line)
         else:
-            groups.append({'start': num, 'end': num, 'targets': targets,
-                           'standalone': standalone})
+            group = {'start': num, 'end': num, 'targets': {}, 'target_roles': {},
+                     'standalone': standalone}
+            groups.append(group)
+        for match in matches:
+            roles, invalid_roles = trace_roles(match)
+            for token in match[1].split(','):
+                target = resolve(token.strip())
+                if not target:
+                    continue
+                group['targets'].setdefault(target, num)
+                if roles or invalid_roles:
+                    valid, invalid = group['target_roles'].setdefault(target, (set(), set()))
+                    valid.update(roles)
+                    invalid.update(invalid_roles)
     for pos, group in enumerate(groups):
         group['region_end'] = groups[pos + 1]['start'] - 1 if pos + 1 < len(groups) else len(rows)
     return groups

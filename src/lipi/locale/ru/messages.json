@@ -1179,6 +1179,18 @@
     "source_sha256": "54ff413687e13a29494a75b881730867646bcbe49b838db754b7eee2ecfd7ae6",
     "text": "рабочие материалы отключены (workflow: null)"
   },
+  "checker.trace.invalid_role": {
+    "source_sha256": "807f86bbbe42ce9f45859e21aef617da9641dac2e12a506c87f0363a8449f122",
+    "text": "неизвестная роль метки %s. Используйте consumes или produces."
+  },
+  "checker.trace.role_on_test": {
+    "source_sha256": "10afab88823dc3dbb3f2df37ff6a5d5734e5296dc503a85958d9d0e03c5724a0",
+    "text": "роль метки %s недопустима в тестовом файле."
+  },
+  "checker.trace.role_on_work_id": {
+    "source_sha256": "afc9987c5067a760387651ce6807be68dea777d068dee3a237e1de43e88e97e8",
+    "text": "для роли метки %s нужен явный якорь Markdown."
+  },
   "checker.trace.stale_anchor_region": {
     "source_sha256": "15824479f710aaddc0d5f52c9b7e7f47b0ca84d34f3ae5ace38feecc2bb2c4ea",
     "text": "код под меткой «%s» изменён, а раздел %s:%d — нет; проверьте, что описание верно"

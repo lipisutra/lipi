@@ -96,6 +96,21 @@ class MoveLinks(unittest.TestCase):
         for offset, token in found:
             self.assertEqual(text[offset:offset + len(token)], token)
 
+    def test_trace_roles_and_adjacent_comments_preserve_exact_spelling(self):
+        tag = support.TAG
+        text = ('let sample = "/* %s old.md#example role=consumes*/";\r\n'
+                '/* %s old.md#part, other.md#part  role=consumes,old.md#part*/ '
+                '/* %s old.md#next role=produces*/\r\n'
+                '// %s old.md#ignored role=reads lipi: ignore-trace\r\n') % (tag, tag, tag, tag)
+        found = list(trace_targets(text, Path('source.js')))
+        self.assertEqual([token for _, token in found],
+                         ['old.md#part', 'other.md#part', 'old.md#next'])
+        for offset, token in found:
+            self.assertEqual(text[offset:offset + len(token)], token)
+        expected = text.replace(tag + ' old.md#part,', tag + ' docs/new.md#part,')
+        expected = expected.replace(tag + ' old.md#next', tag + ' docs/new.md#next')
+        self.assertEqual(self.rewrite(text, path='source.js', markdown=False), expected)
+
     def test_mapping_uses_both_relocated_ends_and_original_targets(self):
         text = ('[Other](b.md#part) [Third](c.md?q=one#two)\n'
                 '[Outside](../README.md) [Image](image.png)\n')

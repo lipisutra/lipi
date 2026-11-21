@@ -99,7 +99,7 @@ Bump the version on the first task in a release that changes behavior. Include t
 
 4. The tag's CI checks must pass.
 
-Move the major tag (for example, `v1`) to each release in its series. Projects use that tag for CI installations under ADR-010. Within a major version a new check starts as a warning. Raising a warning to an error requires a new major version. The release test compares `CODE_LEVELS` with the `v<major>.0.0` tag. Until that tag exists it skips only the level comparison. It still checks the package version, changelog, and lock. If an existing tag cannot be read, the test fails. List new error levels in the changelog when changing the major version.
+Move the major tag (for example, `v1`) to each release in its series. Projects use that tag for CI installations under ADR-010. Within a major version a new check starts as a warning. ADR-022 allows T5 to start as an error in 1.x because it validates an explicit `role=…` attribute. Raising a warning to an error requires a new major version. The release test compares `CODE_LEVELS` with the `v<major>.0.0` tag. Until that tag exists it skips only the level comparison. It still checks the package version, changelog, and lock. If an existing tag cannot be read, the test fails. List new error levels in the changelog when changing the major version.
 
 An incompatible change to project syntax (trace markers, `covers`, workflow headers and filenames, or anchors) requires an automatic migration. The new `lipi init` must rewrite the old form or print an exact plan. Test that path on a project using the previous format. A changelog instruction alone cannot migrate thousands of markers.
 

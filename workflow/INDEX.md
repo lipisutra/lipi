@@ -14,12 +14,12 @@ No work items.
 
 ## All documents
 
-Total documents: 35.
+Total documents: 36.
 
 - [Plans](index/plans.md): 1
 - [Issues](index/issues.md): 3
 - [Discussions](index/discussions.md): 1
-- [Decisions](index/decisions.md): 20
+- [Decisions](index/decisions.md): 21
 - [Audits](index/audits.md): 0
 
 ## Closed work items

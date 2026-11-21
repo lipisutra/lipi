@@ -28,9 +28,9 @@ class IgnoreTrace(support.Case):
     def load(self, root):
         return Project(root.resolve(), load_config(root, None))
 
-    def scan(self, root):
+    def scan(self, root, *, tag_groups=None):
         pr, rep = self.load(root), Report()
-        tags, lines = scan_code(pr, rep)
+        tags, lines = scan_code(pr, rep, tag_groups=tag_groups)
         return pr, rep, tags, lines
 
     def test_examples_in_strings_docstrings_and_comments_leave_neighbor_marks(self):
@@ -93,7 +93,8 @@ class IgnoreTrace(support.Case):
         support.w(root / 'src/order.py', '# %s %s\ndef discount():\n'
                   '    sample = "%s %s"  # %s\n    return sample\n' %
                   (support.TAG, TARGET, support.TAG, OTHER, IGNORE))
-        pr, rep, tags, lines = self.scan(root)
+        groups = {}
+        pr, rep, tags, lines = self.scan(root, tag_groups=groups)
         index = SliceIndex(pr)
         self.assertEqual(set(tags), {TARGET})
         self.assertEqual(lines['src/order.py'], [(1, [TARGET])])
@@ -102,7 +103,7 @@ class IgnoreTrace(support.Case):
         rows = {row['target']: row for row in build_map(pr)['rows']}
         self.assertEqual(rows[TARGET]['code'], {'src': 1})
         self.assertEqual(rows[OTHER]['code'], {'src': 0})
-        check_drift(pr, rep, {}, {TARGET: (pr.page(guide), 3)}, {}, lines,
+        check_drift(pr, rep, {}, {TARGET: (pr.page(guide), 3)}, {}, groups,
                     {'src/order.py': [(3, 3)]})
         self.assertEqual([item[3] for item in rep.items], ['T2'])
         history = GitBlame(root)

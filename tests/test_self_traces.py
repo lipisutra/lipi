@@ -40,7 +40,7 @@ DATE = "2026-01-01T10:00:00"
 # Коды проверок, которым нужны и строка в таблице docs/ru/codes.md, и метка в чекере.
 CODES = (["C1"] + ["D%d" % i for i in range(1, 8)] + ["L1", "L2", "L3"]
          + ["W%d" % i for i in range(1, 12)]
-         + ["T1", "T2", "T3", "T4", "V1", "V2", "V3", "V4"] + ["A%d" % i for i in range(1, 9)]
+         + ["T1", "T2", "T3", "T4", "T5", "V1", "V2", "V3", "V4"] + ["A%d" % i for i in range(1, 9)]
          + ["P1"])
 ANCHORS = [code.lower() for code in CODES]
 # RE_TRACE чекера: коды одной метки — через запятую, без пробела после неё.

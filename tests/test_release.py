@@ -12,7 +12,8 @@
 - дисциплина выпусков (З7, ADR-010): таблица уровней `CODE_LEVELS` в чекере
   сравнивается с таблицей на теге `v<первая цифра>.0.0`. Новый код с уровнем
   `error` или повышение уровня с `warning` до `error` внутри одной первой
-  цифры — ошибка теста, выпуск не проходит. Смена первой цифры разрешает
+  цифры — ошибка теста. ADR-022 допускает в линии 1.x ошибку T5 для явной роли.
+  Смена первой цифры разрешает
   повышения: они попадают в сам тег, и сравнение с ним их не ловит.
   До первого тега новой линии сравнения уровней пропускаются; версия,
   CHANGELOG и lock проверяются независимо. Для 1.x эталон — тег v1.0.0.
@@ -214,19 +215,20 @@ class TestNoTemplateHistory(unittest.TestCase):
             self.assertFalse(templates.joinpath("history").is_dir())
 
 
+# @trace ADR-010
 class TestLevelsDiscipline(unittest.TestCase):
     """Дисциплина выпусков (ADR-010): уровни кодов против тега линии."""
 
-    def test_new_codes_are_warnings_only(self):
-        """Новый код внутри первой цифры может быть только warning."""
+    def test_new_codes_follow_major_line_defaults(self):
+        """T5 проверяет явный атрибут роли. Остальные новые коды начинают с warning."""
         current = levels_of_checker()
         reference, where = reference_levels()
         for code, level in sorted(current.items()):
             if code not in reference:
-                self.assertEqual(level, "warning",
-                                 "новый код %s с уровнем %s внутри первой цифры "
-                                 "(%s): новые проверки выходят только "
-                                 "предупреждениями" % (code, level, where))
+                expected = "error" if (where, code) == ("v1.0.0", "T5") else "warning"
+                self.assertEqual(level, expected,
+                                 "новый код %s в линии %s: ожидается %s" %
+                                 (code, where, expected))
 
     def test_no_promotion_inside_major(self):
         """Повышение уровня warning → error внутри первой цифры запрещено."""

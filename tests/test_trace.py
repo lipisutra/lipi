@@ -1,4 +1,4 @@
-"""test_trace.py — проверки T1–T2 чекера lipi: метки @trace и расхождение. — lipi: ignore-trace
+"""test_trace.py — цели и роли меток @trace, расхождение кода и описания. — lipi: ignore-trace
 
 T1 — ошибка (код 1): метка указывает на несуществующий якорь. T2 —
 предупреждение (код 0) на --staged/--diff: код под меткой изменён, а раздел
@@ -111,6 +111,34 @@ class TraceChecks(support.Case):
         self.assertEqual(code, 0, out)
         self.assertFalse(support.found(out, "T2"), out)
 
+    def test_t2_adjacent_markers_share_a_region_in_either_order(self):
+        targets = ('docs/guide.md#max-discount', 'docs/guide.md#export', 'docs/guide.md#total')
+        markers = (targets[0], ','.join(targets[1:]) + ' role=consumes')
+        for order in (markers, markers[::-1]):
+            with self.subTest(order=order):
+                root = self.project()
+                path = 'src/export.py'
+                support.sub(root / 'docs/guide.md', 'Текст.',
+                            'Текст.\n\n## Export <a id="export"></a>\n\nFields.\n'
+                            '\n## Total <a id="total"></a>\n\nSum.\n')
+                support.w(root / path, ''.join(f'# {support.TAG} {marker}\n' for marker in order)
+                          + 'amount = 0\n')
+                support.git_init(root)
+                support.commit(root)
+                support.sub(root / path, 'amount = 0', 'amount = 1')
+                support.git(root, 'add', path)
+                code, data = support.check_json(root, '--staged', '--structure')
+                self.assertEqual(code, 0, data)
+                found = sorted(item['subject'] for item in data['warnings'] if item['code'] == 'T2')
+                self.assertEqual(found, sorted(targets), data)
+                expected = {targets[0]: order.index(markers[0]) + 1,
+                            **dict.fromkeys(targets[1:], order.index(markers[1]) + 1)}
+                stale = {item['anchor']: item['line'] for item in data['structure']['stale']}
+                edges = {edge['to']: edge['line'] for edge in data['structure']['edges']
+                         if edge['type'] == 'trace' and edge['from'] == path}
+                self.assertEqual(stale, expected)
+                self.assertEqual(edges, expected)
+
     def test_t2_clean_staged(self):
         """Без изменений --staged ничего не сообщает: T2 не срабатывает."""
         root = self.project()
@@ -119,6 +147,81 @@ class TraceChecks(support.Case):
         code, out = support.check(root, "--staged")
         self.assertEqual(code, 0, out)
         self.assertFalse(support.found(out, "T2"), out)
+
+
+# @trace docs/ru/codes.md#t5
+class TraceRoleChecks(support.Case):
+    def test_t5_role_levels_preserve_a_valid_target(self):
+        root = self.project()
+        path, target = 'src/export.py', 'docs/guide.md#max-discount'
+        support.w(root / path, f'# {support.TAG} {target} role=reads\nvalue = 0\n')
+        for level, expected in ((None, 1), ('error', 1), ('warning', 0), ('off', 0)):
+            with self.subTest(level=level):
+                if level:
+                    support.set_config(root, codes={'T5': level})
+                code, data = support.check_json(root, '--structure')
+                self.assertEqual(code, expected, data)
+                for severity in ('errors', 'warnings'):
+                    items = data[severity]
+                    self.assertFalse(any(item['code'] == 'T1' for item in items), data)
+                    seen = [(item['file'], item['line'], item['subject']) for item in items
+                            if item['code'] == 'T5']
+                    wanted = (level in (None, 'error') and severity == 'errors'
+                              or level == 'warning' and severity == 'warnings')
+                    self.assertEqual(seen, [(path, 1, 'reads')] if wanted else [], data)
+                self.assertIn({'from': path, 'to': target, 'type': 'trace', 'line': 1},
+                              data['structure']['edges'])
+
+    def test_t5_reports_each_invalid_value_once_per_line(self):
+        root = self.project()
+        path = 'src/export.py'
+        mark = f'{support.TAG} docs/guide.md#max-discount'
+        support.w(root / path, f'# {mark} role=\n'
+                  f'value = 0  # {mark} role=produce\n'
+                  f'# {mark} role=consumes,reads,reads {mark} role=reads\n'
+                  f'# {mark} role=reads\n'
+                  f'# {support.TAG} missing.md#anchor role=bad lipi: ignore-trace\n'
+                  f'# {mark} role=consumes,produces\n')
+        code, data = support.check_json(root)
+        self.assertEqual(code, 1, data)
+        self.assertEqual([(item['code'], item['file'], item['line'], item['subject'])
+                          for item in data['errors']],
+                         [('T5', path, line, value) for line, value in
+                          ((1, ''), (2, 'produce'), (3, 'reads'), (4, 'reads'))])
+        for item in data['errors']:
+            self.assertIn('"%s"' % item['subject'], item['message'])
+
+    def test_t5_applies_the_slice_test_file_settings(self):
+        root = self.project()
+        support.set_config(root, layers={'qa/*': 'tests'}, tests=['*.verify.py'])
+        mark = f'{support.TAG} docs/guide.md#max-discount role=consumes'
+        for path in ('qa/check.py', 'spec/check.verify.py', 'src/test_check.py'):
+            support.w(root / path, f'# {mark}\n')
+        code, data = support.check_json(root)
+        self.assertEqual(code, 1, data)
+        self.assertEqual([(item['code'], item['file'], item['line'], item['subject'])
+                          for item in data['errors']],
+                         [('T5', path, 1, 'consumes') for path in
+                          ('qa/check.py', 'spec/check.verify.py')])
+
+    def test_t5_disallows_work_and_decision_numbers_but_accepts_an_adr_anchor(self):
+        root = self.project()
+        plan = support.doc(root, 'pln')
+        support.w(plan.with_name('pln-003-export.md'), plan.read_text())
+        decision = 'workflow/adr/adr-007-export.md'
+        support.w(root / decision, '# Export\n\n- Created: 2026-01-01\n'
+                  '- Updated: 2026-01-01\n- Status: accepted\n\n'
+                  '## Decision <a id="export"></a>\n\nFields.\n')
+        path = 'src/export.py'
+        targets = ('PLN-003', 'ADR-007', decision + '#export')
+        support.w(root / path, ''.join(f'# {support.TAG} {target} role=consumes\n'
+                                       for target in targets))
+        code, data = support.check_json(root, '--structure')
+        self.assertEqual(code, 1, data)
+        self.assertEqual([(item['code'], item['line'], item['subject']) for item in data['errors']],
+                         [('T5', 1, 'consumes'), ('T5', 2, 'consumes')])
+        self.assertEqual({edge['to'] for edge in data['structure']['edges']
+                          if edge['type'] == 'trace' and edge['from'] == path}, set(targets))
 
 
 # @trace docs/ru/codes.md#t1,docs/ru/codes.md#d6,ADR-013

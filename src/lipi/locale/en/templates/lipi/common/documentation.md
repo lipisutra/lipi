@@ -68,6 +68,13 @@ documented behavior. When marking a contract shared across components, use
 the same specific anchor where the behavior is produced, where it is
 consumed, and in the test that checks it, as applicable.
 
+In code outside tests, add `role=consumes` for code using the contract and
+`role=produces` for code supplying what it describes. For both, write
+`@trace {{DOCS}}/export.md#row role=consumes,produces`. Separate the suffix
+from the target list with a space. It applies to every target on the marker.
+Use explicit anchors for roles, including anchors in decisions. T5 reports
+empty or unknown roles and roles on test markers or work item IDs.
+
 T2 reminds you to reread the target section when
 changing code. A4 does so when Git history shows that the code is newer
 than the section. This applies to sections outside the documentation too.

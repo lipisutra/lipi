@@ -124,7 +124,8 @@ def main(argv=None):
         return _check(args, fmt, new_args, baseline_args, ap)
 
 
-def check_project_content(pr, rep, *, deployment_cfg, write_index=False, announce_index=False):
+def check_project_content(pr, rep, *, deployment_cfg, write_index=False, announce_index=False,
+                          tag_groups=None):
     """Common documentation, workflow, deployment and trace checks."""
     root, cfg = pr.root, pr.cfg
     # @trace docs/ru/codes.md#v1
@@ -196,7 +197,7 @@ def check_project_content(pr, rep, *, deployment_cfg, write_index=False, announc
                 check_links(pr, rep, page, "W6")
 
     # @trace docs/ru/codes.md#t1
-    tags, tag_lines = scan_code(pr, rep)
+    tags, tag_lines = scan_code(pr, rep, tag_groups=tag_groups)
     return pages, anchor_ids, covers, reachable, docs, index_files, mp_refs, rules, tags, tag_lines
 
 
@@ -240,10 +241,11 @@ def _check(args, fmt, new_args, baseline_args, ap):
     rep = Report(level_of_project(cfg))
     write_index = args.write_index or (fmt != "github" and not args.staged
                                        and not args.diff and not os.environ.get("CI"))
+    tag_groups = {} if args.staged or args.diff else None
     (pages, anchor_ids, covers, reachable, docs, index_files,
      mp_refs, rules, tags, tag_lines) = check_project_content(
         pr, rep, deployment_cfg=None if args.config else cfg, write_index=write_index,
-        announce_index=fmt == "text" and not args.write_index)
+        announce_index=fmt == "text" and not args.write_index, tag_groups=tag_groups)
     # @trace docs/ru/codes.md#p1
     # P1: команды проекта из ключа checks (ADR-008). Запускаются и при
     # `baseline`, чтобы ошибка проверки попадала в линию как обычная.
@@ -282,11 +284,11 @@ def _check(args, fmt, new_args, baseline_args, ap):
         structure = build_structure(pr, pages, anchor_ids, covers, docs, tag_lines,
                                     mp_refs, reachable, extra)
         if changed is not None:
-            structure["stale"] = build_stale(pr, pages, anchor_ids, covers, tag_lines, docs, changed)
+            structure["stale"] = build_stale(pr, pages, anchor_ids, covers, tag_groups, docs, changed)
     else:
         structure = None
     if changed is not None:
-        check_drift(pr, rep, pages, anchor_ids, covers, tag_lines, changed)
+        check_drift(pr, rep, pages, anchor_ids, covers, tag_groups, changed)
     # @trace docs/ru/review.md#summary
     if args.audit:
         try:

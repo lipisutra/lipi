@@ -1,11 +1,11 @@
 """Читаемый индекс целей, явных ссылок и блоков меток для среза."""
 
-import fnmatch
 import re
 from pathlib import Path
 from urllib.parse import unquote
 
 from .i18n import tr
+from .checker.config import code_layer, is_configured_test_file
 from .checker.conventions import K_STATUS, MAX_CODE_FILE
 from .checker.marks import physical_lines, standalone_trace, trace_groups
 from .checker.model import anchor_region, read_text, resolve_target
@@ -13,7 +13,6 @@ from .checker.targets import decision_relations, resolve_mark, target_excluded, 
 
 WORK_ID = re.compile(r"^(ADR|ISS|PLN|DSC|AUD)-(\d+)$", re.I)
 HEADING = re.compile(r"^(#{1,6})\s+(.*?)\s*#*\s*$")
-DEFAULT_TESTS = ['test_*', '*_test.*', '*.test.*', '*.spec.*', '*Test.*']
 
 
 def clean_title(text):
@@ -104,10 +103,7 @@ class SliceIndex:
         self._code()
 
     def layer(self, path):
-        for pattern, name in self.pr.cfg.get('layers', {}).items():
-            if fnmatch.fnmatchcase(path, pattern):
-                return name
-        return path.split('/')[0] if '/' in path else '.'
+        return code_layer(path, self.pr.cfg)
 
     def place_order(self, place):
         layer = place['layer']
@@ -210,13 +206,11 @@ class SliceIndex:
         line = declaration_line(rows, group)
         declaration = rows[line - 1] if line is not None else ''
         layer = self.layer(path)
-        name = Path(path).name
         return {'path': path, 'line': group['start'], 'symbol': declaration.strip()[:80],
                 'layer': layer, 'targets': group['targets'],
                 'history_line': group['end'],
                 'end_line': group['end'], 'region_end': group['region_end'],
-                'test': layer == 'tests' or any(fnmatch.fnmatchcase(name, pattern)
-                    for pattern in self.pr.cfg.get('tests', DEFAULT_TESTS)),
+                'test': is_configured_test_file(path, layer, self.pr.cfg),
                 'entry': any(pattern.search(declaration) for pattern in self.entry)}
 
     def _code(self):

@@ -306,6 +306,37 @@ class MapContract(unittest.TestCase):
                  for p in self.root.rglob("*") if p.is_file()}
         self.assertEqual(after, before)
 
+    # @trace docs/ru/map.md#counts,docs/ru/codes.md#a4
+    def test_role_group_is_one_place_in_map_slice_and_staleness_checks(self):
+        page = "docs/feature.md"
+        row, summary, other = (page + "#" + anchor for anchor in ("row", "summary", "other"))
+        self.page(page, "row", "summary", "other")
+        source = "src/report.py"
+        self.write(source, "\n".join([
+            f"# {support.TAG} {row} role=consumes",
+            f"# {support.TAG} {row},{summary} role=produces",
+            "def rebuild(): return 1",
+            f"# {support.TAG} {other}",
+            "def separate(): return 0",
+        ]) + "\n")
+        support.git_init(self.root)
+        self.assertEqual(support.commit(self.root)[0], 0)
+        support.sub(self.root / source, "return 1", "return 2")
+        self.assertEqual(support.commit(self.root, date="2026-01-03T10:00:00")[0], 0)
+
+        rows = self.rows(self.run_map())
+        for target in (row, summary):
+            self.assertEqual(rows[target]["code"], {"src": 1})
+            code, output = support.cli(self.root, "slice", target, "--format", "json")
+            self.assertEqual(code, 0, output)
+            blocks = {block["kind"]: block["items"] for block in json.loads(output)["blocks"]}
+            self.assertEqual([place["symbol"] for place in blocks["code"]], ["def rebuild(): return 2"])
+            self.assertEqual([item["target"] for item in blocks["signals"] if item["code"] == "A4"],
+                             [target])
+        _, result = support.check_json(self.root, "--audit")
+        self.assertCountEqual([item["subject"] for item in result["warnings"] if item["code"] == "A4"],
+                              [row, summary])
+
 
 if __name__ == "__main__":
     unittest.main()
