@@ -20,7 +20,7 @@ baseline and active review marks update with the document paths.
 | --- | --- | --- | --- |
 | `docs` | string | `docs` | Documentation directory. With `languages`, it must match the directory for the default edition. |
 | `description` | string or `null` | unset | System documentation directory when it is separate from end-user help. |
-| `workflow` | string or `null` | `workflow` | Workflow document directory. `null` disables its checks and routes lipi feedback to `.agents/lipi-feedback/`. |
+| <a id="workflow"></a>`workflow` | string or `null` | `workflow` with a settings file (including `{}` or `--config`), otherwise `null` | Workflow document directory. `null` disables its checks and routes lipi feedback to `.agents/lipi-feedback/`. |
 | `decisions` | nonempty string | `<workflow>/adr` | Decision directory within the project, with no symlinks in its path when using Git. An explicit value overrides the standard path and works with `"workflow": null`. |
 | `repos` | object | unset | Explicit connections to neighboring repositories, with relative `path` and a list of permitted `read` scopes. See [repository connections](#repos). |
 | `enforce` | boolean | `false` | Project enforcement mode (ADR-011). `true` uses pre-commit `lipi check --staged` and strict agent instructions. `false` leaves commits unblocked and installs no hook. |

@@ -728,6 +728,7 @@ def check_reviews(root):
     return []
 
 
+# @trace docs/ru/settings.md#workflow
 def load_config(root, explicit):
     path = Path(explicit) if explicit else root / CONFIG_NAME
     cfg = json.loads(json.dumps(DEFAULTS))
@@ -742,4 +743,6 @@ def load_config(root, explicit):
                 cfg[k] = v
     elif explicit:
         raise ValueError(tr("checker.config.config_missing"))
+    else:
+        cfg["workflow"] = None
     return cfg

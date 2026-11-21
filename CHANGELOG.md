@@ -1,5 +1,16 @@
 # lipi releases
 
+## 1.3.1 — Unreleased
+
+- Without a settings file, `lipi check` and `lipi audit` can check existing
+  documentation and leave an unrelated `workflow/` directory untouched.
+  Run `lipi init` to configure the project.
+
+### Upgrading your project
+
+1. Upgrade Lipi with `pipx upgrade lipi`.
+2. The rules and templates are unchanged. You can skip `lipi init`.
+
 ## 1.3.0 — 2026-11-21
 
 - `lipi slice --diff` and `--staged` show the old and new wording of changed

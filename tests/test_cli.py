@@ -602,6 +602,49 @@ class TestCli(unittest.TestCase):
         code, out = cli(p, "check")
         self.assertEqual(code, 0, out)
 
+    # @trace docs/ru/commands.md#check,docs/ru/settings.md#workflow
+    def test_unconfigured_workflow_is_left_alone(self):
+        root = self.tmp
+        workflow = root / "workflow"
+        note = workflow / "notes.md"
+        support.w(note, "# Notes\n\n[Link](missing.md)\n")
+        support.git_init(root)
+        self.assertEqual(support.commit(root)[0], 0)
+        for args in (("check",), ("audit",), ("index",), ("new", "iss", "Example", "bug")):
+            with self.subTest(args=args):
+                code, out = cli(root, *args)
+                self.assertEqual(code, 2, out)
+                self.assertIn("lipi init", out)
+        self.assertEqual(support.git(root, "status", "--porcelain")[1], "")
+
+        readme = root / "docs/README.md"
+        support.w(readme, "# Guide\n")
+        self.assertEqual(support.commit(root)[0], 0)
+        for args in (("check",), ("audit",), ("slice", "docs/README.md"), ("map",)):
+            with self.subTest(args=args):
+                code, out = cli(root, *args)
+                self.assertEqual(code, 0, out)
+                if args[0] in ("check", "audit"):
+                    self.assertIn("lipi init", out)
+        self.assertEqual(support.git(root, "status", "--porcelain")[1], "")
+        support.w(readme, "# Guide\n\n[Link](missing.md)\n")
+        code, response = check_json(root)
+        self.assertEqual(code, 1)
+        self.assertIn("D1", [item["code"] for item in response["errors"]])
+        self.assertEqual(cli(root, "baseline")[0], 0)
+        self.assertTrue((root / support.BASE_REL).is_file())
+        self.assertEqual(cli(root, "review", "--prune")[0], 0)
+        self.assertEqual(list(workflow.iterdir()), [note])
+
+    def test_empty_settings_file_connects_default_workflow(self):
+        for name, args in (("lipi.json", ()), ("custom.json", ("--config", "custom.json"))):
+            root = self.tmp / name.removesuffix(".json")
+            (root / "workflow").mkdir(parents=True)
+            support.w(root / name, "{}")
+            code, out = cli(root, "index", *args)
+            self.assertEqual(code, 0, out)
+            self.assertTrue((root / "workflow/INDEX.md").is_file())
+
     # @trace docs/ru/commands.md#check,ADR-010
     def test_check_runs_package_checker_with_external_copy_present(self):
         """Скрипт check.py в проекте не влияет на lipi check."""

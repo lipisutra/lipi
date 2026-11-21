@@ -157,6 +157,7 @@ class WorkflowLayoutTests(unittest.TestCase):
         self.assertFalse(any(item[3] == 'W11' for item in rep.items))
 
     def test_check_uses_one_utc_closure_limit_for_w3_and_index(self):
+        support.w(self.root / "lipi.json", "{}")
         cases = (('2026-11-18', '2026-11-19', '2026-11-20'),
                  ('2026-11-30', '2026-12-01', '2026-12-02'),
                  ('2026-12-31', '2027-01-01', '2027-01-02'))

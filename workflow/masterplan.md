@@ -4,6 +4,8 @@
 
 ## Сейчас
 
+- [ISS-025](issue/2026/iss-025-lipi-check-bez-lipi-json-sozdaet.md): проверка проекта без настроек.
+
 ## Дальше
 
 ## Позже

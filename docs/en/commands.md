@@ -10,7 +10,7 @@ state (ADR-010). See [README](../../README.md) and [SETUP.md](../../SETUP.md).
 | --- | --- |
 | <a id="help"></a>`lipi help` | Show help. Equivalent to invoking `lipi` without arguments or with `-h`, `--help`, `?`, or `/?`. `lipi help slice`, `lipi help map`, `lipi help mv`, and `lipi help review` show help for that command. |
 | <a id="guide"></a>`lipi guide` | Print [SETUP](../../SETUP.md) from the repository or installed package. If the page is unavailable, print its address at the current version tag and exit with 1. |
-| <a id="check"></a>`lipi check` | Run [quick checks](checking.md). `--staged` adds staleness checks for the Git index, and `--diff A...B` compares a revision range. `--strict` treats warnings as errors. `--no-baseline` shows all errors. |
+| <a id="check"></a>`lipi check` | Run [quick checks](checking.md). Without a settings file, checks require `docs/` and skip workflow documents. `--staged` adds staleness checks for the Git index, and `--diff A...B` compares a revision range. `--strict` treats warnings as errors. `--no-baseline` shows all errors. |
 | <a id="audit"></a>`lipi audit` | Run check and a detailed [audit](checking.md). Also reports ignored trace marker lines and review authors. `--reviews-since <revision>` shows [new review marks](checking.md#review-authors). |
 | <a id="index"></a>`lipi index` | Regenerate the [workflow index files](workflow.md), including the overview, active lists, and closure log by `Closed` year. |
 | <a id="baseline"></a>`lipi baseline [--prune]` | Record errors in `.agents/lipi/baseline.json` so only new errors fail checks. First setup uses the same error counts. Warnings are excluded. `--prune` removes fixed errors without adding new ones. Commit the baseline with the project. |

@@ -28,6 +28,7 @@ class RepositorySettings(unittest.TestCase):
         return validate_settings(self.root, {"repos": repos}, **options)
 
     def test_absent_and_empty_repos_keep_single_project_defaults(self):
+        support.w(self.root / "lipi.json", "{}")
         original = load_config(self.root, None)
         self.assertNotIn("repos", original)
         self.assertEqual(validate_config(self.root, original), [])

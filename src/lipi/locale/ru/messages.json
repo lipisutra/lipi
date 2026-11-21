@@ -851,6 +851,10 @@
     "source_sha256": "c7437abce4c82945e6cf5398142ef59ac5989bdae86d99a6dcdf3982bc736a23",
     "text": "детектор расхождения по диапазону git, напр. origin/main...HEAD"
   },
+  "checker.runner.docs_only": {
+    "source_sha256": "76b1c64a17d0d5e48c9356a859e130b8315036ef75fd2db29cd1fe1bac119928",
+    "text": "Файл lipi.json не найден. Проверяется описание, рабочие материалы отключены. Для подключения выполните lipi init."
+  },
   "checker.runner.format_help": {
     "source_sha256": "0067d0ebdd5c935d37c7e14ea88a4abacfcfe15b95161a5adcb2dbbd604fc938",
     "text": "формат вывода: text (по умолчанию), json — один объект для инструментов и CI, github — аннотации GitHub Actions"
@@ -874,6 +878,10 @@
   "checker.runner.index_write_failed": {
     "source_sha256": "50c6df9f388b14bef8a730dcaa666346d97ea1376b9cfc0df1ee9a688075b8ab",
     "text": "указатель не записан: %s"
+  },
+  "checker.runner.init_required": {
+    "source_sha256": "41c785dbbdf6faaebf3286f6f1cb3a8c9d049824ff0eb12d74d5d587354c60ac",
+    "text": "Файл настроек проекта не найден. Для подключения выполните lipi init."
   },
   "checker.runner.invalid_entry_pattern": {
     "source_sha256": "8fb6d3094ffd53e980df443ab8809c27adb3049402bb230a3d95b6b81398adbf",

@@ -10,7 +10,7 @@
 | <a id="help"></a>`lipi help` | Справка; то же без аргументов и с `-h`, `--help`, `?`, `/?`. `lipi help slice`, `lipi help map`, `lipi help mv` и `lipi help review` дают справку выбранной команды. |
 | <a id="lang"></a>`lipi lang [язык]` | Показать или выбрать [язык интерфейса](settings.md#interface-language). Для русских заготовок выполните `lipi lang ru` перед первым `lipi init`. |
 | <a id="guide"></a>`lipi guide` | Печатает [SETUP](../../SETUP.md) из репозитория или установленного пакета; если страницы нет — её адрес на теге своей версии и код 1. |
-| <a id="check"></a>`lipi check` | [Быстрые проверки](checking.md); `--staged` добавляет детектор расхождения по индексу Git, `--diff A...B` — по диапазону. `--strict` считает предупреждения ошибками, `--no-baseline` показывает все ошибки. |
+| <a id="check"></a>`lipi check` | [Быстрые проверки](checking.md). Без настроек нужны `docs/`, работы отключены. `--staged` добавляет детектор расхождения по индексу Git, `--diff A...B` — по диапазону. `--strict` считает предупреждения ошибками, `--no-baseline` показывает все ошибки. |
 | <a id="audit"></a>`lipi audit` | Check и расширенный [аудит](checking.md); справочно — ignore-trace и авторы отметок. `--reviews-since <ревизия>` показывает [новые отметки](checking.md#review-authors). |
 | <a id="index"></a>`lipi index` | Пересобирает полный [комплект указателей](workflow.md): короткий INDEX, живые списки и журнал по году поля `Closed`. |
 | <a id="baseline"></a>`lipi baseline [--prune]` | Записывает ошибки в `.agents/lipi/baseline.json`, как при первом `init`. Проверка падает только на новых ошибках. Предупреждения не входят. `--prune` убирает исправленное. Храните файл в Git. |
