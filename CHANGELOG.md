@@ -1,6 +1,6 @@
 # lipi releases
 
-## 1.3.1 — Unreleased
+## 1.3.1 — 2026-11-21
 
 - Without a settings file, `lipi check` and `lipi audit` can check existing
   documentation and leave an unrelated `workflow/` directory untouched.

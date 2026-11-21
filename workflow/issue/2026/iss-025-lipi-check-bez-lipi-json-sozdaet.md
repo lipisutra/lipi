@@ -2,7 +2,9 @@
 
 - Created: 2026-11-21
 - Updated: 2026-11-21
-- Status: in progress
+- Status: closed
+- Closed: 2026-11-21
+- Result: Без файла настроек check и audit проверяют имеющееся описание и оставляют чужую workflow/ нетронутой. Если описания нет, код выхода 2. Команды new, index и baseline до записи предлагают выполнить lipi init.
 - Kind: bug
 
 ## Observation
