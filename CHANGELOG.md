@@ -1,5 +1,17 @@
 # lipi releases
 
+## 1.3.3 — 2026-11-21
+
+- Agent instructions explain how to tell which part of a behavior a linked
+  test confirms and how to report what remains unverified.
+- The first-task guide explains how to choose a link worth marking and when
+  a role helps a reviewer decide which code to open.
+
+### Upgrading your project
+
+1. Upgrade Lipi with `pipx upgrade lipi`.
+2. The rules and templates have changed. Run `lipi init`.
+
 ## 1.3.2 — 2026-11-21
 
 - The workflow rules explain when to ask the user to accept a decision or a

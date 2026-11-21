@@ -50,6 +50,15 @@ Add rules that the checker can enforce or that an agent can follow from a single
 
 To add an interface language, create a sibling of `src/lipi/locale/en/`. Each translated message or term has `text` and `source_sha256`. For a term, `text` contains `term` and `definition`. In `template-hashes.json`, use the seed file's path relative to `templates/` as its key. The managed rules and CI template always come from English. Use `lipi.i18n.fingerprint` on the English value or UTF-8 template text and update the fingerprint after reviewing the translation. Check the translation inventory with `python3 -m unittest tests.test_interface_language.LanguageResources.test_translation_inventory`.
 
+### Design questions for manual input <a id="manual-input"></a>
+
+Before adding a field, relationship, or attribute that authors enter by hand, answer four questions.
+
+1. Does the author already know the answer when making the change?
+2. Can Lipi derive it from paths, layers, Git history, or existing links?
+3. How would this information change a reader's decision or the result of a check?
+4. How will readers see what is still unknown when only some locations have this information?
+
 ## Documentation <a id="documentation"></a>
 
 The root documentation pages and the [reference](../docs/en/README.md) follow the same [documentation rules](https://github.com/lipisutra/lipi/blob/master/src/lipi/locale/en/templates/lipi/common/documentation.md) as other projects.

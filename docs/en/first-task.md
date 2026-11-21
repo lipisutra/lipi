@@ -41,6 +41,9 @@ the documentation index if it is new.
 Reading a revision by ID returns the label stored in that revision.
 ```
 
+Start with a link you would otherwise have to find again the next time the
+code changes. A role is useful when it helps you choose which code to open.
+
 Put `# @trace docs/records.md#read-revision` above the function that forms
 the response and above the test that checks its label. Use the comment
 syntax of the source language. Mark the client function that reads this

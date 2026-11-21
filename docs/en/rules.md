@@ -216,6 +216,11 @@ excluded. An unavailable source contributes no results. T4 leaves
 reference command exit codes unchanged, while `check` exits with 1 for
 T4 at `error` level. See [map](map.md) and [slice](slice.md).
 
+When drawing a conclusion from a linked test, read its assertion, run the
+test, and identify a plausible wrong result it would catch. If it covers only
+part of the behavior, report what it checks and what remains unverified.
+See the [first-task guide](first-task.md#review).
+
 `AGENTS.md` is a short entry point for people using or changing the
 project. It links to `.agents/lipi/README.md`, as checked by V2. Keep
 project rules in project-owned files such as `.agents/README.md`. lipi
