@@ -2,10 +2,12 @@
 
 - Created: 2026-11-22
 - Updated: 2026-11-22
-- Status: open
+- Status: in progress
 - Kind: request
 
 ## Observation
+
+План реализации — [PLN-005](../../plan/2026/pln-005-yavnyy-poisk-po-tekstu-dokumentov-v.md).
 
 В Lipi 1.3.3 [обычный поиск цели](../../../docs/ru/slice.md#target) может
 пропустить раздел, в котором слова вопроса встречаются только в тексте.
