@@ -1,6 +1,6 @@
 # lipi releases
 
-## 1.3.0 — Unreleased
+## 1.3.0 — 2026-11-21
 
 - `lipi slice --diff` and `--staged` show the old and new wording of changed
   Markdown sections alongside linked code and tests, in text and JSON. They
