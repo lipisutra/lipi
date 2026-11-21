@@ -10,6 +10,10 @@
 Read the sections relevant to your task. Both [English](docs/en/README.md) and [Russian](docs/ru/README.md) documentation are available.
 Follow the [managed lipi rules](.agents/lipi/README.md) when editing documentation and workflow files.
 
+Set an ADR to `accepted` only when the user explicitly accepts the decision.
+Their approval to start a plan moves it to `in progress`. Set it to `completed`
+only when they explicitly accept the result.
+
 ## Verification and reflection <a id="verification-and-reflection"></a>
 
 - For wording changes in documentation or contributor instructions, run `lipi check` and
@@ -18,6 +22,11 @@ Follow the [managed lipi rules](.agents/lipi/README.md) when editing documentati
   subsequent `lipi init --dry-run` proposes no changes.
 - For behavior changes, run tests for the affected commands and their callers. Widen the
   run if shared code could affect other commands. Run `lipi index` when workflow headers change.
+- When a change promises to preserve existing command output, compare text and JSON with
+  the latest release tag on the same committed example with the new feature unused.
+  A regression test that checks that case against output captured from the tag is sufficient.
+- Create temporary test projects outside the clone. After the check, remove the files
+  you created for the experiment and use `git worktree remove` for any worktree you created.
 - Run the full suite (`python3 -m unittest discover -s tests`) at agreed checkpoints and
   in both English and Russian before tagging. Count each language's passing run on the
   same tree. If only the release date, work item statuses or results, or the generated

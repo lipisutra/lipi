@@ -68,7 +68,9 @@ language. The header follows the first-level heading:
 ```
 
 - **Status** holds exactly one value without an explanation. Record the
-  status only in this field.
+  status only in this field. Follow the project's acceptance process when
+  changing status. If no process is documented, ask the user before marking
+  a decision `accepted` or a plan `completed`.
 - **Result** is required for a completed or canceled plan and a closed
   issue. The log uses it.
 - **Closed** is required for completed or canceled plans, closed issues
@@ -83,11 +85,14 @@ language. The header follows the first-level heading:
   or invalid date on unfinished work. The due date itself still counts
   as on time. Items without a due date and items with final or unknown
   statuses are skipped. Set the check's level through `codes`.
-- A decision that refines another contains `- Refines: [ADR-NNN](path.md)`
-  and may repeat the field. The original decision remains `accepted`.
-  The slice shows related accepted decisions under `Rules and decisions
-  to follow`. Ordinary links between decisions provide context. Projects translate other
-  status formats into this header.
+- Preserve the meaning of an accepted decision. Fix typos or links in place
+  and update `Updated`. To clarify or extend the decision, write a new one
+  with `- Refines: [ADR-NNN](path.md)`. The field can repeat. The original
+  remains `accepted`. The slice shows related accepted decisions under
+  `Rules and decisions to follow`. Ordinary links between decisions provide
+  context. Projects translate other status formats into this header.
+- When a new decision replaces an old one, mark the old decision `superseded`,
+  set `Closed` to the date of replacement, and link to the new decision in `Result`.
 - **Required sections** are `Observation` for open or in-progress issues,
   and `Purpose` and `Completion criteria` for plans in progress or pending
   acceptance. A missing or empty required section gives W8.

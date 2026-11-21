@@ -163,10 +163,18 @@ See the [agent documentation rules](https://github.com/lipisutra/lipi/blob/v1.0.
   date before `Created`, or one more than a day after the UTC date
   raises W3. Record it at closure, preserve it through later edits,
   and set a new date when closing again. Audits have no closure date.
-- A refining decision uses `- Refines: [ADR-NNN](path.md)`. The line
-  can repeat. Refinement leaves the original decision's status intact.
+- Follow the project's acceptance process when changing a status. If no
+  process is documented, ask the user before marking a decision `accepted`
+  or a plan `completed`.
+- Preserve the meaning of an accepted decision. Fix typos and links in
+  place and update `Updated`. To clarify or extend the decision, write a
+  new one with `- Refines: [ADR-NNN](path.md)`. The field can repeat.
+  The original decision remains `accepted`.
   Only this relation adds related accepted decisions to the slice's
   `obey` block. An ordinary link between decisions remains context.
+- When a new decision replaces an old one, mark the old decision
+  `superseded`, set `Closed` to the replacement date, and link to the
+  new decision in `Result`.
 - **Required sections.** An issue marked `open` or `in progress` needs
   a nonempty `Observation`. A plan marked `in progress` or
   `pending acceptance` needs nonempty `Purpose` and
@@ -192,7 +200,7 @@ See the [agent documentation rules](https://github.com/lipisutra/lipi/blob/v1.0.
   Completed work raises an error there. The file has a size limit.
 - `history/` is the archive. Regular reads and checks skip it.
 
-See the [agent workflow rules](https://github.com/lipisutra/lipi/blob/v1.0.0/src/lipi/locale/en/templates/lipi/common/workflow.md).
+See `.agents/lipi/workflow.md` in your project for the rules applied by `lipi init`.
 
 ## 5. Agent instructions <a id="executor"></a>
 

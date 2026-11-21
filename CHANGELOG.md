@@ -1,5 +1,15 @@
 # lipi releases
 
+## 1.3.2 — Unreleased
+
+- The workflow rules explain when to ask the user to accept a decision or a
+  completed plan, and how to refine or replace an accepted decision.
+
+### Upgrading your project
+
+1. Upgrade Lipi with `pipx upgrade lipi`.
+2. The rules and templates have changed. Run `lipi init`.
+
 ## 1.3.1 — 2026-11-21
 
 - Without a settings file, `lipi check` and `lipi audit` can check existing
