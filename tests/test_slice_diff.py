@@ -64,6 +64,33 @@ class SliceDiffContract(unittest.TestCase):
             self.assertEqual(len(rows), 1, text)
             self.assertEqual(rows[0].partition(via)[2], label, rows[0])
 
+    def test_role_free_slice_matches_v1_2_1_with_entry_point(self):
+        support.set_config(self.root, entry=["def route"], layers={"src/*": "pricing"})
+        self.mark("src/router.py", symbol="def route():")
+        for path in ("src/provider.py", "src/reader.py", "src/policy.py", "tests/test_prices.py"):
+            self.mark(path)
+        self.baseline()
+
+        # Captured with the CLI from git archive v1.2.1 for PLN-003 and PLN-004.
+        fixture = support.HERE / "fixtures" / "slice-no-roles-v1.2.1.json"
+        expected = json.loads(fixture.read_text(encoding="utf-8"))
+
+        def assert_matches_release(query, *args):
+            for language in ("en", "ru"):
+                env = support.language_env(Path(self.tmp.name) / language, language)
+                with self.subTest(args=args, language=language, format="text"):
+                    code, out = support.run(support.PY + [str(support.CLI), "slice", *args],
+                                            cwd=self.root, env=env)
+                    self.assertEqual(code, 0, out)
+                    self.assertEqual(out, expected[query][language])
+                with self.subTest(args=args, language=language, format="json"):
+                    self.assertEqual(self.run_slice(*args, env=env), expected[query]["json"])
+
+        assert_matches_release("section", TARGET)
+        self.stage_change("src/provider.py")
+        assert_matches_release("diff", "--diff", "HEAD")
+        assert_matches_release("staged", "--staged")
+
     def test_shared_concepts_collect_related_places_obey_and_context_once(self):
         rule = ".agents/architecture.md#money"
         self.write(".agents/architecture.md", '# Money <a id="money"></a>\n')

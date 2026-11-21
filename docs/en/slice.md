@@ -172,9 +172,11 @@ With connections, `repos` counts repositories with nontest locations and
 `layers` counts distinct repository and layer pairs.
 
 `decisions` and `rules` count each supporting document in `obey` once,
-including documents found through several work item targets. Code locations
-include entry points and exclude tests. The summary counts the full slice
-before truncation, and counts A4 only where confirmed by the check. Staleness
+including documents found through several work item targets. The code location
+total (`summary.code`) includes entry points. In the example above, two of the
+five locations appear in `entry` and three in `code`. Test locations have
+their own count. The summary counts the full slice before truncation,
+and counts A4 only where confirmed by the check. Staleness
 coverage is shown separately and is independent of truncation.
 
 ## Staleness checks <a id="staleness"></a>
@@ -189,8 +191,9 @@ order](slice-output.md#staleness) and [A4 reviews](review.md#summary).
 
 Text and JSON use the same line budget. Up to the first half goes to severe
 signals, then each block gets up to three lines. Remaining lines are assigned
-in output order. `--full` shows excerpts outside the budget, and `--only`
-preserves signals. See [content selection](slice-output.md#budget) and
+in output order. With `--full`, excerpts fall outside the budget. Location
+lists still share the budget, including addresses with no role. The summary
+keeps the full counts. `--only` preserves signals. See [content selection](slice-output.md#budget) and
 [section excerpts in a diff](slice-diff.md#excerpts).
 
 ## Empty slices <a id="empty"></a>
@@ -264,11 +267,12 @@ type and canonical markers, including prefixes as seen from the current
 project.
 
 Blocks retain their usual order. Within a block, local items come first, then
-connected repositories in `repos` order, followed by the usual layer, path,
-and ID order. Signals show target T3 first, then sort by severity, source,
+connected repositories in `repos` order. Locations within each source sort
+by layer, path, and line. Documents follow address order. Signals show target T3 first, then sort by severity, source,
 path, and line. An item's `layer` omits the prefix. `--layer` selects a local
 layer name or a qualified `<connection>::<layer>`. With connections enabled,
-`::` in a layer name raises C1. A single budget applies to all sources. The
+`::` inside a local layer name raises C1. A neighbor with such a layer
+is marked `unavailable`. A single budget applies to all sources. The
 summary and `code_count` count locations in available sources. `--only`
 preserves source information.
 
@@ -306,8 +310,8 @@ state. JSON has `notes` objects with `code` and `text`. `repos-scope`
 describes available sources in scope, `repos-incomplete` describes unread
 sources, and `repos-unreproducible` reports dirty trees or missing Git or
 HEAD. These notes and the `cross-repo-staleness` note are outside the output
-budget and appear with any `--only` selection. The note counts visible locations with
-cross-repository links before filters and truncation. A location with both local
+budget and appear with any `--only` selection. The note counts locations with
+cross-repository links in available sources, before filters and truncation. A location with both local
 and cross-repository links can also count toward local coverage. `checks.staleness` checks only
 local links to local sections and has `scope: local`. Excluding
 cross-repository links alone does not cause `incomplete`. See [connected

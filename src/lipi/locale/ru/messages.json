@@ -3699,10 +3699,6 @@
     "source_sha256": "3a4463ad79e2115d3c470414ec61d8cbf96100e5d3e390c6d0f7f3708ec78c03",
     "text": "; кандидаты:"
   },
-  "slice.render.code_including_entry": {
-    "source_sha256": "8decc0d91b817137fc9316e95d7292c2f9687c1828419550f54f558c2efc115a",
-    "text": "%s, в том числе %s"
-  },
   "slice.render.concepts_omitted.ending_one": {
     "source_sha256": "0f3dd9b20cf41690a2d3fdf7061c38029fb60a51005dcd5cdbabed6f2c766d0d",
     "text": "реализует ещё %d понятие"

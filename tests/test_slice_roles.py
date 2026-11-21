@@ -101,10 +101,10 @@ class SliceRoles(unittest.TestCase):
         self.assertEqual(entry["target_roles"], [{"target": ROW, "roles": ["consumes"]}])
         self.assert_counts(reads, "consumes", matched=2, unassigned=1)
         output = self.text(ROW, "--role", "consumes")
-        self.assertIn("3 code locations (1 layer), including 1 entry point",
+        self.assertIn("1 entry point · 3 code locations (1 layer)",
                       output.splitlines()[1])
         russian = self.text(ROW, "--role", "consumes", language="ru")
-        self.assertIn("3 места в коде (1 слой), в том числе 1 точка входа",
+        self.assertIn("1 точка входа · 3 места в коде (1 слой)",
                       russian.splitlines()[1])
         self.assertIn("consumes", self.row_text(output, REBUILD))
         self.assertIn("no role", self.row_text(output, MANUAL))

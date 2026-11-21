@@ -152,7 +152,8 @@ belong to individual links. A function can read one format and write another.
 See [trace role syntax](rules.md#trace-roles).
 
 In `entry` and `code`, `target_roles` lists each matching anchor and its
-`roles` if a role was specified or a filter was used. An empty list means
+`roles` when any matching link has a role attribute or you use `--role`.
+An empty list means
 the marker supplied no recognized value. When a value was misspelled,
 `invalid_roles` preserves it. For example, `role=consumes,produce` identifies
 a reader and keeps the address visible under either filter. Test locations
@@ -170,8 +171,15 @@ In a file slice, when the file uses roles or you pass `--role`, each linked
 concept lists the file's matching declarations under `locations`, including
 those with no role. All anchors on one declaration use the first marker's
 line number. If the budget cuts the list short, `locations_omitted` gives the
-remaining count. The code total includes entry points and other related code
-locations that pass the filters.
+remaining count.
+
+For example, suppose `rebuild` consumes `#row` and three other locations
+point to `#row` without a role. With `--role consumes` the summary reads
+“1 consumer · 3 more locations without a role”. All four addresses are worth
+checking. `--only code` hides any entry points from the list. A smaller
+budget can shorten the list further. Both counts stay the same.
+A concept's `code_count` counts linked code locations, including entry points, before
+the role filter. A location shared by two concepts counts once for each.
 
 ## Search in a connected repository <a id="repo-search"></a>
 

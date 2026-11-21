@@ -924,7 +924,6 @@
   "slice.relation.target": "links to the target",
   "slice.render.ambiguous": "target \"%s\" is ambiguous%s",
   "slice.render.candidates": "; candidates:",
-  "slice.render.code_including_entry": "%s, including %s",
   "slice.render.concepts_omitted.ending_one": "implements %d more concepts",
   "slice.render.concepts_omitted.few": "implements %d more concepts",
   "slice.render.concepts_omitted.one": "implements %d more concept",

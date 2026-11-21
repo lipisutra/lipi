@@ -179,24 +179,20 @@ def count_text(number, kind):
 
 
 def _summary(summary):
-    roles = summary.get("roles", {})
-    entry = count_text(summary["entry"], "entry") if roles and summary.get("entry") else ""
     parts = []
     for key in ("errors", "warnings", "decisions", "rules", "concepts", "entry",
                 "code", "tests", "open_work", "targets"):
         number = summary.get(key, 0)
-        if not number or (key == "entry" and entry):
+        if not number:
             continue
         part = count_text(number, key)
-        if key == "code":
-            if summary.get("layers"):
-                detail = count_text(summary["layers"], "layers")
-                if "repos" in summary:
-                    detail += ", " + count_text(summary["repos"], "repos")
-                part += " (%s)" % detail
-            if entry:
-                part = tr("slice.render.code_including_entry") % (part, entry)
+        if key == "code" and summary.get("layers"):
+            detail = count_text(summary["layers"], "layers")
+            if "repos" in summary:
+                detail += ", " + count_text(summary["repos"], "repos")
+            part += " (%s)" % detail
         parts.append(part)
+    roles = summary.get("roles", {})
     if "role" in roles:
         parts.append(count_text(roles["matched"], roles["role"]))
         unassigned = roles["unassigned"]

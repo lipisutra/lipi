@@ -23,7 +23,8 @@ still forms a boundary. `ignore-trace` does not. The trace region
 includes the group and the text up to the next group or EOF.
 Dating the code for A4 skips initial stand-alone trace marker comments
 and counts code alongside an inline marker. Fingerprints include
-every line in the region.
+every line in the region. A marker with `role=…` belongs to its usual
+group. The role text is part of the fingerprint, including a misspelled role.
 
 Markdown uses the shared anchor region. A table region includes its
 header and selected row, excluding rows between them.

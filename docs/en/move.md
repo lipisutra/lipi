@@ -76,7 +76,8 @@ Ignored paths stay out of the plan even when referenced by a moving page.
   For instance, `../README.md` in `docs/page.md` becomes `../../README.md`
   after `docs → docs/ru`.
 - `@trace` and `covers` paths are root-relative and change even within a
-  moving directory. Lines with `lipi: ignore-trace` stay as examples and
+  moving directory. A trace marker keeps its `role=…` suffix exactly as
+  written, including any misspelling. Lines with `lipi: ignore-trace` stay as examples and
   are omitted from the connected repository trace marker report. Work
   item IDs and external targets of the form `name::target` stay as written.
 - Update Markdown code examples, string literals, and arbitrary paths

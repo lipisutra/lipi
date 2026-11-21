@@ -1,0 +1,367 @@
+{
+  "section": {
+    "en": "docs/pricing.md#threshold — Threshold\n1 entry point · 4 code locations (1 layer) · 1 test location\nchecked 5 of 5 locations for staleness\n\nExcerpt\n  ## Threshold \n  \n  Threshold rule.\nEntry points\n  src/router.py:1  def route():  [pricing]\nCode locations\n  src/policy.py:1  def discount():  [pricing]\n  src/provider.py:1  def discount():  [pricing]\n  src/reader.py:1  def discount():  [pricing]\nTest locations\n  tests/test_prices.py:1  def discount():\n",
+    "ru": "docs/pricing.md#threshold — Threshold\n1 точка входа · 4 места в коде (1 слой) · 1 место в тестах\nустаревание проверено для 5 из 5 мест\n\nВыдержка\n  ## Threshold \n  \n  Threshold rule.\nС чего начинать\n  src/router.py:1  def route():  [pricing]\nМеста в коде\n  src/policy.py:1  def discount():  [pricing]\n  src/provider.py:1  def discount():  [pricing]\n  src/reader.py:1  def discount():  [pricing]\nМеста в тестах\n  tests/test_prices.py:1  def discount():\n",
+    "json": {
+      "schema": 1,
+      "target": {
+        "target": "docs/pricing.md#threshold",
+        "title": "Threshold",
+        "kind": "section",
+        "found": "exact"
+      },
+      "summary": {
+        "errors": 0,
+        "warnings": 0,
+        "decisions": 0,
+        "rules": 0,
+        "concepts": 0,
+        "entry": 1,
+        "code": 4,
+        "layers": 1,
+        "tests": 1,
+        "open_work": 0,
+        "targets": 0
+      },
+      "blocks": [
+        {
+          "kind": "excerpt",
+          "items": [
+            {
+              "text": "## Threshold \n\nThreshold rule.",
+              "lines": 3,
+              "cut": false
+            }
+          ],
+          "omitted": 0,
+          "hint": []
+        },
+        {
+          "kind": "entry",
+          "items": [
+            {
+              "path": "src/router.py",
+              "line": 1,
+              "symbol": "def route():",
+              "layer": "pricing",
+              "via": "docs/pricing.md#threshold"
+            }
+          ],
+          "omitted": 0,
+          "hint": []
+        },
+        {
+          "kind": "code",
+          "items": [
+            {
+              "path": "src/policy.py",
+              "line": 1,
+              "symbol": "def discount():",
+              "layer": "pricing",
+              "via": "docs/pricing.md#threshold"
+            },
+            {
+              "path": "src/provider.py",
+              "line": 1,
+              "symbol": "def discount():",
+              "layer": "pricing",
+              "via": "docs/pricing.md#threshold"
+            },
+            {
+              "path": "src/reader.py",
+              "line": 1,
+              "symbol": "def discount():",
+              "layer": "pricing",
+              "via": "docs/pricing.md#threshold"
+            }
+          ],
+          "omitted": 0,
+          "hint": []
+        },
+        {
+          "kind": "tests",
+          "items": [
+            {
+              "path": "tests/test_prices.py",
+              "line": 1,
+              "symbol": "def discount():",
+              "layer": "tests"
+            }
+          ],
+          "omitted": 0,
+          "hint": []
+        }
+      ],
+      "incomplete": false,
+      "notes": [
+        {
+          "code": "staleness-full",
+          "text": "checked 5 of 5 locations for staleness"
+        }
+      ],
+      "checks": {
+        "staleness": {
+          "state": "full",
+          "checked": 5,
+          "total": 5
+        }
+      }
+    }
+  },
+  "diff": {
+    "en": "--diff HEAD — check related locations\n1 concept · 1 entry point · 3 code locations (1 layer) · 1 test location\ncheck related locations, decisions, and tests\nchanges without trace markers: 0 locations\nchecked 4 of 4 locations for staleness\n\nConcepts\n  docs/pricing.md#threshold — Threshold (4 code locations)\nEntry points\n  src/router.py:1  def route():  [pricing]\nCode locations\n  src/policy.py:1  def discount():  [pricing]\n  src/reader.py:1  def discount():  [pricing]\nTest locations\n  tests/test_prices.py:1  def discount():\n",
+    "ru": "--diff HEAD — проверьте связанные места\n1 понятие · 1 точка входа · 3 места в коде (1 слой) · 1 место в тестах\nпроверьте связанные места, решения и тесты\nизменения без меток: 0 мест\nустаревание проверено для 4 из 4 мест\n\nПонятия\n  docs/pricing.md#threshold — Threshold (4 места в коде)\nС чего начинать\n  src/router.py:1  def route():  [pricing]\nМеста в коде\n  src/policy.py:1  def discount():  [pricing]\n  src/reader.py:1  def discount():  [pricing]\nМеста в тестах\n  tests/test_prices.py:1  def discount():\n",
+    "json": {
+      "schema": 1,
+      "target": {
+        "target": "--diff HEAD",
+        "title": "check related locations",
+        "kind": "diff",
+        "found": "exact"
+      },
+      "summary": {
+        "errors": 0,
+        "warnings": 0,
+        "decisions": 0,
+        "rules": 0,
+        "concepts": 1,
+        "entry": 1,
+        "code": 3,
+        "layers": 1,
+        "tests": 1,
+        "open_work": 0,
+        "targets": 0
+      },
+      "blocks": [
+        {
+          "kind": "concepts",
+          "items": [
+            {
+              "target": "docs/pricing.md#threshold",
+              "title": "Threshold",
+              "code_count": 4
+            }
+          ],
+          "omitted": 0,
+          "hint": []
+        },
+        {
+          "kind": "entry",
+          "items": [
+            {
+              "path": "src/router.py",
+              "line": 1,
+              "symbol": "def route():",
+              "layer": "pricing",
+              "via": "docs/pricing.md#threshold",
+              "matched_targets": [
+                "docs/pricing.md#threshold"
+              ]
+            }
+          ],
+          "omitted": 0,
+          "hint": []
+        },
+        {
+          "kind": "code",
+          "items": [
+            {
+              "path": "src/policy.py",
+              "line": 1,
+              "symbol": "def discount():",
+              "layer": "pricing",
+              "via": "docs/pricing.md#threshold",
+              "matched_targets": [
+                "docs/pricing.md#threshold"
+              ]
+            },
+            {
+              "path": "src/reader.py",
+              "line": 1,
+              "symbol": "def discount():",
+              "layer": "pricing",
+              "via": "docs/pricing.md#threshold",
+              "matched_targets": [
+                "docs/pricing.md#threshold"
+              ]
+            }
+          ],
+          "omitted": 0,
+          "hint": []
+        },
+        {
+          "kind": "tests",
+          "items": [
+            {
+              "path": "tests/test_prices.py",
+              "line": 1,
+              "symbol": "def discount():",
+              "layer": "tests",
+              "matched_targets": [
+                "docs/pricing.md#threshold"
+              ]
+            }
+          ],
+          "omitted": 0,
+          "hint": []
+        }
+      ],
+      "incomplete": false,
+      "notes": [
+        {
+          "code": "diff-review",
+          "text": "check related locations, decisions, and tests"
+        },
+        {
+          "code": "diff-unmarked",
+          "text": "changes without trace markers: 0 locations"
+        },
+        {
+          "code": "staleness-full",
+          "text": "checked 4 of 4 locations for staleness"
+        }
+      ],
+      "checks": {
+        "staleness": {
+          "state": "full",
+          "checked": 4,
+          "total": 4
+        },
+        "diff": {
+          "mode": "diff",
+          "base": "HEAD",
+          "files": 1,
+          "unmarked": 0
+        }
+      }
+    }
+  },
+  "staged": {
+    "en": "--staged — check related locations\n1 concept · 1 entry point · 3 code locations (1 layer) · 1 test location\ncheck related locations, decisions, and tests\nchanges without trace markers: 0 locations\nchecked 4 of 4 locations for staleness\n\nConcepts\n  docs/pricing.md#threshold — Threshold (4 code locations)\nEntry points\n  src/router.py:1  def route():  [pricing]\nCode locations\n  src/policy.py:1  def discount():  [pricing]\n  src/reader.py:1  def discount():  [pricing]\nTest locations\n  tests/test_prices.py:1  def discount():\n",
+    "ru": "--staged — проверьте связанные места\n1 понятие · 1 точка входа · 3 места в коде (1 слой) · 1 место в тестах\nпроверьте связанные места, решения и тесты\nизменения без меток: 0 мест\nустаревание проверено для 4 из 4 мест\n\nПонятия\n  docs/pricing.md#threshold — Threshold (4 места в коде)\nС чего начинать\n  src/router.py:1  def route():  [pricing]\nМеста в коде\n  src/policy.py:1  def discount():  [pricing]\n  src/reader.py:1  def discount():  [pricing]\nМеста в тестах\n  tests/test_prices.py:1  def discount():\n",
+    "json": {
+      "schema": 1,
+      "target": {
+        "target": "--staged",
+        "title": "check related locations",
+        "kind": "diff",
+        "found": "exact"
+      },
+      "summary": {
+        "errors": 0,
+        "warnings": 0,
+        "decisions": 0,
+        "rules": 0,
+        "concepts": 1,
+        "entry": 1,
+        "code": 3,
+        "layers": 1,
+        "tests": 1,
+        "open_work": 0,
+        "targets": 0
+      },
+      "blocks": [
+        {
+          "kind": "concepts",
+          "items": [
+            {
+              "target": "docs/pricing.md#threshold",
+              "title": "Threshold",
+              "code_count": 4
+            }
+          ],
+          "omitted": 0,
+          "hint": []
+        },
+        {
+          "kind": "entry",
+          "items": [
+            {
+              "path": "src/router.py",
+              "line": 1,
+              "symbol": "def route():",
+              "layer": "pricing",
+              "via": "docs/pricing.md#threshold",
+              "matched_targets": [
+                "docs/pricing.md#threshold"
+              ]
+            }
+          ],
+          "omitted": 0,
+          "hint": []
+        },
+        {
+          "kind": "code",
+          "items": [
+            {
+              "path": "src/policy.py",
+              "line": 1,
+              "symbol": "def discount():",
+              "layer": "pricing",
+              "via": "docs/pricing.md#threshold",
+              "matched_targets": [
+                "docs/pricing.md#threshold"
+              ]
+            },
+            {
+              "path": "src/reader.py",
+              "line": 1,
+              "symbol": "def discount():",
+              "layer": "pricing",
+              "via": "docs/pricing.md#threshold",
+              "matched_targets": [
+                "docs/pricing.md#threshold"
+              ]
+            }
+          ],
+          "omitted": 0,
+          "hint": []
+        },
+        {
+          "kind": "tests",
+          "items": [
+            {
+              "path": "tests/test_prices.py",
+              "line": 1,
+              "symbol": "def discount():",
+              "layer": "tests",
+              "matched_targets": [
+                "docs/pricing.md#threshold"
+              ]
+            }
+          ],
+          "omitted": 0,
+          "hint": []
+        }
+      ],
+      "incomplete": false,
+      "notes": [
+        {
+          "code": "diff-review",
+          "text": "check related locations, decisions, and tests"
+        },
+        {
+          "code": "diff-unmarked",
+          "text": "changes without trace markers: 0 locations"
+        },
+        {
+          "code": "staleness-full",
+          "text": "checked 4 of 4 locations for staleness"
+        }
+      ],
+      "checks": {
+        "staleness": {
+          "state": "full",
+          "checked": 4,
+          "total": 4
+        },
+        "diff": {
+          "mode": "staged",
+          "base": null,
+          "files": 1,
+          "unmarked": 0
+        }
+      }
+    }
+  }
+}

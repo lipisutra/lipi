@@ -2,6 +2,25 @@
   "algorithm": "sha256-lines-v1",
   "entries": [
     {
+      "head": "29d230059421580e936a1e13886dfce398eff479",
+      "id": "033d593a5ddb1b280b62a5e1a2844ef87069d308f10c966ccef04d4040943893",
+      "reason": "Проверка замены адресов на новом примере с role= подтверждает прежний договор команды о точных заменах: меняются только два адреса перенесённой страницы в действующих комментариях. Синтаксис вызова по-прежнему описан в этой справке, а подробности обработки меток даны в связанном описании переноса.",
+      "relation": "trace",
+      "reviewed_at": "2026-11-21T10:07:48Z",
+      "reviewer": "audit_z4",
+      "source": {
+        "kind": "trace",
+        "path": "tests/test_move_links.py",
+        "sha256": "f47cae5d61fcbc24a8472a2fe347940ea03fa6cfba371d2ec3755086efb9fa58"
+      },
+      "target": {
+        "anchor": "mv",
+        "kind": "anchor",
+        "path": "docs/ru/commands.md",
+        "sha256": "cfcdeb4f86c33b3d76b3c2b38c73d9da5a59d027683846affcd6f32dca7f7ea2"
+      }
+    },
+    {
       "head": "f6d2756903aefdcd53947ecac06e70c1274e98cd",
       "id": "17d2357c9229b94fda9cbaf58e91c6db5d36c96f85f7ac2c0aee06fc0cc4ff1e",
       "reason": "The work-slice test still exercises the documented obey, code, targets order and checks that only the work ID contributes code while shared obligations retain their linked origins.",
@@ -21,41 +40,79 @@
       }
     },
     {
-      "head": "ecc9b1384f8377c9d05ba5443c9025d737c3d379",
-      "id": "2c50fa93345c1a28bfc7341c52f376fe4268a4424c4eb85d39b79561164ccf51",
-      "reason": "Сканирование @trace и разрешение целей для T1 сохранились. Правка выделила проверку имени главного файла ADR для чтения его из Git; в рабочем дереве остались прежние формы имени, проверка исключений и канонический номер без учёта ведущих нулей.",
+      "head": "29d230059421580e936a1e13886dfce398eff479",
+      "id": "4f2b0dd524943ba0277a084de53f556639d83db66db01ab9837c537b2c69a77a",
+      "reason": "Вынесенный is_configured_test_file по-прежнему применяет имя слоя tests и маски имён из настроек соседа. Проверка исходного и разрешённого пути допускает тестовые места при read: tests и обычные места при read: code, что соответствует описанию охвата карты.",
       "relation": "trace",
-      "reviewed_at": "2026-11-21T07:35:46Z",
-      "reviewer": "z3_budget",
+      "reviewed_at": "2026-11-21T10:07:49Z",
+      "reviewer": "audit_z4",
       "source": {
         "kind": "trace",
-        "path": "src/lipi/checker/targets.py",
-        "sha256": "233b652164613064452318909302f3fd692f1cdda55dcd30c6e2c30cb3ccf404"
+        "path": "src/lipi/repo_index.py",
+        "sha256": "f55b89bd412f838d5d7fb484a4f1d926dd71e898da2b3ffcb89d0f5b0b99b1b8"
       },
       "target": {
-        "anchor": "t1",
+        "anchor": "repos",
         "kind": "anchor",
-        "path": "docs/ru/codes.md",
-        "sha256": "d56c8f2098dd87bf1364f60be5512c5d5a5f940cbbbf366275a8df216f73d946"
+        "path": "docs/ru/map.md",
+        "sha256": "3a26d4f6cf1358ac7413233dda40adf0bfe8c29810c3f172c151a991055ad62d"
       }
     },
     {
-      "head": "f6d2756903aefdcd53947ecac06e70c1274e98cd",
-      "id": "2feb57a3f8c56cb55cd282e1d4584071b365620e9d8952f1f3a2d3b8aa9d23de",
-      "reason": "The ordinary work-slice test checks that code still uses the plan ID as its via string and the obey block keeps its list of origins. The new matched_targets field applies to diff slices.",
+      "head": "29d230059421580e936a1e13886dfce398eff479",
+      "id": "5d651a828c93a3046a23a2d65e2ef2c835df9b0a554274ee42096eef5245dd21",
+      "reason": "CLI возвращает код разрешения цели и не меняет его после отбора и вывода сигналов. Неудачное разрешение даёт 1, а неверные аргументы, ошибки конфигурации, реестра просмотра и диффа дают 2.",
       "relation": "trace",
-      "reviewed_at": "2026-11-20T14:20:05Z",
-      "reviewer": "diff_labels_review",
+      "reviewed_at": "2026-11-21T10:07:56Z",
+      "reviewer": "summary_z4",
       "source": {
         "kind": "trace",
-        "path": "tests/test_slice_work.py",
-        "sha256": "8017dd010f8ec299b8680d92dd0b3e5b33c8deff4ec09947d6ab65ec9d927752"
+        "path": "src/lipi/slice.py",
+        "sha256": "d8b59d5f699766ba02076a7933e35f967a123d1397817e9d8968ea26dcaf5c07"
       },
       "target": {
-        "anchor": "json",
+        "anchor": "exit",
         "kind": "anchor",
         "path": "docs/ru/slice.md",
-        "sha256": "43aa368ce2c06689cf41b267ba6b01393927287a8c9e11354d440ae12d6fb42a"
+        "sha256": "3276057e9ebac0f274dd18d5a6021567eb398df83f89033134c7eb8e23729ac2"
+      }
+    },
+    {
+      "head": "29d230059421580e936a1e13886dfce398eff479",
+      "id": "62df43731d89f0705c0324b19a4a33b8bbcbf3f77d5faf59bac7e7ab6a7ff6eb",
+      "reason": "build_slice передаёт тип разрешённой цели, глубину и фильтры общему построителю, а для подключений использует тот же построитель через адаптер. Порядок блоков соответствует таблице по типам целей. Тесты срезов проверяют пути попадания в блоки и сохранение сигналов.",
+      "relation": "trace",
+      "reviewed_at": "2026-11-21T10:07:57Z",
+      "reviewer": "summary_z4",
+      "source": {
+        "kind": "trace",
+        "path": "src/lipi/slice_query.py",
+        "sha256": "27c267137a44cad7cf15f58f3af89c836cc9dd1eab59131356a7c528f2b10892"
+      },
+      "target": {
+        "anchor": "blocks",
+        "kind": "anchor",
+        "path": "docs/ru/slice.md",
+        "sha256": "7c507c69ed03303a8538b520e30ba348f71dfc20c8a5ab1999d4402f4fa44f27"
+      }
+    },
+    {
+      "head": "29d230059421580e936a1e13886dfce398eff479",
+      "id": "658db77a0631cf94d18d7a8049d7d6bf86bdc23c4d85d49f0f8a986b1c975f9e",
+      "reason": "Тест подтверждает, что две соседние отдельные метки с ролями образуют одну область. Изменение тела rebuild даёт A4 по одному разу для #row и #summary в аудите и срезе, а следующее объявление с #other остаётся за границей области.",
+      "relation": "trace",
+      "reviewed_at": "2026-11-21T10:07:46Z",
+      "reviewer": "audit_z4",
+      "source": {
+        "kind": "trace",
+        "path": "tests/test_map.py",
+        "sha256": "caac29f0d304d301ec9f9850c1876e90b0ecbf8663784f76a691b6e74c706b57"
+      },
+      "target": {
+        "anchor": "a4",
+        "kind": "anchor",
+        "path": "docs/ru/codes.md",
+        "sha256": "874737d702bca18294c28aa8ca257b159cc43704707109f80bfe0f1e192cb87a"
       }
     },
     {
@@ -78,35 +135,35 @@
       }
     },
     {
-      "head": "f6d2756903aefdcd53947ecac06e70c1274e98cd",
-      "id": "989ac4c53fbcc5ba1041fc0ca032849f1304f6557d59df99b521fb504bb0a4c3",
-      "reason": "CLI still returns the slice result code after rendering. Invalid arguments, configuration failures and Git diff errors still return 2.",
+      "head": "29d230059421580e936a1e13886dfce398eff479",
+      "id": "9716a4b6b9168b4a8887d6f2b2525976c0633952c8122b119d429779d02f545a",
+      "reason": "render_text берёт сводку из исходного ответа и показывает выбранные общим отбором блоки и дифф-выдержки. CLI в режиме JSON сериализует выбранный ответ схемы 1 напрямую, сохраняя общий summary.code и отдельный summary.entry, а также дополнительные поля диффа, подсказки и отметки просмотра.",
       "relation": "trace",
-      "reviewed_at": "2026-11-20T14:19:22Z",
-      "reviewer": "diff_labels_review",
+      "reviewed_at": "2026-11-21T10:07:53Z",
+      "reviewer": "audit_z4",
       "source": {
         "kind": "trace",
-        "path": "src/lipi/slice.py",
-        "sha256": "cd3c670ab4b6d02a126f5ca49a1ab9513733649a4043b640e0f12c99c1880f17"
+        "path": "src/lipi/slice_output.py",
+        "sha256": "2c4beaf0133e999887b1d84b6e4b9268f69f6c870acbbeb1345201c29d088df2"
       },
       "target": {
-        "anchor": "exit",
+        "anchor": "json",
         "kind": "anchor",
         "path": "docs/ru/slice.md",
-        "sha256": "41273a7927a53b808b03bb21bf75f07266745a4416ad04e7a4632928dd5c9386"
+        "sha256": "e49e86dc621dd0116edc88bbec7eb6fefcc0ee13b7773778e409b5fdb0dd1702"
       }
     },
     {
-      "head": "ecc9b1384f8377c9d05ba5443c9025d737c3d379",
-      "id": "a4a44d8643cf9eb988a8b53d3a605650fa3211bb7f5271ed42c31c90bf75430d",
-      "reason": "В этой группе изменена только сборка диффа: она сохраняет исторические цели и отбрасывает цели недоступных соседей. При местном промахе подсказки по-прежнему идут в порядке repos для доступных подключений с docs в read и lipi.json, сохраняют фразу и формируются без поиска у соседа.",
+      "head": "29d230059421580e936a1e13886dfce398eff479",
+      "id": "9f1c66d838838e04a701633821dcb515d1313ba7bbaad22db899839d5eb18a94",
+      "reason": "Подсказки для локального промаха сохраняют исходную фразу и строятся в порядке подключений только для доступных соседей с docs и lipi.json. Фильтрация и проверка ошибки происходят без поиска у соседа.",
       "relation": "trace",
-      "reviewed_at": "2026-11-21T07:35:57Z",
-      "reviewer": "z3_budget",
+      "reviewed_at": "2026-11-21T10:07:54Z",
+      "reviewer": "summary_z4",
       "source": {
         "kind": "trace",
         "path": "src/lipi/repo_slice.py",
-        "sha256": "6797d71f3bc271b352780843146e131468d3bde976fb1eaac0e05e402c0efc5b"
+        "sha256": "5107526899892cd2a1e0100308b57b02d9a18e0e391da62cfa6cb124a089bb17"
       },
       "target": {
         "anchor": "repo-search",
@@ -116,41 +173,41 @@
       }
     },
     {
-      "head": "f6d2756903aefdcd53947ecac06e70c1274e98cd",
-      "id": "d9b2d8fc89c9930eec3dbe3382da89d51364fd367b4b1469970b8ac1febd3b13",
-      "reason": "The work-slice fixture still counts one shared decision and two distinct rules once each, even when an obligation has two origins. The target count is still three.",
+      "head": "29d230059421580e936a1e13886dfce398eff479",
+      "id": "b51abebeface1eee1d58c2963162369c705af9879f93be70ee0817aab72ac377",
+      "reason": "Индекс копирует данные ролей только для сохранённых целей после исключения недоступных источников. Карта берёт места из by_target и группирует их по репозиторию, пути и строке, поэтому роли не добавляют строки или счётчики, а исключённый источник не даёт мест.",
       "relation": "trace",
-      "reviewed_at": "2026-11-20T14:19:33Z",
-      "reviewer": "diff_labels_review",
+      "reviewed_at": "2026-11-21T10:07:51Z",
+      "reviewer": "audit_z4",
       "source": {
         "kind": "trace",
-        "path": "tests/test_slice_work.py",
-        "sha256": "8017dd010f8ec299b8680d92dd0b3e5b33c8deff4ec09947d6ab65ec9d927752"
+        "path": "src/lipi/repo_index.py",
+        "sha256": "9f3ea8b06749a871bf01a9d47c05da04299168aa6b2e281b4372b7525cf1aec0"
       },
       "target": {
-        "anchor": "summary",
+        "anchor": "repos",
         "kind": "anchor",
-        "path": "docs/ru/slice.md",
-        "sha256": "a6bd6bf59e018e233218a8bcf6f55307da9d3bf652733ea84c71abaf75b85103"
+        "path": "docs/ru/map.md",
+        "sha256": "3a26d4f6cf1358ac7413233dda40adf0bfe8c29810c3f172c151a991055ad62d"
       }
     },
     {
-      "head": "f6d2756903aefdcd53947ecac06e70c1274e98cd",
-      "id": "f6885c6b90f1ec975d6a2a6c73e8976e0584c50556d45014625317c4e65e235c",
-      "reason": "The text renderer reads full diff targets to label selected lines. JSON still serializes the selected schema 1 response, where matched_targets is additive and existing via values retain their meaning.",
+      "head": "29d230059421580e936a1e13886dfce398eff479",
+      "id": "bf1737de43599d31d4a625ae102973ba562e3ca1e8eb48e13045c92975ad0dd6",
+      "reason": "build_slice в обеих ветках возвращает договор схемы 1. Неоднозначная или отсутствующая цель возвращает структурированную ошибку. При локальном промахе ветка подключений может предложить поиск у соседей, а успешный ответ сохраняет сводку и блоки.",
       "relation": "trace",
-      "reviewed_at": "2026-11-20T14:19:39Z",
-      "reviewer": "diff_labels_review",
+      "reviewed_at": "2026-11-21T10:07:59Z",
+      "reviewer": "summary_z4",
       "source": {
         "kind": "trace",
-        "path": "src/lipi/slice_output.py",
-        "sha256": "56308fbc9cca529381412e92012f9633c98446948896c3c74833e1a8543d0404"
+        "path": "src/lipi/slice_query.py",
+        "sha256": "27c267137a44cad7cf15f58f3af89c836cc9dd1eab59131356a7c528f2b10892"
       },
       "target": {
         "anchor": "json",
         "kind": "anchor",
         "path": "docs/ru/slice.md",
-        "sha256": "43aa368ce2c06689cf41b267ba6b01393927287a8c9e11354d440ae12d6fb42a"
+        "sha256": "e49e86dc621dd0116edc88bbec7eb6fefcc0ee13b7773778e409b5fdb0dd1702"
       }
     }
   ],
