@@ -422,7 +422,10 @@ class RepositorySlices(support.Case):
         self.assertTrue(self.items(self.response('core::docs/api.md#request'), 'excerpt'))
         for query in ('core::docs/api.md', 'core::request', 'core::ADR-001'):
             with self.subTest(query=query):
-                self.assertEqual(self.response(query, expected=1)['error'], 'not-found')
+                response = self.response(query, expected=1)
+                self.assertEqual(response['error'], 'not-found')
+                self.assertEqual(response['reason'], 'no-config')
+                self.assertIn('path#anchor', response['message'])
 
     def test_explicit_external_adr_brings_accepted_refinements_but_not_foreign_rules(self):
         self.decision(1)

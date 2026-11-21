@@ -631,8 +631,12 @@ class TestCli(unittest.TestCase):
         code, response = check_json(root)
         self.assertEqual(code, 1)
         self.assertIn("D1", [item["code"] for item in response["errors"]])
-        self.assertEqual(cli(root, "baseline")[0], 0)
-        self.assertTrue((root / support.BASE_REL).is_file())
+        for args in (("baseline",), ("baseline", "--prune")):
+            with self.subTest(args=args):
+                code, out = cli(root, *args)
+                self.assertEqual(code, 2, out)
+                self.assertIn("lipi init", out)
+                self.assertFalse((root / ".agents").exists())
         self.assertEqual(cli(root, "review", "--prune")[0], 0)
         self.assertEqual(list(workflow.iterdir()), [note])
 

@@ -233,11 +233,12 @@ def _check(args, fmt, new_args, baseline_args, ap):
     pr.reviews_present = os.path.lexists(root / REVIEWS_NAME)
     pr.reviewed_pairs = set()
     configured = bool(args.config) or (root / CONFIG_NAME).is_file()
-    if not configured and (new_args is not None or args.write_index or pr.docs is None):
-        print(tr("checker.runner.init_required"), file=sys.stderr)
-        return 2
-    if not configured and fmt == "text" and baseline_args is None:
-        print(tr("checker.runner.docs_only"), file=sys.stderr)
+    if not configured:
+        if new_args is not None or baseline_args is not None or args.write_index or pr.docs is None:
+            print(tr("checker.runner.init_required"), file=sys.stderr)
+            return 2
+        if fmt == "text":
+            print(tr("checker.runner.docs_only"), file=sys.stderr)
     if new_args is not None:
         return cmd_new(pr, new_args, fmt)
     if pr.docs is None and pr.wf is None and not (pr.decisions and pr.decisions.is_dir()):

@@ -188,7 +188,8 @@ known address. To search only that connection, run
 `lipi slice 'core::export report'`. The [usual search rules](slice.md#target)
 apply within its [read scope](settings.md#repos), including pages in `page_dirs`.
 A neighbor without `lipi.json` supports only exact `path.md#anchor` targets
-and supplies no backlinks.
+and supplies no backlinks. A query without an anchor returns exit code 1
+with `error: not-found` and `reason: no-config`.
 
 For an explicit Markdown address in a configured connection, a miss has exit
 code 1 and JSON error `not-found`. The `reason` field identifies the next step:

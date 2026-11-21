@@ -386,9 +386,9 @@ class RepoIndex:
                 'section' if '#' in local else 'page' if local.lower().endswith('.md') else None)
             return {'target': query, 'repo': repo, 'title': '', 'kind': kind, 'unavailable': True}, None
         index = self._neighbors[repo]
-        if not source.has_config and '#' not in local:
-            return None, dict(error, message=tr('repo.target.no_config'))
         # @trace docs/ru/slice-output.md#repo-search
+        if not source.has_config and '#' not in local:
+            return None, dict(error, reason='no-config', message=tr('repo.target.no_config'))
         page, _, anchor = local.partition('#')
         relative = Path(unquote(page))
         if source.has_config and relative.suffix.lower() == '.md':

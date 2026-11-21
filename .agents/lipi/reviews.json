@@ -21,6 +21,25 @@
       }
     },
     {
+      "head": "581647120f0a417649bc945f4619ce7c5a1ec63c",
+      "id": "044e10366d1261e22e99d56ea6031bd89d56eed5293121e234b20b102cd04d39",
+      "reason": "The new early return applies to baseline without settings. Check still runs scan_code with the existing T1 target resolution rules.",
+      "relation": "trace",
+      "reviewed_at": "2026-11-21T14:37:49Z",
+      "reviewer": "Codex",
+      "source": {
+        "kind": "trace",
+        "path": "src/lipi/checker/runner.py",
+        "sha256": "149ccd7b1ae529d8e5e592c9c4d97443e5f567a9ad3e93f70d47e1228c44baf4"
+      },
+      "target": {
+        "anchor": "t1",
+        "kind": "anchor",
+        "path": "docs/ru/codes.md",
+        "sha256": "c167de352c222e9bfe02c42a09a57d06c004c63bdec4dfadc85ae2196273d7c7"
+      }
+    },
+    {
       "head": "f6d2756903aefdcd53947ecac06e70c1274e98cd",
       "id": "17d2357c9229b94fda9cbaf58e91c6db5d36c96f85f7ac2c0aee06fc0cc4ff1e",
       "reason": "The work-slice test still exercises the documented obey, code, targets order and checks that only the work ID contributes code while shared obligations retain their linked origins.",
@@ -40,22 +59,22 @@
       }
     },
     {
-      "head": "3d228a7424de60cecbcd2da7ddf8899eaf8db9d5",
-      "id": "54e8d116476eec4a60bda035d635d88c039600854d6e4d8cd176bffe48af765b",
-      "reason": "run_project_checks запускается позже, а T1 по-прежнему делегируется scan_code. Ветка без настроек отключает каталог работ и управляет запуском проверки, сохраняя правила поиска меток, разрешения доступных целей и уровни T1.",
+      "head": "581647120f0a417649bc945f4619ce7c5a1ec63c",
+      "id": "372b820e609191ec0e74f575f5114d848db2f92ef1d82f70fb6038079270d35a",
+      "reason": "The CLI fixture still checks exit 2 without docs, success with docs and D1 on a broken link. The new assertions concern the separate baseline command.",
       "relation": "trace",
-      "reviewed_at": "2026-11-21T11:46:10Z",
-      "reviewer": "verify_025",
+      "reviewed_at": "2026-11-21T14:38:04Z",
+      "reviewer": "Codex",
       "source": {
         "kind": "trace",
-        "path": "src/lipi/checker/runner.py",
-        "sha256": "7390df3dd206a20f55b7cf6fe484a93b20d7c6570ce15003bbc6fd015797d1d6"
+        "path": "tests/test_cli.py",
+        "sha256": "b86137c47e61978f8f18f6151ae1771e1309d784cfb0345559f52ac53d204aa6"
       },
       "target": {
-        "anchor": "t1",
+        "anchor": "check",
         "kind": "anchor",
-        "path": "docs/ru/codes.md",
-        "sha256": "c167de352c222e9bfe02c42a09a57d06c004c63bdec4dfadc85ae2196273d7c7"
+        "path": "docs/ru/commands.md",
+        "sha256": "1a096e31a2e9f7fa01eadd6230cabea08a8b9413df674bb7e33870e193172c10"
       }
     },
     {
@@ -116,6 +135,25 @@
       }
     },
     {
+      "head": "581647120f0a417649bc945f4619ce7c5a1ec63c",
+      "id": "7029062191b14c7a9ec11dca058afa95b22598ddcf26f2e673cff061208e44e0",
+      "reason": "The new reason is returned only by slice target resolution. Map still collects direct markers through the existing per-source indexes and exposes only anchors for an unconfigured neighbor.",
+      "relation": "trace",
+      "reviewed_at": "2026-11-21T14:38:07Z",
+      "reviewer": "Codex",
+      "source": {
+        "kind": "trace",
+        "path": "src/lipi/repo_index.py",
+        "sha256": "5728109c5926f383434176d6e0a255898cb143d07946921492e66428e033854a"
+      },
+      "target": {
+        "anchor": "repos",
+        "kind": "anchor",
+        "path": "docs/ru/map.md",
+        "sha256": "3a26d4f6cf1358ac7413233dda40adf0bfe8c29810c3f172c151a991055ad62d"
+      }
+    },
+    {
       "head": "3d228a7424de60cecbcd2da7ddf8899eaf8db9d5",
       "id": "818be86cdd893c85ff0134ad25c58cb6126c16c5d1b49f040f68922a9bea82a3",
       "reason": "Пустой lipi.json подключает workflow для теста предела Closed. Отдельный сценарий W11 по-прежнему проверяет расхождение с годом из Created и требует предупреждение с командой lipi mv для переноса целого контейнера AUD.",
@@ -173,6 +211,25 @@
       }
     },
     {
+      "head": "581647120f0a417649bc945f4619ce7c5a1ec63c",
+      "id": "aaae22fdc9013e7e63e13632f9057e5e12cef15232cfbcb326b15117da428397",
+      "reason": "The fixture still connects workflow for both empty settings files, including explicit config, and leaves the unconfigured workflow directory alone.",
+      "relation": "trace",
+      "reviewed_at": "2026-11-21T14:38:05Z",
+      "reviewer": "Codex",
+      "source": {
+        "kind": "trace",
+        "path": "tests/test_cli.py",
+        "sha256": "b86137c47e61978f8f18f6151ae1771e1309d784cfb0345559f52ac53d204aa6"
+      },
+      "target": {
+        "anchor": "workflow",
+        "kind": "anchor",
+        "path": "docs/ru/settings.md",
+        "sha256": "685b41e3ca70a0a24ac5ea1241b52fb003f1f5479b95201245d21e59a2804b1a"
+      }
+    },
+    {
       "head": "3d228a7424de60cecbcd2da7ddf8899eaf8db9d5",
       "id": "b5b0d87c05044109d99d0ef11ef0a89b638f7dcc187d2b9ba0beb75080e53d4e",
       "reason": "Пустой lipi.json подключает workflow для теста предела Closed. Тесты W10 по-прежнему принимают раскладку типа по годам и плоские ADR и feedback, а за PLN без года и ADR в каталоге года требуют ошибку W10.",
@@ -208,25 +265,6 @@
         "kind": "anchor",
         "path": "docs/ru/slice.md",
         "sha256": "e49e86dc621dd0116edc88bbec7eb6fefcc0ee13b7773778e409b5fdb0dd1702"
-      }
-    },
-    {
-      "head": "3d228a7424de60cecbcd2da7ddf8899eaf8db9d5",
-      "id": "f98baf65e231b0cd3991fffe0f4de1ff10cbb1ec72082196f818c5313244496c",
-      "reason": "Карта по-прежнему добавляет внешние строки по прямым меткам своего кода и тестов, а обратные места — из прямых подключений с нужной областью чтения. Уточнение отказов для явно запрошенных страниц работает в разрешении цели среза. Правила построения строк, охват чтения и метаданные карты соответствуют описанию.",
-      "relation": "trace",
-      "reviewed_at": "2026-11-21T11:46:59Z",
-      "reviewer": "verify_026",
-      "source": {
-        "kind": "trace",
-        "path": "src/lipi/repo_index.py",
-        "sha256": "769a397939b8dff29903ca009784c08c19126ab1187650047222ba270acf9006"
-      },
-      "target": {
-        "anchor": "repos",
-        "kind": "anchor",
-        "path": "docs/ru/map.md",
-        "sha256": "3a26d4f6cf1358ac7413233dda40adf0bfe8c29810c3f172c151a991055ad62d"
       }
     }
   ],
