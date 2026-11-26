@@ -313,9 +313,14 @@ def rank_documents(index, query):
         if paragraphs:
             documents[path] = (page_id, paragraphs)
 
-    # Inverse squared document frequency keeps ubiquitous terms useful while
-    # letting one distinctive term outweigh several widely repeated words.
-    weights = {term: 1 / count ** 2 for term, count in frequency.items()}
+    # Measure how well each term narrows the pages matching the query.
+    # Squared inverse odds discount common terms and cap rare ones. A half
+    # page of smoothing on either side keeps every match's weight positive.
+    weights = {}
+    for term, count in frequency.items():
+        present = (count + 0.5) ** 2
+        absent = (len(documents) - count + 0.5) ** 2
+        weights[term] = absent / (present + absent)
     ranked = []
     for path, (page_id, paragraphs) in documents.items():
         page = index.nodes[page_id]['page']

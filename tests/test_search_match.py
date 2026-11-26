@@ -69,6 +69,28 @@ class SearchMatching(unittest.TestCase):
                 pages['c'] = '# C\n\n' + repeated
                 self.assertEqual(self.targets(self.index(pages), query), base)
 
+    # @trace docs/ru/slice-search.md#match
+    def test_receipt_answer_outranks_rare_question_word(self):
+        for query, heading, recurring, answer, copy, pack in (
+                ('сколько хранится квитанция', 'Сроки', 'Квитанция выдаётся после применения.',
+                 'Квитанция хранится 30 дней.', 'Копия хранится до очистки.',
+                 'Сколько единиц входит в пакет.'),
+                ('How long are receipts stored?', 'Retention policy',
+                 'Receipts follow every transaction.', 'Receipts remain stored for 30 days.',
+                 'Backups stay stored until cleanup.', 'How many units fit inside the pack?')):
+            with self.subTest(query=query):
+                pages = {f'issued-{number}': f'# Guide\n\n{recurring}\n' for number in range(6)}
+                pages.update({
+                    'retention': f'# Guide\n\n## {heading} <a id="receipts"></a>\n\n{recurring}\n\n{answer}\n',
+                    'copy': f'# Guide\n\n{copy}\n',
+                    'pack': f'# Guide\n\n{pack}\n',
+                })
+                results = rank_documents(self.index(pages), query)
+                self.assertIn('docs/pack.md', [result['target'] for result in results])
+                first = results[0]
+                self.assertEqual((first['target'], first['excerpt'], first['line']),
+                                 ('docs/retention.md#receipts', answer, 7))
+
     def test_exact_word_keeps_positive_weight_in_one_document(self):
         index = self.index({'one': '# Overview\n\nThe API is available.\n'})
         self.assertEqual(self.targets(index, 'api api'), ['docs/one.md'])

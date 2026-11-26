@@ -38,10 +38,12 @@ words. Longer words can match with a one-letter change at the end when they
 share at least four initial letters. This finds `report` for `reports`.
 For `copies` and `copy`, try the other spelling.
 
-Words found in fewer documents in the selected repository carry more weight.
-A file counts once however many times it repeats the word. A match still
-counts in a one-page repository. Exact matches rank higher when other evidence
-is equal. Each target appears once with its best excerpt.
+Search weighs each distinct query word by how common it is among pages with
+at least one match. Several words in one paragraph can together outweigh a
+single rare word. A distinctive term such as `API` can still outweigh several
+words shared by most matching pages. Repeating a word on a page gives it no
+extra weight. A match still counts in a one-page repository. Exact matches
+rank higher when other evidence is equal. Each target appears once with its best excerpt.
 
 ## Read or open a result <a id="output"></a>
 

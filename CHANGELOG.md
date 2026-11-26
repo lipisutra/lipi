@@ -1,5 +1,16 @@
 # lipi releases
 
+## 1.4.1 — Unreleased
+
+- Document text search gives several matching words in a paragraph a better
+  chance of outranking an isolated question word. A distinctive term such as
+  `API` can still outrank several common words.
+
+### Upgrading your project for 1.4.1
+
+1. Upgrade Lipi with `pipx upgrade lipi`.
+2. The rules and templates are unchanged. You can skip `lipi init`.
+
 ## 1.4.0 — 2026-11-22
 
 - `lipi slice --search 'question'` searches document headings and paragraphs.
