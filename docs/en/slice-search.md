@@ -15,11 +15,18 @@ lipi slice docs/storage.md#cleanup
 For example, the heading might be “Cleanup policy” and the matching sentence
 might read “We keep a copy for 30 days.” Read the excerpt before opening the
 section. Even a single candidate can be about a different kind of copy.
+If the excerpts leave your question unanswered, try asking it in the language
+of the documentation. Use `--search` for a code identifier mentioned in the text.
+If you know the anchor, open it with `slice`, for example `lipi slice docs/storage.md#cleanup`.
 
 ## Where to search <a id="scope"></a>
 
 A query without a prefix searches eligible Markdown pages in the current
-repository. To search one direct connection, use its configured name:
+repository. Setting `"workflow": null` disables workflow checks. Both title
+search and `--search` still find eligible pages in `workflow/`, including the
+project’s own plans.
+
+To search one direct connection, use its configured name.
 
 ```bash
 lipi slice --search 'library::How long do we keep a copy?'
