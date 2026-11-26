@@ -1,6 +1,6 @@
 # lipi releases
 
-## 1.4.1 — Unreleased
+## 1.4.1 — 2026-11-26
 
 - Document text search gives several matching words in a paragraph a better
   chance of outranking an isolated question word. A distinctive term such as
