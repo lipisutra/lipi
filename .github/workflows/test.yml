@@ -2,8 +2,16 @@ name: test
 
 on:
   push:
+    branches: ['**']
+    # release-tests.yml calls this workflow for these tags with the full suite.
+    tags-ignore: ['v[0-9]+.[0-9]+.[0-9]+']
   pull_request:
   workflow_dispatch:
+  workflow_call:
+    inputs:
+      full_suite:
+        type: boolean
+        required: true
 
 jobs:
   test:
@@ -11,7 +19,7 @@ jobs:
       fail-fast: false
       matrix:
         os: >-
-          ${{ fromJSON(github.event_name == 'workflow_dispatch'
+          ${{ fromJSON((github.event_name == 'workflow_dispatch' || inputs.full_suite)
               && '["ubuntu-latest", "windows-latest", "macos-latest", "ubuntu-24.04"]'
               || '["ubuntu-latest", "windows-latest"]') }}
     runs-on: ${{ matrix.os }}
@@ -34,13 +42,13 @@ jobs:
         run: python -m unittest -v tests.test_portability
       - name: Полный функциональный набор
         id: full
-        if: github.event_name == 'workflow_dispatch'
+        if: github.event_name == 'workflow_dispatch' || inputs.full_suite
         continue-on-error: ${{ runner.os == 'Windows' }} # ISS-033
         env:
           LIPI_TEST_TIMING: ${{ matrix.os == 'ubuntu-24.04' && '1' || '0' }}
         run: python -m unittest discover -s tests
       - name: Результат полного набора Windows
-        if: always() && github.event_name == 'workflow_dispatch' && runner.os == 'Windows'
+        if: always() && runner.os == 'Windows' && (github.event_name == 'workflow_dispatch' || inputs.full_suite)
         shell: pwsh
         run: |
           "Full Windows suite: ${{ steps.full.outcome }}. [ISS-033](${{ github.server_url }}/${{ github.repository }}/blob/${{ github.sha }}/workflow/issue/2026/iss-033-vosstanovit-obyazatelnyy-polnyy-progon-na-windows.md)" >> $env:GITHUB_STEP_SUMMARY
@@ -60,7 +68,7 @@ jobs:
         run: python src/lipi/check.py --audit
 
   test-macos-39:
-    if: github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'workflow_dispatch' || inputs.full_suite
     # Для arm64-macOS setup-python сборок Python 3.9 не даёт: ставим
     # универсальный (universal2) установщик с python.org. Не зависит от
     # образа macos-13, который выводится из эксплуатации и подолгу стоит
@@ -107,11 +115,11 @@ jobs:
         run: C:\Python39\python.exe -m unittest -v tests.test_portability
       - name: Полный функциональный набор
         id: full
-        if: github.event_name == 'workflow_dispatch'
+        if: github.event_name == 'workflow_dispatch' || inputs.full_suite
         continue-on-error: true # ISS-033
         run: C:\Python39\python.exe -m unittest discover -s tests
       - name: Результат полного набора Windows
-        if: always() && github.event_name == 'workflow_dispatch'
+        if: always() && (github.event_name == 'workflow_dispatch' || inputs.full_suite)
         shell: pwsh
         run: |
           "Full Windows suite: ${{ steps.full.outcome }}. [ISS-033](${{ github.server_url }}/${{ github.repository }}/blob/${{ github.sha }}/workflow/issue/2026/iss-033-vosstanovit-obyazatelnyy-polnyy-progon-na-windows.md)" >> $env:GITHUB_STEP_SUMMARY

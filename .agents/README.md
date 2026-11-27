@@ -101,15 +101,17 @@ Bump the version on the first task in a release that changes behavior. Include t
    git push origin vX.Y.Z
    ```
 
-4. Wait for the version tag's quick CI checks. Pushes (including tags) and pull
-   requests run the release tests, package installation smoke test, project audit,
-   and the CRLF and repository path checks on Windows with Python 3.9 and 3.x.
-   Run the full GitHub Actions matrix only when the user explicitly requests it,
-   including before a release. Select **Actions → test → Run workflow** or run
-   `gh workflow run test.yml --ref <branch-or-tag>`. The two-second CLI budget
-   runs on Ubuntu 24.04 with Python 3.9. Until
-   [ISS-033](https://github.com/lipisutra/lipi/blob/master/workflow/issue/2026/iss-033-vosstanovit-obyazatelnyy-polnyy-progon-na-windows.md)
-   closes, the manual run reports the full Windows results in the job summary.
+4. Pushing `vX.Y.Z` starts the full GitHub Actions matrix automatically. Wait for
+   the tag's required checks. The full suite must pass on Ubuntu and macOS. On
+   Windows, the CRLF and repository path checks must pass on Python 3.9 and 3.x.
+   Until [ISS-033](https://github.com/lipisutra/lipi/blob/master/workflow/issue/2026/iss-033-vosstanovit-obyazatelnyy-polnyy-progon-na-windows.md)
+   closes, the job summary reports the full Windows results for reference.
+   The two-second CLI budget runs on Ubuntu 24.04 with Python 3.9.
+
+   Branch pushes, pull requests, and updates to `v1` run quick checks covering the
+   release metadata, package installation, project audit, and Windows portability.
+   For a full run on request, select **Actions → test → Run workflow** or run
+   `gh workflow run test.yml --ref <branch-or-tag>`.
 5. Once the required checks pass, move the major tag to the same commit, push it,
    and publish the GitHub release.
 

@@ -34,8 +34,10 @@ only when they explicitly accept the result.
   including before a release. Run it first in English, then in Russian, on the same tree,
   one test group at a time. The result still counts after changes limited to the release
   date, work item statuses or results, or the generated workflow index.
-- GitHub Actions runs quick checks on pushes and pull requests. Run the full hosted suite
-  only at the user’s explicit request, including for a release. See the [release procedure](.agents/README.md#release).
+- GitHub Actions runs the full suite when a version tag (`vX.Y.Z`) is pushed or the
+  user requests a manual run. Branch pushes, pull requests, and the moving major tag
+  (`v1`) get quick checks. Wait for the version tag’s required checks before moving
+  the major tag and publishing. See the [release procedure](.agents/README.md#release).
 
 Occasionally look back at how a task went. If a step wasted time or a check missed a
 problem, tell the user what happened and discuss one concrete improvement before adopting it.
