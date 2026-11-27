@@ -1,6 +1,6 @@
 # lipi releases
 
-## 1.4.2 — Unreleased
+## 1.4.2 — 2026-11-27
 
 - A missing link to Lipi rules in `AGENTS.md` (V2) now fails `lipi check`
   at error level even if an older baseline contains V2. New baselines omit
