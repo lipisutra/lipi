@@ -29,11 +29,13 @@ only when they explicitly accept the result.
   A regression test that checks that case against output captured from the tag is sufficient.
 - Create temporary test projects outside the clone. After the check, remove the files
   you created for the experiment and use `git worktree remove` for any worktree you created.
-- The full suite (`python3 -m unittest discover -s tests`) is required only before tagging
+- The local full suite (`python3 -m unittest discover -s tests`) is required before tagging
   a release. Run it first in English, then in Russian, on the same tree, with one test
   group at a time. If only the release date, work item statuses or results, or the generated
   workflow index have changed since that run, it still counts. For those changes, run
   `lipi check`, `lipi audit`, and `python3 -m unittest tests.test_release`.
+- GitHub Actions runs quick checks on pushes and pull requests. Run the full hosted suite
+  only at the user’s explicit request, including for a release. See the [release procedure](.agents/README.md#release).
 
 Occasionally look back at how a task went. If a step wasted time or a check missed a
 problem, tell the user what happened and discuss one concrete improvement before adopting it.

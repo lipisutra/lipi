@@ -3,19 +3,17 @@ name: test
 on:
   push:
   pull_request:
+  workflow_dispatch:
 
 jobs:
   test:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          # Python 3.9 setup-python даёт только на старых образах: на
-          # ubuntu-latest (26) и macos-latest (arm64) сборок 3.9 нет.
-          - { os: ubuntu-24.04,   python: "3.9" }
-          - { os: ubuntu-latest,  python: "3.x" }
-          - { os: macos-latest,   python: "3.x" }
-          - { os: windows-latest, python: "3.x" }
+        os: >-
+          ${{ fromJSON(github.event_name == 'workflow_dispatch'
+              && '["ubuntu-latest", "windows-latest", "macos-latest", "ubuntu-24.04"]'
+              || '["ubuntu-latest", "windows-latest"]') }}
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -23,22 +21,26 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.python }}
+          python-version: ${{ matrix.os == 'ubuntu-24.04' && '3.9' || '3.x' }}
       - name: Имя и почта git для тестов с коммитами
         run: |
           git config --global user.name "lipi-tests"
           git config --global user.email "lipi-tests@example.com"
+      - name: Версия, CHANGELOG и lock
+        if: matrix.os == 'ubuntu-latest'
+        run: python -m unittest -v tests.test_release
       - name: Обязательные проверки Windows — CRLF и пути подключений
         if: runner.os == 'Windows'
         run: python -m unittest -v tests.test_portability
       - name: Полный функциональный набор
         id: full
+        if: github.event_name == 'workflow_dispatch'
         continue-on-error: ${{ runner.os == 'Windows' }} # ISS-033
         env:
           LIPI_TEST_TIMING: ${{ matrix.os == 'ubuntu-24.04' && '1' || '0' }}
         run: python -m unittest discover -s tests
       - name: Результат полного набора Windows
-        if: always() && runner.os == 'Windows'
+        if: always() && github.event_name == 'workflow_dispatch' && runner.os == 'Windows'
         shell: pwsh
         run: |
           "Full Windows suite: ${{ steps.full.outcome }}. [ISS-033](${{ github.server_url }}/${{ github.repository }}/blob/${{ github.sha }}/workflow/issue/2026/iss-033-vosstanovit-obyazatelnyy-polnyy-progon-na-windows.md)" >> $env:GITHUB_STEP_SUMMARY
@@ -58,6 +60,7 @@ jobs:
         run: python src/lipi/check.py --audit
 
   test-macos-39:
+    if: github.event_name == 'workflow_dispatch'
     # Для arm64-macOS setup-python сборок Python 3.9 не даёт: ставим
     # универсальный (universal2) установщик с python.org. Не зависит от
     # образа macos-13, который выводится из эксплуатации и подолгу стоит
@@ -104,10 +107,11 @@ jobs:
         run: C:\Python39\python.exe -m unittest -v tests.test_portability
       - name: Полный функциональный набор
         id: full
+        if: github.event_name == 'workflow_dispatch'
         continue-on-error: true # ISS-033
         run: C:\Python39\python.exe -m unittest discover -s tests
       - name: Результат полного набора Windows
-        if: always()
+        if: always() && github.event_name == 'workflow_dispatch'
         shell: pwsh
         run: |
           "Full Windows suite: ${{ steps.full.outcome }}. [ISS-033](${{ github.server_url }}/${{ github.repository }}/blob/${{ github.sha }}/workflow/issue/2026/iss-033-vosstanovit-obyazatelnyy-polnyy-progon-na-windows.md)" >> $env:GITHUB_STEP_SUMMARY

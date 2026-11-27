@@ -151,11 +151,15 @@ lipi new iss "Что мешает" friction
    git push origin vX.Y.Z
    ```
 
-4. Дождитесь обязательных проверок версионного тега. Полные функциональные
-   наборы на Ubuntu и macOS должны пройти. Порог CLI в две секунды проверяет
-   Ubuntu 24.04 с Python 3.9 (`LIPI_TEST_TIMING=1`). Обе версии Python на
-   Windows (3.9 и 3.x) должны пройти проверки клона с CRLF и путей подключений.
-   До закрытия [ISS-033](https://github.com/lipisutra/lipi/blob/master/workflow/issue/2026/iss-033-vosstanovit-obyazatelnyy-polnyy-progon-na-windows.md) только полный набор Windows носит информационный характер. Результат виден в сводке задания.
+4. Дождитесь быстрых проверок версионного тега. При push ветки или тега и при
+   pull request CI проверяет версию и CHANGELOG, установку пакета, сам проект
+   через `check --audit`, а также CRLF и пути подключений на Windows с Python 3.9 и 3.x.
+   Полный набор GitHub Actions запускайте только по явной просьбе пользователя,
+   в том числе перед выпуском. Выберите **Actions → test → Run workflow** или
+   выполните `gh workflow run test.yml --ref <ветка-или-тег>`. Порог CLI в две
+   секунды проверяет Ubuntu 24.04 с Python 3.9. До закрытия
+   [ISS-033](https://github.com/lipisutra/lipi/blob/master/workflow/issue/2026/iss-033-vosstanovit-obyazatelnyy-polnyy-progon-na-windows.md)
+   результат полного прогона Windows справочно выводится в сводке ручного запуска.
 5. После успеха обязательных проверок перенесите мажорный тег на этот же коммит,
    отправьте его и опубликуйте выпуск на GitHub.
 
