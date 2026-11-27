@@ -286,16 +286,16 @@ class InitTest(unittest.TestCase):
         self.assertEqual(lock["lipi"], VERSION)
         self.assertEqual(set(lock["files"]), set(LIPI_FILES))
         self.assertNotIn("AGENTS.md", lock["files"])
-        # существующий долг зафиксирован базовой линией: поиск проходит,
-        # без линии ошибки видны
+        # Базовая линия покрывает прежние ошибки описания. V2 остаётся видимой.
         baseline = json.loads((self.root / support.BASE_REL)
                               .read_text(encoding="utf-8"))
         self.assertEqual(baseline["schema"], 1)
-        self.assertEqual(sum(e["count"] for e in baseline["entries"]), 4)
+        self.assertEqual(sum(e["count"] for e in baseline["entries"]), 3)
         self.assertIn(localized('Baseline', "базовая линия"), out)
         code, out = support.check(self.root)
-        self.assertEqual(code, 0, out)
-        self.assertIn(localized('in the baseline: 4, fixed: 0', "в базовой линии 4, исправлено 0"), out)
+        self.assertEqual(code, 1, out)
+        self.assertTrue(support.found(out, "V2"), out)
+        self.assertIn(localized('in the baseline: 3, fixed: 0', "в базовой линии 3, исправлено 0"), out)
         code, out = support.check(self.root, "--no-baseline")
         self.assertEqual(code, 1, out)
         self.assertTrue(support.found(out, "D1"), out)
@@ -393,7 +393,8 @@ class InitTest(unittest.TestCase):
                          agents_after_init)
         self.assertEqual(agents_after_init, "мои правила\n")
         code, out = support.check(self.root)
-        self.assertEqual(code, 0, out)
+        self.assertEqual(code, 1, out)
+        self.assertTrue(support.found(out, "V2"), out)
         self.assertFalse(support.found(out, "W6"), out)
 
     def test_cli_init_dry_run(self):

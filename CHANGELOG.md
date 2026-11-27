@@ -1,5 +1,16 @@
 # lipi releases
 
+## 1.4.2 — Unreleased
+
+- A missing link to Lipi rules in `AGENTS.md` (V2) now fails `lipi check`
+  at error level even if an older baseline contains V2. New baselines omit
+  V2. Adding the link resolves the finding immediately.
+
+### Upgrading your project for 1.4.2
+
+1. Upgrade Lipi with `pipx upgrade lipi`.
+2. The rules and templates are unchanged. You can skip `lipi init`.
+
 ## 1.4.1 — 2026-11-26
 
 - Document text search gives several matching words in a paragraph a better

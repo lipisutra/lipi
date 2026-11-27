@@ -11,6 +11,7 @@ from .model import read_text
 
 
 RE_VERSION = re.compile(r"(\d+)(?:\.(\d+))?(?:\.(\d+))?")
+BASELINE_EXCLUDED_CODES = frozenset({"C1", "V2"})
 
 
 def version_parts(value):
@@ -97,11 +98,12 @@ def write_baseline(root, entries):
     path.write_text(baseline_text(entries), encoding="utf-8")
 
 
+# @trace docs/ru/commands.md#baseline
 def baseline_counts(rep):
-    """Ошибки отчёта по (code, file, subject) с числом повторов; C1 не считается."""
+    """Ошибки, включаемые в базовую линию, по (code, file, subject) с числом повторов."""
     counts = {}
     for path, _, level, code, _, subject in rep.items:
-        if level != "E" or code == "C1":
+        if level != "E" or code in BASELINE_EXCLUDED_CODES:
             continue
         key = (code, path, subject)
         counts[key] = counts.get(key, 0) + 1
@@ -109,6 +111,7 @@ def baseline_counts(rep):
             for (code, path, subject), n in sorted(counts.items())]
 
 
+# @trace docs/ru/commands.md#baseline,docs/ru/codes.md#v2
 def apply_baseline(root, rep):
     """Убирает из отчёта ошибки, покрытые линией; возвращает (в линии, исправлено).
 
@@ -121,6 +124,8 @@ def apply_baseline(root, rep):
         return None
     known, total = {}, 0
     for entry in entries:
+        if entry["code"] in BASELINE_EXCLUDED_CODES:
+            continue
         key = (entry["code"], entry["file"], entry["subject"])
         known[key] = known.get(key, 0) + entry["count"]
         total += entry["count"]

@@ -126,7 +126,9 @@ baseline. Keep documentation dates tied to actual edits.
 The baseline `.agents/lipi/baseline.json` records existing project debt.
 `lipi baseline` records current errors. `lipi baseline --prune` removes
 fixed errors without adding new ones. Checks fail for errors beyond the
-baseline. Warnings and C1 configuration errors are excluded.
+baseline. Warnings, configuration errors (C1), and a missing rules link in
+`AGENTS.md` (V2) are excluded. A V2 entry saved by an older version has
+no effect on the check. `lipi baseline --prune` removes the entry.
 
 The checker verifies form. People judge whether the text accurately
 describes behavior.

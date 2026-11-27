@@ -108,6 +108,32 @@ class TestBaselineCommands(support.Case):
 class TestBaselineApply(support.Case):
     """check с линией: известная ошибка не роняет, новая роняет; --no-baseline показывает всё."""
 
+    # @trace docs/ru/commands.md#baseline,docs/ru/codes.md#v2
+    def test_existing_v2_entry_cannot_cover_a_missing_rules_link(self):
+        root = self.project()
+        support.w(root / "AGENTS.md", "# Project instructions\n")
+        add_link(root)
+        debt = {"code": "D1", "file": "docs/guide.md", "subject": "nope.md", "count": 1}
+        legacy = {"code": "V2", "file": "AGENTS.md", "subject": "AGENTS.md", "count": 1}
+        old_entries = [debt, legacy]
+        support.w(baseline_path(root), json.dumps({"schema": 1, "entries": old_entries}))
+
+        code, data = support.check_json(root)
+        self.assertEqual(code, 1, data)
+        self.assertEqual([e["code"] for e in data["errors"]], ["V2"])
+        self.assertEqual(data["baseline"], {"known": 1, "fixed": 0})
+        self.assertEqual(entries(root), old_entries)
+
+        support.w(root / "AGENTS.md", "[Lipi rules](.agents/lipi/README.md)\n")
+        code, data = support.check_json(root)
+        self.assertEqual(code, 0, data)
+        self.assertEqual(entries(root), old_entries)
+
+        support.w(root / "AGENTS.md", "# Project instructions\n")
+        code, out = support.check(root, "baseline", "--prune")
+        self.assertEqual(code, 0, out)
+        self.assertEqual(entries(root), [debt])
+
     def test_known_error_does_not_fail(self):
         """Известная ошибка: проверка проходит, вывод сообщает размер линии."""
         root = self.project()
@@ -413,16 +439,19 @@ class TestInitBaseline(unittest.TestCase):
         self.assertIsNone(cfg["workflow"])
         self.assertTrue(baseline_path(self.root).is_file(), out)
         # Существующий AGENTS.md принадлежит проекту: init не дописывает
-        # ссылку, а объясняет действие; V2 остаётся среди исходных ошибок.
+        # ссылку, а объясняет действие.
         self.assertEqual((self.root / "AGENTS.md").read_text(encoding="utf-8"),
                          "мои правила\n")
         self.assertIn(support.localized('Add a link to the rules in AGENTS.md', "добавьте вручную в AGENTS.md ссылку"), out)
-        self.assertEqual(len(entries(self.root)), 4)
-        self.assertIn("V2", {entry["code"] for entry in entries(self.root)})
-        # правила в полную силу: проверка проходит только за счёт линии
+        self.assertEqual(len(entries(self.root)), 3)
+        self.assertNotIn("V2", {entry["code"] for entry in entries(self.root)})
+        code, data = support.check_json(self.root)
+        self.assertEqual(code, 1, data)
+        self.assertEqual([e["code"] for e in data["errors"]], ["V2"])
+        self.assertEqual(data["baseline"], {"known": 3, "fixed": 0})
+        support.w(self.root / "AGENTS.md", "[Lipi rules](.agents/lipi/README.md)\n")
         code, out = support.check(self.root)
         self.assertEqual(code, 0, out)
-        self.assertIn(support.localized('in the baseline: 4, fixed: 0', "в базовой линии 4, исправлено 0"), out)
         code, out = support.check(self.root, "--no-baseline")
         self.assertEqual(code, 1, out)
         self.assertTrue(support.found(out, "D1"), out)

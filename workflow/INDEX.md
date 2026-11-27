@@ -16,11 +16,11 @@ No work items.
 Total documents: 47.
 
 - [Plans](index/plans.md): 0
-- [Issues](index/issues.md): 4
+- [Issues](index/issues.md): 3
 - [Discussions](index/discussions.md): 2
 - [Decisions](index/decisions.md): 21
 - [Audits](index/audits.md): 0
 
 ## Closed work items
 
-- [2026](index/done/2026.md): 20
+- [2026](index/done/2026.md): 21

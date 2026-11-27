@@ -13,7 +13,7 @@ state (ADR-010). See [README](../../README.md) and [SETUP.md](../../SETUP.md).
 | <a id="check"></a>`lipi check` | Run [quick checks](checking.md). Without a settings file, checks require `docs/` and skip workflow documents. `--staged` adds staleness checks for the Git index, and `--diff A...B` compares a revision range. `--strict` treats warnings as errors. `--no-baseline` shows all errors. |
 | <a id="audit"></a>`lipi audit` | Run check and a detailed [audit](checking.md). Also reports ignored trace marker lines and review authors. `--reviews-since <revision>` shows [new review marks](checking.md#review-authors). |
 | <a id="index"></a>`lipi index` | Regenerate the [workflow index files](workflow.md), including the overview, active lists, and closure log by `Closed` year. |
-| <a id="baseline"></a>`lipi baseline [--prune]` | Requires a settings file. First setup and `baseline` record errors in `.agents/lipi/baseline.json` so only new errors fail checks. Warnings are excluded. `--prune` removes fixed errors without adding new ones. Commit the baseline with the project. |
+| <a id="baseline"></a>`lipi baseline [--prune]` | Requires a settings file. First setup and `baseline` record errors in `.agents/lipi/baseline.json` for comparison with later checks. Warnings, C1 and V2 are excluded. `--prune` removes fixed errors without adding new ones. Commit the baseline with the project. |
 | <a id="new"></a>`lipi new <type> "Title" [kind] [lipi]` | Create a document with the next ID in the creation year. ADR and feedback use flat directories. Plan filenames omit a leading `Plan:` or `План:`. Types are `pln`, `iss`, `dsc`, `adr`, and `aud`. An issue's `Kind` is `bug`, `friction`, `request`, or `question`. Recipient `lipi` allows an issue in `.agents/lipi-feedback/` if workflow documents are disabled. |
 | <a id="selftest"></a>`lipi selftest` | Run lipi's local unittest suite from its repository. A missing test directory produces a message and exit code 2. |
 | <a id="version"></a>`lipi version [--path]` | Show the package version. `--path` also shows the checker path. `lipi --version` invokes the same command. |
@@ -200,9 +200,9 @@ An existing `.agents/lipi/lipi.lock` indicates a repeat application.
 | Lock and `lipi.json` present | Replace or restore managed lipi files. Preserve scaffolds and the baseline, with no creation of missing ones. |
 | Corrupt lock or settings, or lock without `lipi.json` | Exit with 2 before writing. |
 
-First-time setup calculates a missing baseline directly in the working tree. A dry run
-only reports whether setup will create or keep it. Add the link to `.agents/lipi/README.md`
-to an existing `AGENTS.md`. A new scaffold includes the link.
+First setup calculates a missing baseline in the working tree. A dry run reports whether it will create or keep it.
+Add a link to `.agents/lipi/README.md` in an existing `AGENTS.md`. New scaffolds include it.
+By default, `lipi check` returns 1 until the link is present, even after a successful init.
 
 `--type`, `--docs`, `--workflow`, and `--enforce` set options for a new project. If
 `lipi.json` already exists, explicit arguments must match it. A mismatch exits with
