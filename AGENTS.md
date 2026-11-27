@@ -21,16 +21,17 @@ only when they explicitly accept the result.
   `lipi audit`. If a test checks an edited example, run that test too.
 - For wording changes in managed templates, also run `lipi init` and verify that a
   subsequent `lipi init --dry-run` proposes no changes.
-- For behavior changes, run tests for the affected commands and their callers. Widen the
-  run if shared code could affect other commands. Run `lipi index` when workflow headers change.
+- During development, test the changed behavior and the commands that use it. Check
+  changed messages in English and Russian. If you cannot identify all affected commands,
+  consider an early full run. Run `lipi index` when workflow headers change.
 - When a change promises to preserve existing command output, compare text and JSON with
   the latest release tag on the same committed example with the new feature unused.
   A regression test that checks that case against output captured from the tag is sufficient.
 - Create temporary test projects outside the clone. After the check, remove the files
   you created for the experiment and use `git worktree remove` for any worktree you created.
-- Run the full suite (`python3 -m unittest discover -s tests`) at agreed checkpoints and
-  in both English and Russian before tagging. Count each language's passing run on the
-  same tree. If only the release date, work item statuses or results, or the generated
+- The full suite (`python3 -m unittest discover -s tests`) is required only before tagging
+  a release. Run it first in English, then in Russian, on the same tree, with one test
+  group at a time. If only the release date, work item statuses or results, or the generated
   workflow index have changed since that run, it still counts. For those changes, run
   `lipi check`, `lipi audit`, and `python3 -m unittest tests.test_release`.
 
