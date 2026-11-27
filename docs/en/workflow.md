@@ -78,9 +78,9 @@ other files in `index/` remain project files. A project file already at
 a new output path stops regeneration before any writes. Symbolic links at
 participating index paths also stop regeneration.
 
-Regeneration replaces manual edits to generated indexes. It writes a file
-only when the bytes change. Commit the index with the workflow documents.
-The generator leaves the Git index alone.
+Regeneration replaces manual edits to generated indexes. It preserves a file
+when only its line endings differ. LF and CRLF are valid on the marker line.
+Commit the index with the workflow documents. The generator leaves the Git index alone.
 
 ## 4. Regenerate and check <a id="refresh"></a>
 
@@ -91,8 +91,8 @@ lipi index
 ```
 
 The command builds the full set, verifies the paths and file ownership,
-then writes changes. A write failure or interruption rolls back file
-writes and newly created directories.
+then writes changes. A write failure or interruption restores the original
+file bytes, including line endings, and removes newly created directories.
 
 A local `lipi check` regenerates outdated files automatically. In CI or
 with `--staged`, `--diff`, or `--format github`, it reports each outdated

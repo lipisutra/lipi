@@ -172,12 +172,22 @@ def check_lipi_link(root):
     return "AGENTS.md", tr("checker.state.missing_lipi_rules_link") % LIPI_README
 
 
-def sha256_file(path):
-    """SHA-256 файла; None, если файла нет или он не читается."""
+# @trace docs/ru/codes.md#v3
+def managed_digests(data):
+    """LF digest for new locks and the CRLF digest written by older Windows installs."""
+    lf = data.replace(b"\r\n", b"\n")
+    crlf = lf.replace(b"\n", b"\r\n")
+    return hashlib.sha256(lf).hexdigest(), hashlib.sha256(crlf).hexdigest()
+
+
+def file_digests(path, *, managed=True):
     try:
-        return hashlib.sha256(path.read_bytes()).hexdigest()
+        if not path.is_file():
+            return ()
+        data = path.read_bytes()
     except OSError:
-        return None
+        return ()
+    return managed_digests(data) if managed else (hashlib.sha256(data).hexdigest(),)
 
 
 # @trace docs/ru/codes.md#v4
@@ -209,13 +219,13 @@ def check_rule_updates(root, cfg, lock, installed):
             message = tr("checker.state.rule_retired") % installed
         else:
             path = root / name
-            actual = sha256_file(path) if path.is_file() else None
-            if actual == expected[name]:
+            actual = file_digests(path)
+            if expected[name] in actual:
                 message = tr("checker.state.rule_record") % installed
             else:
                 key = "checker.state.rule_updated" if name in previous else "checker.state.rule_added"
                 message = tr(key) % installed
-                if actual is not None and actual != previous.get(name):
+                if actual and previous.get(name) not in actual:
                     message += " " + tr("checker.state.preserve_edits")
                 else:
                     message += " " + tr("checker.state.apply_rule")
@@ -251,8 +261,9 @@ def check_lipi_files(root, cfg=None):
         errors.append((LOCK_NAME,
                        tr("checker.state.enforce_mismatch")
                        % (_describe(rendered), _describe(enforced)), "W"))
+    from lipi.init import is_lipi_rel
     for name, digest in sorted(data["files"].items()):
-        if sha256_file(root / name) != digest:
+        if digest not in file_digests(root / name, managed=is_lipi_rel(name)):
             errors.append((name, tr("checker.state.fingerprint_mismatch")
                             % name, "E"))
     return errors

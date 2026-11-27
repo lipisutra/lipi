@@ -70,7 +70,7 @@ def read_lock(root):
 
 
 def sha256_path(path):
-    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+    return hashlib.sha256(Path(path).read_bytes().replace(b"\r\n", b"\n")).hexdigest()
 
 
 def render_ci(enforce=False):

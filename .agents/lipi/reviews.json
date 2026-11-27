@@ -192,6 +192,25 @@
       }
     },
     {
+      "head": "478a1cbbb37e65540b7260710cf908d28bc8804a",
+      "id": "aa0f9e3abe6c4d5a7e2509dd2904a0b2871911efe91020b4ad4f0e91db600a9a",
+      "reason": "The status and count assertions still assign each work item to one list. The CRLF cases exercise only write and rollback of generated files.",
+      "relation": "trace",
+      "reviewed_at": "2026-11-27T19:19:40Z",
+      "reviewer": "Codex",
+      "source": {
+        "kind": "trace",
+        "path": "tests/test_workflow_index.py",
+        "sha256": "53e71a93d43decacf17f0d5222b24b17f650db21626a479a7204795d89822628"
+      },
+      "target": {
+        "anchor": "files",
+        "kind": "anchor",
+        "path": "docs/ru/workflow.md",
+        "sha256": "f4529aec76b6aa8ad86de1b3da8e445f625f058b6733f4d32eabb4ebae8e25d5"
+      }
+    },
+    {
       "head": "581647120f0a417649bc945f4619ce7c5a1ec63c",
       "id": "aaae22fdc9013e7e63e13632f9057e5e12cef15232cfbcb326b15117da428397",
       "reason": "The fixture still connects workflow for both empty settings files, including explicit config, and leaves the unconfigured workflow directory alone.",
@@ -208,6 +227,25 @@
         "kind": "anchor",
         "path": "docs/ru/settings.md",
         "sha256": "685b41e3ca70a0a24ac5ea1241b52fb003f1f5479b95201245d21e59a2804b1a"
+      }
+    },
+    {
+      "head": "478a1cbbb37e65540b7260710cf908d28bc8804a",
+      "id": "b20d94020ff2b7902092058045bf93b18485c7ed0e5563404452fcfb61d4d02f",
+      "reason": "The closure year still comes from Closed and the tests check reopening and invalid dates. The new checks compare the original bytes on rollback.",
+      "relation": "trace",
+      "reviewed_at": "2026-11-27T19:19:42Z",
+      "reviewer": "Codex",
+      "source": {
+        "kind": "trace",
+        "path": "tests/test_workflow_index.py",
+        "sha256": "53e71a93d43decacf17f0d5222b24b17f650db21626a479a7204795d89822628"
+      },
+      "target": {
+        "anchor": "closure",
+        "kind": "anchor",
+        "path": "docs/ru/workflow.md",
+        "sha256": "d0c364c873ebc9bd7944bcdd505c5a9028e38e5bdb74af1730c30017630cbe76"
       }
     },
     {

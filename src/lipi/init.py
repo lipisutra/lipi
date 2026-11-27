@@ -7,7 +7,6 @@
 Установкой программы управляет установщик, init не обращается к сети.
 """
 import datetime
-import hashlib
 import json
 import os
 import re
@@ -45,6 +44,7 @@ if __name__ == "__main__":
 from lipi import __version__ as VERSION  # noqa: E402
 from lipi.checker.conventions import BASE_NAME  # noqa: E402
 from lipi.checker.config import validate_config  # noqa: E402
+from lipi.checker.state import managed_digests  # noqa: E402
 from lipi.checker.model import git_worktree_root, has_symlink  # noqa: E402
 from lipi.i18n import ArgumentParser, current_language, template_path, tr  # noqa: E402
 
@@ -230,15 +230,10 @@ def deployment_files(root, kind, docs, workflow, enforce, old_files, *,
     for path in managed.keys() & files.keys():
         name = rel_name(root, path)
         if is_lipi_rel(name) and (name != CI_REL or ci_owned):
-            expected[name] = template_digest(files[path])
+            expected[name] = template_digest(files[path], old_files.get(name))
         else:
             del files[path]
     return files, expected, description
-
-
-def sha256_hex(path):
-    """Отпечаток файла для lock: sha256 в hex."""
-    return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
 def read_lock(root):
@@ -292,17 +287,10 @@ def rel_name(root, path):
     return os.path.relpath(str(path), str(root)).replace(os.sep, "/")
 
 
-def template_digest(text):
-    """Отпечаток новой версии шаблона: тот, что будет у файла после записи.
-
-    Файлы пишутся в текстовом режиме, и «\\n» на Windows становится CRLF;
-    отпечаток считается по тем же байтам, иначе следующий init счёл бы
-    файл, записанный шаблоном, изменённым.
-    """
-    data = text.encode("utf-8")
-    if os.linesep != "\n":
-        data = data.replace(b"\n", os.linesep.encode("utf-8"))
-    return hashlib.sha256(data).hexdigest()
+def template_digest(text, previous=None):
+    """New entries use LF. Keep an equivalent existing Windows lock entry."""
+    canonical, legacy = managed_digests(text.encode("utf-8"))
+    return legacy if previous == legacy else canonical
 
 
 def hook_text():
@@ -419,15 +407,16 @@ def add_ci(root, templates=None, dry_run=False):
     except ValueError as exc:
         print(str(exc), file=sys.stderr)
         return 2
-    digest = template_digest(text)
-    changed = not dst.is_file() or sha256_hex(dst) != digest
+    digest = template_digest(text, lock_files.get(CI_REL))
+    actual = managed_digests(dst.read_bytes()) if dst.is_file() else ()
+    changed = digest not in actual
     try:
         check_destinations(([dst] if changed else []) + [root / LOCK_REL])
     except ValueError as exc:
         print(str(exc), file=sys.stderr)
         return 2
     if changed:
-        if dst.is_file() and CI_REL in lock_files and sha256_hex(dst) != lock_files[CI_REL]:
+        if actual and CI_REL in lock_files and lock_files[CI_REL] not in actual:
             show_replaced(CI_REL, dry_run)
         if dst.exists():
             key = 'init.ci_update_plan' if dry_run else 'init.ci_updated'
@@ -588,10 +577,11 @@ def initialize(root, *, kind=None, docs=None, workflow=None, enforce=None,
         if exists and not repeat:
             print(tr('init.existing_file') % name)
             continue
-        if path.is_file() and sha256_hex(path) == digest:
+        actual = managed_digests(path.read_bytes()) if path.is_file() else ()
+        if digest in actual:
             print(tr('init.matching_template') % name)
             continue
-        if path.is_file() and name in old_files and sha256_hex(path) != old_files[name]:
+        if actual and name in old_files and old_files[name] not in actual:
             replaced.append(name)
         changes.append((path, files[path]))
 
@@ -616,7 +606,9 @@ def initialize(root, *, kind=None, docs=None, workflow=None, enforce=None,
     lock_path = root / LOCK_REL
     new_lock = lock_text(VERSION, expected, enforce)
     if not lock_path.is_file() or lock_path.read_text(encoding="utf-8") != new_lock:
-        changes.append((lock_path, new_lock))
+        # When init already needs to update the manifest, write all entries in LF form.
+        canonical = {name: template_digest(files[root / name]) for name in expected}
+        changes.append((lock_path, lock_text(VERSION, canonical, enforce)))
 
     baseline = root / BASE_NAME
     index = wf / "INDEX.md"

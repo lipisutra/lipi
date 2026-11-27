@@ -404,7 +404,7 @@ def _check_repos(value):
             return tr("checker.config.repo_path_not_string") % (alias, _type_name(path))
         if not path.strip():
             return tr("checker.config.empty_repo_path") % alias
-        if "\0" in path or Path(path).is_absolute():
+        if "\0" in path or PureWindowsPath(path).anchor or Path(path).is_absolute():
             return tr("checker.config.invalid_repo_path") % alias
         read = item["read"]
         problem = _check_str_list(read)

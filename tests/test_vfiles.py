@@ -30,7 +30,7 @@ AGENTS_LINK = "](" + LIPI_README + ")"
 
 
 def sha256_path(path):
-    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+    return hashlib.sha256(Path(path).read_bytes().replace(b"\r\n", b"\n")).hexdigest()
 
 
 class TestV2(support.Case):

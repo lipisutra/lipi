@@ -45,7 +45,7 @@ def index_path(wf, path):
 
 
 def _owned(data):
-    return data is not None and data.startswith((MARKER + "\n").encode("utf-8"))
+    return data is not None and data.startswith(((MARKER + "\n").encode(), (MARKER + "\r\n").encode()))
 
 
 def _safe_path(path, boundary):
@@ -213,7 +213,7 @@ def plan_index(pr, files, *, previous=None):
         old = previous.get(path)
         if old is not None and not _owned(old):
             raise IndexErrorBase(path, tr("checker.workflow_index.user_file_at_index_path"))
-        if old != content:
+        if old is None or old.replace(b"\r\n", b"\n") != content:
             changes[path], before[path] = content, old
     return IndexPlan(dict(files), changes, before)
 

@@ -151,8 +151,8 @@ The exit codes for `check` and `audit` apply to all formats.
 You can install it at setup with `lipi init --ci github`. On pushes and pull
 requests, the job installs lipi at the same major version (`pipx install
 git+https://github.com/lipisutra/lipi@v<major>`) and runs the installed command
-with GitHub Actions annotations. V3 checks the workflow against the lock.
-`lipi init` reapplies the managed workflow.
+with GitHub Actions annotations. V3 accepts LF and CRLF when comparing the
+workflow with the lock. `lipi init` reapplies the managed workflow.
 
 In another CI system, run one check with full Git history for pull requests.
 
@@ -216,8 +216,8 @@ identify local edits it will overwrite. A preview reports `Will replace
 your edits in .agents/lipi/README.md`. Applying reports `Replaced your
 edits in .agents/lipi/README.md`.
 It reconciles a hook carrying the lipi marker with `enforce` and preserves an
-unrelated hook. The lock records the version, template fingerprints, and `enforce`.
-Files with identical contents are left untouched. The output identifies the
+unrelated hook. The lock records the version, LF-based template fingerprints,
+and `enforce`. Init preserves files that differ only in their line endings. The output identifies the
 installed version. `--dry-run` previews the plan without writing.
 
 Upgrade lipi before updating a project on a newer major version. Init can

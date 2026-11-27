@@ -1,5 +1,18 @@
 # lipi releases
 
+## 1.4.3 — 2026-11-27
+
+- Clean Git checkouts with LF or CRLF pass the managed-file and workflow
+  index checks. Existing Windows lock fingerprints remain valid.
+- Connected repository paths must be relative to the project on every OS.
+  Paths with a root, drive prefix, or UNC share raise C1. Siblings such
+  as `../neighbor` are supported.
+
+### Upgrading your project for 1.4.3
+
+1. Upgrade Lipi with `pipx upgrade lipi`.
+2. The rules and templates are unchanged. You can skip `lipi init`.
+
 ## 1.4.2 — 2026-11-27
 
 - A missing link to Lipi rules in `AGENTS.md` (V2) now fails `lipi check`

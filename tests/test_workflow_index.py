@@ -197,7 +197,7 @@ class WorkflowIndexTests(unittest.TestCase):
         for failure in (OSError("disk failure"), KeyboardInterrupt()):
             with self.subTest(failure=type(failure).__name__):
                 path = self.pr.wf / "INDEX.md"
-                support.w(path, MARKER + "\nold\n")
+                path.write_bytes((MARKER + "\r\nold\r\n").encode())
                 previous = read_index_files(self.pr)
                 files = build_index_files(self.pr, self.docs, previous=previous)
                 plan = plan_index(self.pr, files, previous=previous)
@@ -214,6 +214,18 @@ class WorkflowIndexTests(unittest.TestCase):
                         apply_index(self.pr, plan)
                 self.assertEqual(read_index_files(self.pr), previous)
                 self.assertFalse((self.pr.wf / "index").exists())
+
+    def test_eol_change_after_planning_preserves_concurrent_edit(self):
+        path = self.pr.wf / "INDEX.md"
+        original = (MARKER + "\r\nold\r\n").encode()
+        path.write_bytes(original)
+        plan = plan_index(self.pr, build_index_files(self.pr, self.docs))
+        concurrent = original.replace(b"\r\n", b"\n")
+        path.write_bytes(concurrent)
+        with self.assertRaises(IndexErrorBase):
+            apply_index(self.pr, plan)
+        self.assertEqual(path.read_bytes(), concurrent)
+        self.assertFalse((self.pr.wf / "index").exists())
 
     def test_cache_refresh_and_git_index_unchanged(self):
         support.run(["git", "init", "-q", str(self.root)])

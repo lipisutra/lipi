@@ -66,7 +66,8 @@ Invalid settings raise C1 and exit with 2. V1 checks the version against
 `.agents/lipi/lipi.lock`. A project set up with another major version
 needs a [matching installation](../../SETUP.md#install) or the rules applied
 according to the [release history](../../CHANGELOG.md). V3 checks rule and
-CI template fingerprints.
+CI template fingerprints. LF and CRLF are equivalent. Locks created on Windows
+by earlier releases remain valid.
 
 [V4](codes.md#v4) compares the lock with the managed files the installed
 templates would produce for this project. It runs with a nonempty valid

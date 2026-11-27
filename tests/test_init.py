@@ -82,18 +82,12 @@ def tree(root):
 
 
 def digest_text(text):
-    """sha256 отрисованного шаблона так, как он окажется в файле.
-
-    Файлы пишутся в текстовом режиме: на Windows «\\n» становится CRLF.
-    """
-    data = text.encode("utf-8")
-    if os.linesep != "\n":
-        data = data.replace(b"\n", os.linesep.encode("utf-8"))
-    return hashlib.sha256(data).hexdigest()
+    """Canonical lock digest of a rendered template."""
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
 def sha256_path(path):
-    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+    return hashlib.sha256(Path(path).read_bytes().replace(b"\r\n", b"\n")).hexdigest()
 
 
 # @trace docs/ru/commands.md#update,ADR-014
@@ -153,7 +147,7 @@ class InitTest(unittest.TestCase):
         self.assertEqual(set(lock["files"]), set(LIPI_FILES))
         for rel in LIPI_FILES:
             self.assertEqual(lock["files"][rel],
-                             hashlib.sha256((self.root / rel).read_bytes()).hexdigest(), rel)
+                             sha256_path(self.root / rel), rel)
         # заготовки и файлы, не созданные из шаблонов, в lock не входят
         for rel in SEED_FILES + ("lipi.json", "workflow/INDEX.md"):
             self.assertNotIn(rel, lock["files"])

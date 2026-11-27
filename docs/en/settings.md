@@ -116,7 +116,8 @@ Connection names are nonempty and contain lowercase ASCII letters,
 digits, and hyphens. Each connection requires `path` and `read`.
 
 - `path` is a nonempty path relative to the project root. It may contain
-  `..`. Absolute paths and NUL characters are invalid.
+  `..`. A leading slash or backslash, a Windows drive prefix, a UNC path,
+  or a NUL character raises C1 on every platform.
 - `read` is a nonempty array with unique entries drawn from `docs`,
   `decisions`, `code`, and `tests`. These values authorize read access
   to those scopes.

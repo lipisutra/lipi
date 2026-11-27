@@ -230,7 +230,7 @@ class ReapplyTest(Base):
         # правило — файл lipi: отпечаток в lock сходится с файлом
         lock = self.lock(root)
         digest = hashlib.sha256(
-            (root / support.LIPI_DIR / "README.md").read_bytes()).hexdigest()
+            (root / support.LIPI_DIR / "README.md").read_bytes().replace(b"\r\n", b"\n")).hexdigest()
         self.assertEqual(lock["files"][support.LIPI_DIR + "/README.md"], digest)
 
     def test_v3_reports_before_init(self):
