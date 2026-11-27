@@ -2,7 +2,9 @@
 
 - Created: 2026-11-27
 - Updated: 2026-11-27
-- Status: in progress
+- Status: closed
+- Closed: 2026-11-27
+- Result: В [Lipi 1.4.3](https://github.com/lipisutra/lipi/releases/tag/v1.4.3) чистые клоны с LF и CRLF и прежние Windows-отпечатки проходят проверку. Пути с корнем или префиксом диска дают C1. Оба сценария прошли на Windows с Python 3.9 и 3.x в [CI тега](https://github.com/lipisutra/lipi/actions/runs/46060264918).
 - Kind: bug
 
 ## Observation
