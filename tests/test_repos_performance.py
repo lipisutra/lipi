@@ -2,7 +2,6 @@
 import json
 import shutil
 import tempfile
-import time
 import unittest
 from pathlib import Path
 
@@ -52,9 +51,8 @@ class RepositoryPerformance(unittest.TestCase):
                 for number in range(3000):
                     support.w(root / ("scratch/%03d/untracked_%04d.txt" % (number % 100, number)),
                               "untracked\n")
-        started = time.monotonic()
-        code, output = support.cli(roots[0], "slice", test_slice.TARGET, "--format", "json")
-        elapsed = time.monotonic() - started
+        with support.time_budget(self, "slice: three repositories with untracked files"):
+            code, output = support.cli(roots[0], "slice", test_slice.TARGET, "--format", "json")
         self.assertEqual(code, 0, output)
         result = json.loads(output)
         self.assertEqual(result["summary"]["code"], 1000)
@@ -65,16 +63,11 @@ class RepositoryPerformance(unittest.TestCase):
         self.assertTrue(all(item["state"] == "ok" and item["head"] for item in metadata))
         self.assertFalse(result["reproducible"])
         self.assertEqual(result["checks"]["staleness"]["total"], 334)
-        self.assertLess(elapsed, 2.0, "CLI slice including git status took %.3fs" % elapsed)
-        started = time.monotonic()
-        code, output = support.cli(roots[0], "map", "--format", "json")
-        map_elapsed = time.monotonic() - started
+        with support.time_budget(self, "map: three repositories with untracked files"):
+            code, output = support.cli(roots[0], "map", "--format", "json")
         self.assertEqual(code, 0, output)
         mapped = json.loads(output)
         row = next(item for item in mapped["rows"] if item["target"] == test_slice.TARGET)
         self.assertEqual(sum(row["code"].values()), 1000)
         self.assertEqual([item["dirty"] for item in mapped["checks"]["repos"]],
                          [False, True, True])
-        self.assertLess(map_elapsed, 2.0, "CLI map including git status took %.3fs" % map_elapsed)
-        print("\nRepository profile: 1000 places / 3 repositories / 41 commits / "
-              "6000 untracked files: slice %.3fs, map %.3fs" % (elapsed, map_elapsed))

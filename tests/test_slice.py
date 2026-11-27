@@ -3,7 +3,6 @@ import json
 import re
 import sys
 import tempfile
-import time
 import unittest
 from pathlib import Path
 
@@ -963,13 +962,11 @@ class SliceContract(unittest.TestCase):
             with self.subTest(scenario=scenario):
                 if scenario == "after-move":
                     locations = self.profile_mass_move(locations)
-                start = time.monotonic()
-                code, out = support.cli(self.root, "slice", TARGET, "--format", "json")
-                elapsed = time.monotonic() - start
+                with support.time_budget(self, f"local slice: {scenario}"):
+                    code, out = support.cli(self.root, "slice", TARGET, "--format", "json")
                 self.assertEqual(code, 0, out)
                 result = json.loads(out)
                 self.assert_profile_result(result, locations, scenario)
-                self.assertLess(elapsed, 2.0, "%s CLI slice took %.3fs" % (scenario, elapsed))
 
 
 if __name__ == "__main__":

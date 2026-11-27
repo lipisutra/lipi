@@ -1,6 +1,7 @@
 """Shared repository index: scope, identity, refinements and atomic exclusion."""
 
 import json
+import os
 import sys
 import tempfile
 import unittest
@@ -188,11 +189,13 @@ class RepositoryIndex(unittest.TestCase):
                 self.assertIsNone(node)
                 self.assertEqual(error['error'], 'not-found')
 
+    @unittest.skipIf(os.name == "nt", "Windows filenames cannot contain ::")
     def test_own_implicit_reserved_layer_is_configuration_error(self):
         self.mark(self.root, 'bad::layer/main.py', 'docs/guide.md#request')
         with self.assertRaises(RepoConfigError):
             self.index()
 
+    @unittest.skipIf(os.name == "nt", "Windows filenames cannot contain ::")
     def test_neighbor_implicit_reserved_layer_is_unavailable(self):
         self.mark(self.neighbor, 'bad::layer/main.py', 'application::docs/guide.md#request')
         index = self.index()

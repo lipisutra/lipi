@@ -101,7 +101,13 @@ Bump the version on the first task in a release that changes behavior. Include t
    git push origin vX.Y.Z
    ```
 
-4. The tag's CI checks must pass.
+4. Wait for the version tag's required CI checks. The full functional suites on
+   Ubuntu and macOS must pass. The two-second CLI timing budgets run on Ubuntu
+   24.04 with Python 3.9 (`LIPI_TEST_TIMING=1`). Both Windows jobs (3.9 and
+   3.x) must pass the CRLF checkout and repository path checks. Until
+   [ISS-033](https://github.com/lipisutra/lipi/blob/master/workflow/issue/2026/iss-033-vosstanovit-obyazatelnyy-polnyy-progon-na-windows.md) closes, only the full Windows suite is advisory. Its outcome appears in the job summary.
+5. Once the required checks pass, move the major tag to the same commit, push it,
+   and publish the GitHub release.
 
 Move the major tag (for example, `v1`) to each release in its series. Projects use that tag for CI installations under ADR-010. Within a major version a new check starts as a warning. ADR-022 allows T5 to start as an error in 1.x because it validates an explicit `role=…` attribute. Raising a warning to an error requires a new major version. The release test compares `CODE_LEVELS` with the `v<major>.0.0` tag. Until that tag exists it skips only the level comparison. It still checks the package version, changelog, and lock. If an existing tag cannot be read, the test fails. List new error levels in the changelog when changing the major version.
 

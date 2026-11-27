@@ -15,7 +15,9 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import time
 import unittest
+from contextlib import contextmanager
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from unittest.mock import patch
@@ -56,7 +58,7 @@ def localized(english, russian):
 def language_env(profile, language):
     """Isolate a CLI call's personal settings from the test runner's."""
     w(profile / ".config/lipi/config.json", json.dumps({"language": language}))
-    return dict(os.environ, HOME=str(profile), USERPROFILE=str(profile))
+    return child_environment({"HOME": str(profile), "USERPROFILE": str(profile)})
 
 
 def freeze_workflow_clock(stamp, utc_offset=0):
@@ -70,9 +72,31 @@ def freeze_workflow_clock(stamp, utc_offset=0):
     return patch("lipi.checker.workflow_layout.datetime", **{"now.side_effect": now})
 
 
+@contextmanager
+def time_budget(test, label):
+    """Enforce the two-second CLI budget on the selected CI runner."""
+    if os.environ.get("LIPI_TEST_TIMING") != "1":
+        yield
+        return
+    started = time.monotonic()
+    yield
+    elapsed = time.monotonic() - started
+    print(f"\n{label}: {elapsed:.3f}s")
+    test.assertLess(elapsed, 2.0, label)
+
+
+def child_environment(overrides=None):
+    """A test invokes a local command unless it explicitly sets CI."""
+    child_env = os.environ.copy()
+    child_env.pop("CI", None)
+    if overrides is not None:
+        child_env.update(overrides)
+    return child_env
+
+
 def run(cmd, cwd=None, env=None):
     p = subprocess.run(cmd, cwd=cwd, stdout=subprocess.PIPE,
-                       stderr=subprocess.STDOUT, env=env)
+                       stderr=subprocess.STDOUT, env=child_environment(env))
     return p.returncode, p.stdout.decode("utf-8", "replace")
 
 

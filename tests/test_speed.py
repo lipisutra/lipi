@@ -4,7 +4,7 @@
 связанных указателем docs/README.md, и 5000 небольших файлов кода в src/ без
 меток — scan_code читает каждый файл, но находок нет. `check` без
 --audit/--structure/--staged замеряется вокруг support.check(): тест падает,
-если быстрые проверки дольше 2 с — это бюджет CI (цель на машине
+при LIPI_TEST_TIMING=1, если быстрые проверки дольше 2 с — это бюджет CI (цель на машине
 разработки — 1 с).
 
 Обе стороны бюджета: маленький проект (только что развёрнутый) заведомо
@@ -16,7 +16,6 @@
 """
 import shutil
 import tempfile
-import time
 import unittest
 from pathlib import Path
 
@@ -25,9 +24,6 @@ from tests import support
 # Синтетический проект: сколько страниц описания и файлов кода генерировать.
 PAGES = 300
 CODE_FILES = 5000
-# Бюджет быстрых проверок, секунды: предел CI (цель на машине разработки — 1 с).
-BUDGET = 2.0
-
 
 def add_pages(root):
     """300 страниц docs/ и строки указателя в docs/README.md."""
@@ -77,28 +73,15 @@ class SpeedBudgetCase(unittest.TestCase):
     def tearDownClass(cls):
         shutil.rmtree(cls.tmp, ignore_errors=True)
 
-    def measure(self, root):
-        """Быстрые проверки проекта: (секунды, код возврата, вывод)."""
-        start = time.perf_counter()
-        code, out = support.check(root)
-        return time.perf_counter() - start, code, out
-
     def test_small_project_is_cheap(self):
-        """Маленький проект: быстрые проверки заведомо укладываются в бюджет."""
-        elapsed, code, out = self.measure(self.small)
+        with support.time_budget(self, "check: empty project"):
+            code, out = support.check(self.small)
         self.assertEqual(code, 0, out)
-        self.assertLess(elapsed, BUDGET,
-                        "быстрые проверки маленького проекта заняли %.2f с "
-                        "(бюджет %.1f с)" % (elapsed, BUDGET))
 
     def test_big_project_fits_budget(self):
-        """300 страниц и 5000 файлов кода: быстрые проверки укладываются в бюджет."""
-        elapsed, code, out = self.measure(self.big)
+        with support.time_budget(self, "check: 300 pages and 5000 code files"):
+            code, out = support.check(self.big)
         self.assertEqual(code, 0, out)
-        self.assertLess(elapsed, BUDGET,
-                        "быстрые проверки синтетического проекта (%d страниц, %d файлов "
-                        "кода) заняли %.2f с (бюджет %.1f с)"
-                        % (PAGES, CODE_FILES, elapsed, BUDGET))
 
 
 if __name__ == "__main__":

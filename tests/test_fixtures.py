@@ -14,11 +14,12 @@ covers. Каждый тест работает на временной копи�
 import json
 import os
 import shutil
-import subprocess
 import sys
 import tempfile
 import unittest
 from pathlib import Path
+
+from tests.support import run
 
 HERE = Path(__file__).resolve().parent
 FIXTURES = HERE / "fixtures"
@@ -26,12 +27,6 @@ CHECK = HERE.parent / "src" / "lipi" / "check.py"
 TAG = "@" + "trace"          # по частям, чтобы чекер lipi не принял за метку
 GIT_ENV = dict(os.environ, GIT_AUTHOR_NAME="t", GIT_AUTHOR_EMAIL="t@t",
                GIT_COMMITTER_NAME="t", GIT_COMMITTER_EMAIL="t@t")
-
-
-def run(cmd, cwd, env=None):
-    p = subprocess.run(cmd, cwd=str(cwd), stdout=subprocess.PIPE,
-                       stderr=subprocess.STDOUT, env=env)
-    return p.returncode, p.stdout.decode("utf-8", "replace")
 
 
 def check(root, *args, env=None):

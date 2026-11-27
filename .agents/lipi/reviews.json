@@ -40,6 +40,25 @@
       }
     },
     {
+      "head": "478a1cbbb37e65540b7260710cf908d28bc8804a",
+      "id": "0f3cdaaad32f20e89f55269b67e7c81db99671183467011b2a78910d9dcb3139",
+      "reason": "The configured reserved layer still produces T4 for a neighbor on every OS. The filesystem scenario still checks local C1 and external T4 where that directory can exist.",
+      "relation": "trace",
+      "reviewed_at": "2026-11-27T19:19:44Z",
+      "reviewer": "Codex",
+      "source": {
+        "kind": "trace",
+        "path": "tests/test_map_repos.py",
+        "sha256": "b451fa6be096c40e1565fa3773d4aecc8842428c3931f02bd2a27e3a1aa6cf29"
+      },
+      "target": {
+        "anchor": "repos",
+        "kind": "anchor",
+        "path": "docs/ru/map.md",
+        "sha256": "3a26d4f6cf1358ac7413233dda40adf0bfe8c29810c3f172c151a991055ad62d"
+      }
+    },
+    {
       "head": "f6d2756903aefdcd53947ecac06e70c1274e98cd",
       "id": "17d2357c9229b94fda9cbaf58e91c6db5d36c96f85f7ac2c0aee06fc0cc4ff1e",
       "reason": "The work-slice test still exercises the documented obey, code, targets order and checks that only the work ID contributes code while shared obligations retain their linked origins.",
@@ -193,6 +212,25 @@
     },
     {
       "head": "478a1cbbb37e65540b7260710cf908d28bc8804a",
+      "id": "9d11771dc7ed50e80e767290924067ce06748098e7e7b89ebd6c7322d89a3fc8",
+      "reason": "The slice still checks 1000 code places, three source records, dirty states and 334 local staleness checks. The runner choice affects only the time limit.",
+      "relation": "trace",
+      "reviewed_at": "2026-11-27T19:19:49Z",
+      "reviewer": "Codex",
+      "source": {
+        "kind": "trace",
+        "path": "tests/test_repos_performance.py",
+        "sha256": "1a9a6470ca80bc7504826f00e87f9cfa135ea4c4dac7421b41aafca07a230eb6"
+      },
+      "target": {
+        "anchor": "repos",
+        "kind": "anchor",
+        "path": "docs/ru/slice.md",
+        "sha256": "eb2a998eff854a3e0d1e663e25e517b950cc6d5ece1c02b92a0046d46736e938"
+      }
+    },
+    {
+      "head": "478a1cbbb37e65540b7260710cf908d28bc8804a",
       "id": "aa0f9e3abe6c4d5a7e2509dd2904a0b2871911efe91020b4ad4f0e91db600a9a",
       "reason": "The status and count assertions still assign each work item to one list. The CRLF cases exercise only write and rollback of generated files.",
       "relation": "trace",
@@ -265,6 +303,63 @@
         "kind": "anchor",
         "path": "docs/ru/codes.md",
         "sha256": "3dbc9187d84ca7404c6367a822b91137c0c4897b8e6404d7e725382211b9d111"
+      }
+    },
+    {
+      "head": "478a1cbbb37e65540b7260710cf908d28bc8804a",
+      "id": "bfe70ff636ee539ad5b522216a6e2ecbfd576ae98a3497b30ee383064ecd4a15",
+      "reason": "Local configuration errors and unavailable neighbors remain distinct. The two skipped cases require an actual directory whose name contains the reserved separator.",
+      "relation": "trace",
+      "reviewed_at": "2026-11-27T19:19:47Z",
+      "reviewer": "Codex",
+      "source": {
+        "kind": "trace",
+        "path": "tests/test_repo_index.py",
+        "sha256": "b5e2becae5a82860fad88ca6e48aefa0dc4bf1608af28dfaaaebcca0535ec664"
+      },
+      "target": {
+        "anchor": "repos",
+        "kind": "anchor",
+        "path": "docs/ru/slice.md",
+        "sha256": "eb2a998eff854a3e0d1e663e25e517b950cc6d5ece1c02b92a0046d46736e938"
+      }
+    },
+    {
+      "head": "478a1cbbb37e65540b7260710cf908d28bc8804a",
+      "id": "c8949032bc9d934388867fc9c7b01f2fb50ba4e6b6617228568ca7f608e36b3d",
+      "reason": "The map still checks the sum of 1000 code places and the dirty state of three sources. Timing is conditional on the selected runner.",
+      "relation": "trace",
+      "reviewed_at": "2026-11-27T19:19:46Z",
+      "reviewer": "Codex",
+      "source": {
+        "kind": "trace",
+        "path": "tests/test_repos_performance.py",
+        "sha256": "1a9a6470ca80bc7504826f00e87f9cfa135ea4c4dac7421b41aafca07a230eb6"
+      },
+      "target": {
+        "anchor": "repos",
+        "kind": "anchor",
+        "path": "docs/ru/map.md",
+        "sha256": "3a26d4f6cf1358ac7413233dda40adf0bfe8c29810c3f172c151a991055ad62d"
+      }
+    },
+    {
+      "head": "478a1cbbb37e65540b7260710cf908d28bc8804a",
+      "id": "fb0c68f3f44ad8e5d20b79ffcfa14f65d9884d9d1423958f7d8b573969b07c56",
+      "reason": "The index still separates source columns and excludes unavailable neighbors. The skip applies only to a literal directory name Windows cannot create.",
+      "relation": "trace",
+      "reviewed_at": "2026-11-27T19:19:43Z",
+      "reviewer": "Codex",
+      "source": {
+        "kind": "trace",
+        "path": "tests/test_repo_index.py",
+        "sha256": "b5e2becae5a82860fad88ca6e48aefa0dc4bf1608af28dfaaaebcca0535ec664"
+      },
+      "target": {
+        "anchor": "repos",
+        "kind": "anchor",
+        "path": "docs/ru/map.md",
+        "sha256": "3a26d4f6cf1358ac7413233dda40adf0bfe8c29810c3f172c151a991055ad62d"
       }
     }
   ],

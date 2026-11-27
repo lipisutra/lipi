@@ -1,5 +1,6 @@
 """Map repository scope, counts, availability and read-only output (ADR-016)."""
 import json
+import os
 import subprocess
 import sys
 import tempfile
@@ -320,6 +321,7 @@ class MapRepositories(unittest.TestCase):
         self.assertFalse(result['incomplete'])
         self.assertEqual(self.rows(result)[None, 'docs/local.md#one']['tests'], 1)
 
+    @unittest.skipIf(os.name == "nt", "Windows filenames cannot contain ::")
     def test_reserved_inferred_layer_is_c1_locally_and_t4_for_neighbor(self):
         self.page(self.root, 'docs/local.md', 'one')
         self.mark(self.root, 'bad::layer/main.py', 'docs/local.md#one')
@@ -334,7 +336,9 @@ class MapRepositories(unittest.TestCase):
         self.assertTrue(result['incomplete'])
         self.assertEqual(result['signals'][0]['code'], 'T4')
         self.assertEqual(result['layers'], [])
-        (self.engine / 'bad::layer/main.py').unlink()
+
+    def test_reserved_configured_layer_is_t4_for_neighbor(self):
+        self.page(self.root, 'docs/local.md', 'one')
         support.w(self.engine / 'lipi.json', json.dumps({'layers': {'empty/*': 'bad::layer'}}))
         result = self.result()
         self.assertTrue(result['incomplete'])
