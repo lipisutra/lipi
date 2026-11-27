@@ -22,18 +22,18 @@ only when they explicitly accept the result.
 - For wording changes in managed templates, also run `lipi init` and verify that a
   subsequent `lipi init --dry-run` proposes no changes.
 - During development, test the changed behavior and the commands that use it. Check
-  changed messages in English and Russian. If you cannot identify all affected commands,
-  consider an early full run. Run `lipi index` when workflow headers change.
+  changed messages in English and Russian. Run `lipi index` when workflow headers change.
 - When a change promises to preserve existing command output, compare text and JSON with
   the latest release tag on the same committed example with the new feature unused.
   A regression test that checks that case against output captured from the tag is sufficient.
 - Create temporary test projects outside the clone. After the check, remove the files
   you created for the experiment and use `git worktree remove` for any worktree you created.
-- The local full suite (`python3 -m unittest discover -s tests`) is required before tagging
-  a release. Run it first in English, then in Russian, on the same tree, with one test
-  group at a time. If only the release date, work item statuses or results, or the generated
-  workflow index have changed since that run, it still counts. For those changes, run
-  `lipi check`, `lipi audit`, and `python3 -m unittest tests.test_release`.
+- Before tagging a release, run `lipi check`, `lipi audit`, and
+  `python3 -m unittest tests.test_release`. Run the full local suite
+  (`python3 -m unittest discover -s tests`) only when the user explicitly asks for it,
+  including before a release. Run it first in English, then in Russian, on the same tree,
+  one test group at a time. The result still counts after changes limited to the release
+  date, work item statuses or results, or the generated workflow index.
 - GitHub Actions runs quick checks on pushes and pull requests. Run the full hosted suite
   only at the user’s explicit request, including for a release. See the [release procedure](.agents/README.md#release).
 
